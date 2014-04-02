@@ -14,7 +14,7 @@
 	<div class="col-lg-4 col-md-4">
 		<?php $this->lstMaquina->Render(); ?>
 	</div>
-	<div class="col-lg-3 col-md-4">
+	<div class="col-lg-3 col-md-3">
 		<?php $this->txtTempo->Render(); ?>
 	</div>	
 	<div class="col-lg-1 col-md-1">
