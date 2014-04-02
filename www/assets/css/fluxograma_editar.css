@@ -1,0 +1,14 @@
+/*.group-control-qcodo{display: table; width: 100%;}
+
+.group-control-qcodo > span{display: table-cell;}
+	.group-control-qcodo .btn, 
+	.group-control-qcodo .form-control{float: left;}
+
+.group-control-qcodo-lg .btn, 
+.group-control-qcodo-lg .form-control{padding: 10px 16px; font-size: 18px; height: 46px;}
+
+
+
+.group-control-qcodo select.form-control{border-radius: 6px 0px 0px 6px;}
+.group-control-qcodo a{border-radius: 0px 6px 6px 0px;  border-left: none;}
+*/

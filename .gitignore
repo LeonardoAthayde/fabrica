@@ -1,0 +1,6 @@
+includes/qcodo/i18n/*
+!includes/qcodo/i18n/_README.txt
+includes/qcodo/cache/*
+!includes/qcodo/cache/_README.txt
+.gitignore~
+includes/configuration.inc.php

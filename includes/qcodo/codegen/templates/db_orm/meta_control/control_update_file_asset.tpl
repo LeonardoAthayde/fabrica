@@ -1,0 +1,1 @@
+				if ($this-><%= $strControlId %>) $this-><%= $strObjectName %>-><%= $objColumn->PropertyName %> = str_replace(__DOCROOT__, '', $this-><%= $strControlId %>->File);

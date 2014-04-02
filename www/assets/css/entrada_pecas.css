@@ -1,0 +1,6 @@
+.custom-group-form select{display: inline; width: 25%; border-radius: 1px; border-right: none; }
+.custom-group-form span:first-child select{display: inline; width: 25%; border-radius: 6px 0px 0px 6px;} 
+.custom-group-form input{display: inline; width: 25%; border-radius: 0px 6px 6px 0px;}
+
+.custom-group-form2 input{display: inline; width: 200px;}
+.custom-group-form2 a{float: right;}
