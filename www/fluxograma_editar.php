@@ -123,6 +123,7 @@
 			$this->btnAdd->Height = 46;
 			$this->btnAdd->Display = false;
 			$this->btnAdd->HtmlEntities = false;
+			$this->btnAdd->CausesValidation = true;
 			$this->btnAdd->AddAction(new QClickEvent(), new QAjaxAction('btnAdd_Click'));
 		}
 		
