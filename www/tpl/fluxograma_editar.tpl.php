@@ -8,16 +8,16 @@
  </div>
 
 <div class="row marginBottom20">
-	<div class="col-lg-4">
+	<div class="col-lg-4 col-md-4">
 		<?php $this->lstFluxogramaAcoes->Render(); ?>
 	</div>
-	<div class="col-lg-4">
+	<div class="col-lg-4 col-md-4">
 		<?php $this->lstMaquina->Render(); ?>
 	</div>
-	<div class="col-lg-3">
+	<div class="col-lg-3 col-md-4">
 		<?php $this->txtTempo->Render(); ?>
 	</div>	
-	<div class="col-lg-1">
+	<div class="col-lg-1 col-md-1">
 		<?php $this->btnAdd->Render(); ?>
 	</div>	
 </div>

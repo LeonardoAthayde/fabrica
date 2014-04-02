@@ -100,7 +100,7 @@
 			$this->lstMaquina->Required = true;
 			$this->lstMaquina->Display = false;
 			
-			$this->lstMaquina->AddItem('Selecione uma ação ==>');
+			$this->lstMaquina->AddItem('Selecione uma maquina ==>');
 			foreach (Maquina::LoadAll() as $objMaquina)
 				$this->lstMaquina->AddItem($objMaquina->Nome, $objMaquina->Id);			
 		}
