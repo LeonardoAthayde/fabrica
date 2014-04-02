@@ -19,6 +19,12 @@
 			$this->pxyConfirm_Create();
 			$this->lblSelected_Create();
 			QApplication::ExecuteJavaScript("SelectedListGroup();");
+			$this->SetPollingProcessor('OrdemExecucaoForm_Poling', $this, 1000 * 5);
+		}
+		
+		protected function OrdemExecucaoForm_Poling(){
+			QApplication::ExecuteJavaScript("SelectedListGroup();");
+			$this->pnlNewGrade->Refresh();
 		}
 		
 		protected function pnlNewGrade_Create(){

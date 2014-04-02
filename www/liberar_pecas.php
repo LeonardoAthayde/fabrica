@@ -16,7 +16,7 @@
 			$this->dtgReleased_Create();
 			$this->pxyRelease_Create();
 			$this->pxyBlock_Create();
-			$this->SetPollingProcessor('LiberarPecasForm_Poling', $this, 1000 * 30);
+			$this->SetPollingProcessor('LiberarPecasForm_Poling', $this, 1000 * 5);
 		}
 				
 		protected function dtgToReleased_Create(){
