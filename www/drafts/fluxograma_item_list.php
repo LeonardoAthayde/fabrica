@@ -75,11 +75,10 @@
 			// can traverse down QQN::fluxograma_item() to display fields that are down the hierarchy)
 			$this->dtgFluxogramaItems->MetaAddColumn('Id');
 			$this->dtgFluxogramaItems->MetaAddColumn(QQN::FluxogramaItem()->Referencia);
-			$this->dtgFluxogramaItems->MetaAddColumn('Ordenacao');
 			$this->dtgFluxogramaItems->MetaAddColumn(QQN::FluxogramaItem()->FluxogramaAcoes);
 			$this->dtgFluxogramaItems->MetaAddColumn(QQN::FluxogramaItem()->Maquina);
 			$this->dtgFluxogramaItems->MetaAddColumn('Tempo');
-			$this->dtgFluxogramaItems->MetaAddColumn('Ativo');
+			$this->dtgFluxogramaItems->MetaAddColumn('Profundidade');
 		}
 	}
 

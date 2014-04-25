@@ -6,6 +6,13 @@
 		QApplicationBase::$ClassFile['balancoacoesmetacontrol'] = __DATA_META_CONTROLS__ . '/BalancoAcoesMetaControl.class.php';
 		QApplicationBase::$ClassFile['balancoacoesdatagrid'] = __DATA_META_CONTROLS__ . '/BalancoAcoesDataGrid.class.php';
 
+	// ClassPaths for the BalancoAcoesDepedencia class
+		QApplicationBase::$ClassFile['balancoacoesdepedencia'] = __DATA_CLASSES__ . '/BalancoAcoesDepedencia.class.php';
+		QApplicationBase::$ClassFile['qqnodebalancoacoesdepedencia'] = __DATA_CLASSES__ . '/BalancoAcoesDepedencia.class.php';
+		QApplicationBase::$ClassFile['qqreversereferencenodebalancoacoesdepedencia'] = __DATA_CLASSES__ . '/BalancoAcoesDepedencia.class.php';
+		QApplicationBase::$ClassFile['balancoacoesdepedenciametacontrol'] = __DATA_META_CONTROLS__ . '/BalancoAcoesDepedenciaMetaControl.class.php';
+		QApplicationBase::$ClassFile['balancoacoesdepedenciadatagrid'] = __DATA_META_CONTROLS__ . '/BalancoAcoesDepedenciaDataGrid.class.php';
+
 	// ClassPaths for the BalancoPecas class
 		QApplicationBase::$ClassFile['balancopecas'] = __DATA_CLASSES__ . '/BalancoPecas.class.php';
 		QApplicationBase::$ClassFile['qqnodebalancopecas'] = __DATA_CLASSES__ . '/BalancoPecas.class.php';
@@ -55,6 +62,13 @@
 		QApplicationBase::$ClassFile['fluxogramaitemmetacontrol'] = __DATA_META_CONTROLS__ . '/FluxogramaItemMetaControl.class.php';
 		QApplicationBase::$ClassFile['fluxogramaitemdatagrid'] = __DATA_META_CONTROLS__ . '/FluxogramaItemDataGrid.class.php';
 
+	// ClassPaths for the FluxogramaItemReal class
+		QApplicationBase::$ClassFile['fluxogramaitemreal'] = __DATA_CLASSES__ . '/FluxogramaItemReal.class.php';
+		QApplicationBase::$ClassFile['qqnodefluxogramaitemreal'] = __DATA_CLASSES__ . '/FluxogramaItemReal.class.php';
+		QApplicationBase::$ClassFile['qqreversereferencenodefluxogramaitemreal'] = __DATA_CLASSES__ . '/FluxogramaItemReal.class.php';
+		QApplicationBase::$ClassFile['fluxogramaitemrealmetacontrol'] = __DATA_META_CONTROLS__ . '/FluxogramaItemRealMetaControl.class.php';
+		QApplicationBase::$ClassFile['fluxogramaitemrealdatagrid'] = __DATA_META_CONTROLS__ . '/FluxogramaItemRealDataGrid.class.php';
+
 	// ClassPaths for the Maquina class
 		QApplicationBase::$ClassFile['maquina'] = __DATA_CLASSES__ . '/Maquina.class.php';
 		QApplicationBase::$ClassFile['qqnodemaquina'] = __DATA_CLASSES__ . '/Maquina.class.php';
@@ -82,13 +96,6 @@
 		QApplicationBase::$ClassFile['qqreversereferencenodeordemproducaograde'] = __DATA_CLASSES__ . '/OrdemProducaoGrade.class.php';
 		QApplicationBase::$ClassFile['ordemproducaogrademetacontrol'] = __DATA_META_CONTROLS__ . '/OrdemProducaoGradeMetaControl.class.php';
 		QApplicationBase::$ClassFile['ordemproducaogradedatagrid'] = __DATA_META_CONTROLS__ . '/OrdemProducaoGradeDataGrid.class.php';
-
-	// ClassPaths for the Pacote class
-		QApplicationBase::$ClassFile['pacote'] = __DATA_CLASSES__ . '/Pacote.class.php';
-		QApplicationBase::$ClassFile['qqnodepacote'] = __DATA_CLASSES__ . '/Pacote.class.php';
-		QApplicationBase::$ClassFile['qqreversereferencenodepacote'] = __DATA_CLASSES__ . '/Pacote.class.php';
-		QApplicationBase::$ClassFile['pacotemetacontrol'] = __DATA_META_CONTROLS__ . '/PacoteMetaControl.class.php';
-		QApplicationBase::$ClassFile['pacotedatagrid'] = __DATA_META_CONTROLS__ . '/PacoteDataGrid.class.php';
 
 	// ClassPaths for the Referencia class
 		QApplicationBase::$ClassFile['referencia'] = __DATA_CLASSES__ . '/Referencia.class.php';

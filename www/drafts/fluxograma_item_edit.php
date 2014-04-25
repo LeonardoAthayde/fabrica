@@ -28,13 +28,14 @@
 		// Controls for FluxogramaItem's Data Fields
 		protected $lblId;
 		protected $lstReferencia;
-		protected $txtOrdenacao;
 		protected $lstFluxogramaAcoes;
 		protected $lstMaquina;
 		protected $txtTempo;
-		protected $chkAtivo;
+		protected $txtProfundidade;
 
 		// Other ListBoxes (if applicable) via Unique ReverseReferences and ManyToMany References
+		protected $lstParentFluxogramaItemsAsFluxogramaDepedencia;
+		protected $lstFluxogramaItemsAsFluxogramaDepedencia;
 
 		// Other Controls
 		protected $btnSave;
@@ -76,11 +77,12 @@
 			// Call MetaControl's methods to create qcontrols based on FluxogramaItem's data fields
 			$this->lblId = $this->mctFluxogramaItem->lblId_Create();
 			$this->lstReferencia = $this->mctFluxogramaItem->lstReferencia_Create();
-			$this->txtOrdenacao = $this->mctFluxogramaItem->txtOrdenacao_Create();
 			$this->lstFluxogramaAcoes = $this->mctFluxogramaItem->lstFluxogramaAcoes_Create();
 			$this->lstMaquina = $this->mctFluxogramaItem->lstMaquina_Create();
 			$this->txtTempo = $this->mctFluxogramaItem->txtTempo_Create();
-			$this->chkAtivo = $this->mctFluxogramaItem->chkAtivo_Create();
+			$this->txtProfundidade = $this->mctFluxogramaItem->txtProfundidade_Create();
+			$this->lstParentFluxogramaItemsAsFluxogramaDepedencia = $this->mctFluxogramaItem->lstParentFluxogramaItemsAsFluxogramaDepedencia_Create();
+			$this->lstFluxogramaItemsAsFluxogramaDepedencia = $this->mctFluxogramaItem->lstFluxogramaItemsAsFluxogramaDepedencia_Create();
 
 			// Create Buttons and Actions on this Form
 			$this->btnSave = new QButton($this);

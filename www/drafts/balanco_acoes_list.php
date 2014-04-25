@@ -75,7 +75,7 @@
 			// can traverse down QQN::balanco_acoes() to display fields that are down the hierarchy)
 			$this->dtgBalancoAcoeses->MetaAddColumn('Id');
 			$this->dtgBalancoAcoeses->MetaAddColumn(QQN::BalancoAcoes()->OrdemProducaoGrade);
-			$this->dtgBalancoAcoeses->MetaAddColumn(QQN::BalancoAcoes()->FluxogramaItem);
+			$this->dtgBalancoAcoeses->MetaAddColumn(QQN::BalancoAcoes()->FluxogramaItemReal);
 			$this->dtgBalancoAcoeses->MetaAddColumn('QuantidadeDisponivel');
 			$this->dtgBalancoAcoeses->MetaAddColumn('QuantidadeRemetida');
 			$this->dtgBalancoAcoeses->MetaAddColumn('QuantidadeProduzida');

@@ -1,6 +1,3 @@
-$(document).ready(function(){
-	
-});
 function SelectedListGroup(){
 	$('.pnlNewGrade .list-group-item').each(function(i, data){
 		var chkNode = $(data).find('input:checkbox');

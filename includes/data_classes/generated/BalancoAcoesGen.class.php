@@ -17,12 +17,14 @@
 	 * @subpackage GeneratedDataObjects
 	 * @property integer $Id the value for intId (Read-Only PK)
 	 * @property integer $OrdemProducaoGradeId the value for intOrdemProducaoGradeId (Not Null)
-	 * @property integer $FluxogramaItemId the value for intFluxogramaItemId (Not Null)
+	 * @property integer $FluxogramaItemRealId the value for intFluxogramaItemRealId (Unique)
 	 * @property integer $QuantidadeDisponivel the value for intQuantidadeDisponivel (Not Null)
 	 * @property integer $QuantidadeRemetida the value for intQuantidadeRemetida (Not Null)
 	 * @property integer $QuantidadeProduzida the value for intQuantidadeProduzida (Not Null)
 	 * @property OrdemProducaoGrade $OrdemProducaoGrade the value for the OrdemProducaoGrade object referenced by intOrdemProducaoGradeId (Not Null)
-	 * @property FluxogramaItem $FluxogramaItem the value for the FluxogramaItem object referenced by intFluxogramaItemId (Not Null)
+	 * @property FluxogramaItemReal $FluxogramaItemReal the value for the FluxogramaItemReal object referenced by intFluxogramaItemRealId (Unique)
+	 * @property BalancoAcoesDepedencia $_BalancoAcoesDepedencia the value for the private _objBalancoAcoesDepedencia (Read-Only) if set due to an expansion on the balanco_acoes_depedencia.balanco_acoes_id reverse relationship
+	 * @property BalancoAcoesDepedencia[] $_BalancoAcoesDepedenciaArray the value for the private _objBalancoAcoesDepedenciaArray (Read-Only) if set due to an ExpandAsArray on the balanco_acoes_depedencia.balanco_acoes_id reverse relationship
 	 * @property CostureiraProducao $_CostureiraProducao the value for the private _objCostureiraProducao (Read-Only) if set due to an expansion on the costureira_producao.balanco_acoes_id reverse relationship
 	 * @property CostureiraProducao[] $_CostureiraProducaoArray the value for the private _objCostureiraProducaoArray (Read-Only) if set due to an ExpandAsArray on the costureira_producao.balanco_acoes_id reverse relationship
 	 * @property boolean $__Restored whether or not this object was restored from the database (as opposed to created new)
@@ -50,11 +52,11 @@
 
 
 		/**
-		 * Protected member variable that maps to the database column balanco_acoes.fluxograma_item_id
-		 * @var integer intFluxogramaItemId
+		 * Protected member variable that maps to the database column balanco_acoes.fluxograma_item_real_id
+		 * @var integer intFluxogramaItemRealId
 		 */
-		protected $intFluxogramaItemId;
-		const FluxogramaItemIdDefault = null;
+		protected $intFluxogramaItemRealId;
+		const FluxogramaItemRealIdDefault = null;
 
 
 		/**
@@ -80,6 +82,22 @@
 		protected $intQuantidadeProduzida;
 		const QuantidadeProduzidaDefault = null;
 
+
+		/**
+		 * Private member variable that stores a reference to a single BalancoAcoesDepedencia object
+		 * (of type BalancoAcoesDepedencia), if this BalancoAcoes object was restored with
+		 * an expansion on the balanco_acoes_depedencia association table.
+		 * @var BalancoAcoesDepedencia _objBalancoAcoesDepedencia;
+		 */
+		private $_objBalancoAcoesDepedencia;
+
+		/**
+		 * Private member variable that stores a reference to an array of BalancoAcoesDepedencia objects
+		 * (of type BalancoAcoesDepedencia[]), if this BalancoAcoes object was restored with
+		 * an ExpandAsArray on the balanco_acoes_depedencia association table.
+		 * @var BalancoAcoesDepedencia[] _objBalancoAcoesDepedenciaArray;
+		 */
+		private $_objBalancoAcoesDepedenciaArray = array();
 
 		/**
 		 * Private member variable that stores a reference to a single CostureiraProducao object
@@ -131,13 +149,13 @@
 
 		/**
 		 * Protected member variable that contains the object pointed by the reference
-		 * in the database column balanco_acoes.fluxograma_item_id.
+		 * in the database column balanco_acoes.fluxograma_item_real_id.
 		 *
-		 * NOTE: Always use the FluxogramaItem property getter to correctly retrieve this FluxogramaItem object.
+		 * NOTE: Always use the FluxogramaItemReal property getter to correctly retrieve this FluxogramaItemReal object.
 		 * (Because this class implements late binding, this variable reference MAY be null.)
-		 * @var FluxogramaItem objFluxogramaItem
+		 * @var FluxogramaItemReal objFluxogramaItemReal
 		 */
-		protected $objFluxogramaItem;
+		protected $objFluxogramaItemReal;
 
 
 
@@ -451,7 +469,7 @@
 
 			$objBuilder->AddSelectItem($strTableName, 'id', $strAliasPrefix . 'id');
 			$objBuilder->AddSelectItem($strTableName, 'ordem_producao_grade_id', $strAliasPrefix . 'ordem_producao_grade_id');
-			$objBuilder->AddSelectItem($strTableName, 'fluxograma_item_id', $strAliasPrefix . 'fluxograma_item_id');
+			$objBuilder->AddSelectItem($strTableName, 'fluxograma_item_real_id', $strAliasPrefix . 'fluxograma_item_real_id');
 			$objBuilder->AddSelectItem($strTableName, 'quantidade_disponivel', $strAliasPrefix . 'quantidade_disponivel');
 			$objBuilder->AddSelectItem($strTableName, 'quantidade_remetida', $strAliasPrefix . 'quantidade_remetida');
 			$objBuilder->AddSelectItem($strTableName, 'quantidade_produzida', $strAliasPrefix . 'quantidade_produzida');
@@ -493,6 +511,20 @@
 					$strAliasPrefix = 'balanco_acoes__';
 
 
+				$strAlias = $strAliasPrefix . 'balancoacoesdepedencia__id';
+				$strAliasName = array_key_exists($strAlias, $strColumnAliasArray) ? $strColumnAliasArray[$strAlias] : $strAlias;
+				if ((array_key_exists($strAlias, $strExpandAsArrayNodes)) &&
+					(!is_null($objDbRow->GetColumn($strAliasName)))) {
+					if ($intPreviousChildItemCount = count($objPreviousItem->_objBalancoAcoesDepedenciaArray)) {
+						$objPreviousChildItem = $objPreviousItem->_objBalancoAcoesDepedenciaArray[$intPreviousChildItemCount - 1];
+						$objChildItem = BalancoAcoesDepedencia::InstantiateDbRow($objDbRow, $strAliasPrefix . 'balancoacoesdepedencia__', $strExpandAsArrayNodes, $objPreviousChildItem, $strColumnAliasArray);
+						if ($objChildItem)
+							$objPreviousItem->_objBalancoAcoesDepedenciaArray[] = $objChildItem;
+					} else
+						$objPreviousItem->_objBalancoAcoesDepedenciaArray[] = BalancoAcoesDepedencia::InstantiateDbRow($objDbRow, $strAliasPrefix . 'balancoacoesdepedencia__', $strExpandAsArrayNodes, null, $strColumnAliasArray);
+					$blnExpandedViaArray = true;
+				}
+
 				$strAlias = $strAliasPrefix . 'costureiraproducao__id';
 				$strAliasName = array_key_exists($strAlias, $strColumnAliasArray) ? $strColumnAliasArray[$strAlias] : $strAlias;
 				if ((array_key_exists($strAlias, $strExpandAsArrayNodes)) &&
@@ -522,8 +554,8 @@
 			$objToReturn->intId = $objDbRow->GetColumn($strAliasName, 'Integer');
 			$strAliasName = array_key_exists($strAliasPrefix . 'ordem_producao_grade_id', $strColumnAliasArray) ? $strColumnAliasArray[$strAliasPrefix . 'ordem_producao_grade_id'] : $strAliasPrefix . 'ordem_producao_grade_id';
 			$objToReturn->intOrdemProducaoGradeId = $objDbRow->GetColumn($strAliasName, 'Integer');
-			$strAliasName = array_key_exists($strAliasPrefix . 'fluxograma_item_id', $strColumnAliasArray) ? $strColumnAliasArray[$strAliasPrefix . 'fluxograma_item_id'] : $strAliasPrefix . 'fluxograma_item_id';
-			$objToReturn->intFluxogramaItemId = $objDbRow->GetColumn($strAliasName, 'Integer');
+			$strAliasName = array_key_exists($strAliasPrefix . 'fluxograma_item_real_id', $strColumnAliasArray) ? $strColumnAliasArray[$strAliasPrefix . 'fluxograma_item_real_id'] : $strAliasPrefix . 'fluxograma_item_real_id';
+			$objToReturn->intFluxogramaItemRealId = $objDbRow->GetColumn($strAliasName, 'Integer');
 			$strAliasName = array_key_exists($strAliasPrefix . 'quantidade_disponivel', $strColumnAliasArray) ? $strColumnAliasArray[$strAliasPrefix . 'quantidade_disponivel'] : $strAliasPrefix . 'quantidade_disponivel';
 			$objToReturn->intQuantidadeDisponivel = $objDbRow->GetColumn($strAliasName, 'Integer');
 			$strAliasName = array_key_exists($strAliasPrefix . 'quantidade_remetida', $strColumnAliasArray) ? $strColumnAliasArray[$strAliasPrefix . 'quantidade_remetida'] : $strAliasPrefix . 'quantidade_remetida';
@@ -549,14 +581,24 @@
 			if (!is_null($objDbRow->GetColumn($strAliasName)))
 				$objToReturn->objOrdemProducaoGrade = OrdemProducaoGrade::InstantiateDbRow($objDbRow, $strAliasPrefix . 'ordem_producao_grade_id__', $strExpandAsArrayNodes, null, $strColumnAliasArray);
 
-			// Check for FluxogramaItem Early Binding
-			$strAlias = $strAliasPrefix . 'fluxograma_item_id__id';
+			// Check for FluxogramaItemReal Early Binding
+			$strAlias = $strAliasPrefix . 'fluxograma_item_real_id__id';
 			$strAliasName = array_key_exists($strAlias, $strColumnAliasArray) ? $strColumnAliasArray[$strAlias] : $strAlias;
 			if (!is_null($objDbRow->GetColumn($strAliasName)))
-				$objToReturn->objFluxogramaItem = FluxogramaItem::InstantiateDbRow($objDbRow, $strAliasPrefix . 'fluxograma_item_id__', $strExpandAsArrayNodes, null, $strColumnAliasArray);
+				$objToReturn->objFluxogramaItemReal = FluxogramaItemReal::InstantiateDbRow($objDbRow, $strAliasPrefix . 'fluxograma_item_real_id__', $strExpandAsArrayNodes, null, $strColumnAliasArray);
 
 
 
+
+			// Check for BalancoAcoesDepedencia Virtual Binding
+			$strAlias = $strAliasPrefix . 'balancoacoesdepedencia__id';
+			$strAliasName = array_key_exists($strAlias, $strColumnAliasArray) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			if (!is_null($objDbRow->GetColumn($strAliasName))) {
+				if (($strExpandAsArrayNodes) && (array_key_exists($strAlias, $strExpandAsArrayNodes)))
+					$objToReturn->_objBalancoAcoesDepedenciaArray[] = BalancoAcoesDepedencia::InstantiateDbRow($objDbRow, $strAliasPrefix . 'balancoacoesdepedencia__', $strExpandAsArrayNodes, null, $strColumnAliasArray);
+				else
+					$objToReturn->_objBalancoAcoesDepedencia = BalancoAcoesDepedencia::InstantiateDbRow($objDbRow, $strAliasPrefix . 'balancoacoesdepedencia__', $strExpandAsArrayNodes, null, $strColumnAliasArray);
+			}
 
 			// Check for CostureiraProducao Virtual Binding
 			$strAlias = $strAliasPrefix . 'costureiraproducao__id';
@@ -654,17 +696,13 @@
 			
 		/**
 		 * Load a single BalancoAcoes object,
-		 * by OrdemProducaoGradeId, FluxogramaItemId Index(es)
-		 * @param integer $intOrdemProducaoGradeId
-		 * @param integer $intFluxogramaItemId
+		 * by FluxogramaItemRealId Index(es)
+		 * @param integer $intFluxogramaItemRealId
 		 * @return BalancoAcoes
 		*/
-		public static function LoadByOrdemProducaoGradeIdFluxogramaItemId($intOrdemProducaoGradeId, $intFluxogramaItemId, $objOptionalClauses = null) {
+		public static function LoadByFluxogramaItemRealId($intFluxogramaItemRealId, $objOptionalClauses = null) {
 			return BalancoAcoes::QuerySingle(
-				QQ::AndCondition(
-				QQ::Equal(QQN::BalancoAcoes()->OrdemProducaoGradeId, $intOrdemProducaoGradeId),
-				QQ::Equal(QQN::BalancoAcoes()->FluxogramaItemId, $intFluxogramaItemId)
-				)
+				QQ::Equal(QQN::BalancoAcoes()->FluxogramaItemRealId, $intFluxogramaItemRealId)
 			, $objOptionalClauses
 			);
 		}
@@ -702,40 +740,6 @@
 			, $objOptionalClauses
 			);
 		}
-			
-		/**
-		 * Load an array of BalancoAcoes objects,
-		 * by FluxogramaItemId Index(es)
-		 * @param integer $intFluxogramaItemId
-		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
-		 * @return BalancoAcoes[]
-		*/
-		public static function LoadArrayByFluxogramaItemId($intFluxogramaItemId, $objOptionalClauses = null) {
-			// Call BalancoAcoes::QueryArray to perform the LoadArrayByFluxogramaItemId query
-			try {
-				return BalancoAcoes::QueryArray(
-					QQ::Equal(QQN::BalancoAcoes()->FluxogramaItemId, $intFluxogramaItemId),
-					$objOptionalClauses
-					);
-			} catch (QCallerException $objExc) {
-				$objExc->IncrementOffset();
-				throw $objExc;
-			}
-		}
-
-		/**
-		 * Count BalancoAcoeses
-		 * by FluxogramaItemId Index(es)
-		 * @param integer $intFluxogramaItemId
-		 * @return int
-		*/
-		public static function CountByFluxogramaItemId($intFluxogramaItemId, $objOptionalClauses = null) {
-			// Call BalancoAcoes::QueryCount to perform the CountByFluxogramaItemId query
-			return BalancoAcoes::QueryCount(
-				QQ::Equal(QQN::BalancoAcoes()->FluxogramaItemId, $intFluxogramaItemId)
-			, $objOptionalClauses
-			);
-		}
 
 
 
@@ -768,13 +772,13 @@
 					$objDatabase->NonQuery('
 						INSERT INTO `balanco_acoes` (
 							`ordem_producao_grade_id`,
-							`fluxograma_item_id`,
+							`fluxograma_item_real_id`,
 							`quantidade_disponivel`,
 							`quantidade_remetida`,
 							`quantidade_produzida`
 						) VALUES (
 							' . $objDatabase->SqlVariable($this->intOrdemProducaoGradeId) . ',
-							' . $objDatabase->SqlVariable($this->intFluxogramaItemId) . ',
+							' . $objDatabase->SqlVariable($this->intFluxogramaItemRealId) . ',
 							' . $objDatabase->SqlVariable($this->intQuantidadeDisponivel) . ',
 							' . $objDatabase->SqlVariable($this->intQuantidadeRemetida) . ',
 							' . $objDatabase->SqlVariable($this->intQuantidadeProduzida) . '
@@ -798,7 +802,7 @@
 							`balanco_acoes`
 						SET
 							`ordem_producao_grade_id` = ' . $objDatabase->SqlVariable($this->intOrdemProducaoGradeId) . ',
-							`fluxograma_item_id` = ' . $objDatabase->SqlVariable($this->intFluxogramaItemId) . ',
+							`fluxograma_item_real_id` = ' . $objDatabase->SqlVariable($this->intFluxogramaItemRealId) . ',
 							`quantidade_disponivel` = ' . $objDatabase->SqlVariable($this->intQuantidadeDisponivel) . ',
 							`quantidade_remetida` = ' . $objDatabase->SqlVariable($this->intQuantidadeRemetida) . ',
 							`quantidade_produzida` = ' . $objDatabase->SqlVariable($this->intQuantidadeProduzida) . '
@@ -887,7 +891,7 @@
 
 			// Update $this's local variables to match
 			$this->OrdemProducaoGradeId = $objReloaded->OrdemProducaoGradeId;
-			$this->FluxogramaItemId = $objReloaded->FluxogramaItemId;
+			$this->FluxogramaItemRealId = $objReloaded->FluxogramaItemRealId;
 			$this->intQuantidadeDisponivel = $objReloaded->intQuantidadeDisponivel;
 			$this->intQuantidadeRemetida = $objReloaded->intQuantidadeRemetida;
 			$this->intQuantidadeProduzida = $objReloaded->intQuantidadeProduzida;
@@ -905,7 +909,7 @@
 				INSERT INTO `balanco_acoes` (
 					`id`,
 					`ordem_producao_grade_id`,
-					`fluxograma_item_id`,
+					`fluxograma_item_real_id`,
 					`quantidade_disponivel`,
 					`quantidade_remetida`,
 					`quantidade_produzida`,
@@ -915,7 +919,7 @@
 				) VALUES (
 					' . $objDatabase->SqlVariable($this->intId) . ',
 					' . $objDatabase->SqlVariable($this->intOrdemProducaoGradeId) . ',
-					' . $objDatabase->SqlVariable($this->intFluxogramaItemId) . ',
+					' . $objDatabase->SqlVariable($this->intFluxogramaItemRealId) . ',
 					' . $objDatabase->SqlVariable($this->intQuantidadeDisponivel) . ',
 					' . $objDatabase->SqlVariable($this->intQuantidadeRemetida) . ',
 					' . $objDatabase->SqlVariable($this->intQuantidadeProduzida) . ',
@@ -979,10 +983,10 @@
 					// @return integer
 					return $this->intOrdemProducaoGradeId;
 
-				case 'FluxogramaItemId':
-					// Gets the value for intFluxogramaItemId (Not Null)
+				case 'FluxogramaItemRealId':
+					// Gets the value for intFluxogramaItemRealId (Unique)
 					// @return integer
-					return $this->intFluxogramaItemId;
+					return $this->intFluxogramaItemRealId;
 
 				case 'QuantidadeDisponivel':
 					// Gets the value for intQuantidadeDisponivel (Not Null)
@@ -1015,13 +1019,13 @@
 						throw $objExc;
 					}
 
-				case 'FluxogramaItem':
-					// Gets the value for the FluxogramaItem object referenced by intFluxogramaItemId (Not Null)
-					// @return FluxogramaItem
+				case 'FluxogramaItemReal':
+					// Gets the value for the FluxogramaItemReal object referenced by intFluxogramaItemRealId (Unique)
+					// @return FluxogramaItemReal
 					try {
-						if ((!$this->objFluxogramaItem) && (!is_null($this->intFluxogramaItemId)))
-							$this->objFluxogramaItem = FluxogramaItem::Load($this->intFluxogramaItemId);
-						return $this->objFluxogramaItem;
+						if ((!$this->objFluxogramaItemReal) && (!is_null($this->intFluxogramaItemRealId)))
+							$this->objFluxogramaItemReal = FluxogramaItemReal::Load($this->intFluxogramaItemRealId);
+						return $this->objFluxogramaItemReal;
 					} catch (QCallerException $objExc) {
 						$objExc->IncrementOffset();
 						throw $objExc;
@@ -1032,6 +1036,18 @@
 				// Virtual Object References (Many to Many and Reverse References)
 				// (If restored via a "Many-to" expansion)
 				////////////////////////////
+
+				case '_BalancoAcoesDepedencia':
+					// Gets the value for the private _objBalancoAcoesDepedencia (Read-Only)
+					// if set due to an expansion on the balanco_acoes_depedencia.balanco_acoes_id reverse relationship
+					// @return BalancoAcoesDepedencia
+					return $this->_objBalancoAcoesDepedencia;
+
+				case '_BalancoAcoesDepedenciaArray':
+					// Gets the value for the private _objBalancoAcoesDepedenciaArray (Read-Only)
+					// if set due to an ExpandAsArray on the balanco_acoes_depedencia.balanco_acoes_id reverse relationship
+					// @return BalancoAcoesDepedencia[]
+					return (array) $this->_objBalancoAcoesDepedenciaArray;
 
 				case '_CostureiraProducao':
 					// Gets the value for the private _objCostureiraProducao (Read-Only)
@@ -1084,13 +1100,13 @@
 						throw $objExc;
 					}
 
-				case 'FluxogramaItemId':
-					// Sets the value for intFluxogramaItemId (Not Null)
+				case 'FluxogramaItemRealId':
+					// Sets the value for intFluxogramaItemRealId (Unique)
 					// @param integer $mixValue
 					// @return integer
 					try {
-						$this->objFluxogramaItem = null;
-						return ($this->intFluxogramaItemId = QType::Cast($mixValue, QType::Integer));
+						$this->objFluxogramaItemReal = null;
+						return ($this->intFluxogramaItemRealId = QType::Cast($mixValue, QType::Integer));
 					} catch (QCallerException $objExc) {
 						$objExc->IncrementOffset();
 						throw $objExc;
@@ -1163,30 +1179,30 @@
 					}
 					break;
 
-				case 'FluxogramaItem':
-					// Sets the value for the FluxogramaItem object referenced by intFluxogramaItemId (Not Null)
-					// @param FluxogramaItem $mixValue
-					// @return FluxogramaItem
+				case 'FluxogramaItemReal':
+					// Sets the value for the FluxogramaItemReal object referenced by intFluxogramaItemRealId (Unique)
+					// @param FluxogramaItemReal $mixValue
+					// @return FluxogramaItemReal
 					if (is_null($mixValue)) {
-						$this->intFluxogramaItemId = null;
-						$this->objFluxogramaItem = null;
+						$this->intFluxogramaItemRealId = null;
+						$this->objFluxogramaItemReal = null;
 						return null;
 					} else {
-						// Make sure $mixValue actually is a FluxogramaItem object
+						// Make sure $mixValue actually is a FluxogramaItemReal object
 						try {
-							$mixValue = QType::Cast($mixValue, 'FluxogramaItem');
+							$mixValue = QType::Cast($mixValue, 'FluxogramaItemReal');
 						} catch (QInvalidCastException $objExc) {
 							$objExc->IncrementOffset();
 							throw $objExc;
 						} 
 
-						// Make sure $mixValue is a SAVED FluxogramaItem object
+						// Make sure $mixValue is a SAVED FluxogramaItemReal object
 						if (is_null($mixValue->Id))
-							throw new QCallerException('Unable to set an unsaved FluxogramaItem for this BalancoAcoes');
+							throw new QCallerException('Unable to set an unsaved FluxogramaItemReal for this BalancoAcoes');
 
 						// Update Local Member Variables
-						$this->objFluxogramaItem = $mixValue;
-						$this->intFluxogramaItemId = $mixValue->Id;
+						$this->objFluxogramaItemReal = $mixValue;
+						$this->intFluxogramaItemRealId = $mixValue->Id;
 
 						// Return $mixValue
 						return $mixValue;
@@ -1219,6 +1235,188 @@
 		///////////////////////////////
 		// ASSOCIATED OBJECTS' METHODS
 		///////////////////////////////
+
+			
+		
+		// Related Objects' Methods for BalancoAcoesDepedencia
+		//-------------------------------------------------------------------
+
+		/**
+		 * Gets all associated BalancoAcoesDepedencias as an array of BalancoAcoesDepedencia objects
+		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
+		 * @return BalancoAcoesDepedencia[]
+		*/ 
+		public function GetBalancoAcoesDepedenciaArray($objOptionalClauses = null) {
+			if ((is_null($this->intId)))
+				return array();
+
+			try {
+				return BalancoAcoesDepedencia::LoadArrayByBalancoAcoesId($this->intId, $objOptionalClauses);
+			} catch (QCallerException $objExc) {
+				$objExc->IncrementOffset();
+				throw $objExc;
+			}
+		}
+
+		/**
+		 * Counts all associated BalancoAcoesDepedencias
+		 * @return int
+		*/ 
+		public function CountBalancoAcoesDepedencias() {
+			if ((is_null($this->intId)))
+				return 0;
+
+			return BalancoAcoesDepedencia::CountByBalancoAcoesId($this->intId);
+		}
+
+		/**
+		 * Associates a BalancoAcoesDepedencia
+		 * @param BalancoAcoesDepedencia $objBalancoAcoesDepedencia
+		 * @return void
+		*/ 
+		public function AssociateBalancoAcoesDepedencia(BalancoAcoesDepedencia $objBalancoAcoesDepedencia) {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociateBalancoAcoesDepedencia on this unsaved BalancoAcoes.');
+			if ((is_null($objBalancoAcoesDepedencia->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociateBalancoAcoesDepedencia on this BalancoAcoes with an unsaved BalancoAcoesDepedencia.');
+
+			// Get the Database Object for this Class
+			$objDatabase = BalancoAcoes::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`balanco_acoes_depedencia`
+				SET
+					`balanco_acoes_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objBalancoAcoesDepedencia->Id) . '
+			');
+
+			// Journaling (if applicable)
+			if ($objDatabase->JournalingDatabase) {
+				$objBalancoAcoesDepedencia->BalancoAcoesId = $this->intId;
+				$objBalancoAcoesDepedencia->Journal('UPDATE');
+			}
+		}
+
+		/**
+		 * Unassociates a BalancoAcoesDepedencia
+		 * @param BalancoAcoesDepedencia $objBalancoAcoesDepedencia
+		 * @return void
+		*/ 
+		public function UnassociateBalancoAcoesDepedencia(BalancoAcoesDepedencia $objBalancoAcoesDepedencia) {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateBalancoAcoesDepedencia on this unsaved BalancoAcoes.');
+			if ((is_null($objBalancoAcoesDepedencia->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateBalancoAcoesDepedencia on this BalancoAcoes with an unsaved BalancoAcoesDepedencia.');
+
+			// Get the Database Object for this Class
+			$objDatabase = BalancoAcoes::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`balanco_acoes_depedencia`
+				SET
+					`balanco_acoes_id` = null
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objBalancoAcoesDepedencia->Id) . ' AND
+					`balanco_acoes_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+
+			// Journaling
+			if ($objDatabase->JournalingDatabase) {
+				$objBalancoAcoesDepedencia->BalancoAcoesId = null;
+				$objBalancoAcoesDepedencia->Journal('UPDATE');
+			}
+		}
+
+		/**
+		 * Unassociates all BalancoAcoesDepedencias
+		 * @return void
+		*/ 
+		public function UnassociateAllBalancoAcoesDepedencias() {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateBalancoAcoesDepedencia on this unsaved BalancoAcoes.');
+
+			// Get the Database Object for this Class
+			$objDatabase = BalancoAcoes::GetDatabase();
+
+			// Journaling
+			if ($objDatabase->JournalingDatabase) {
+				foreach (BalancoAcoesDepedencia::LoadArrayByBalancoAcoesId($this->intId) as $objBalancoAcoesDepedencia) {
+					$objBalancoAcoesDepedencia->BalancoAcoesId = null;
+					$objBalancoAcoesDepedencia->Journal('UPDATE');
+				}
+			}
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`balanco_acoes_depedencia`
+				SET
+					`balanco_acoes_id` = null
+				WHERE
+					`balanco_acoes_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+		/**
+		 * Deletes an associated BalancoAcoesDepedencia
+		 * @param BalancoAcoesDepedencia $objBalancoAcoesDepedencia
+		 * @return void
+		*/ 
+		public function DeleteAssociatedBalancoAcoesDepedencia(BalancoAcoesDepedencia $objBalancoAcoesDepedencia) {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateBalancoAcoesDepedencia on this unsaved BalancoAcoes.');
+			if ((is_null($objBalancoAcoesDepedencia->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateBalancoAcoesDepedencia on this BalancoAcoes with an unsaved BalancoAcoesDepedencia.');
+
+			// Get the Database Object for this Class
+			$objDatabase = BalancoAcoes::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`balanco_acoes_depedencia`
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objBalancoAcoesDepedencia->Id) . ' AND
+					`balanco_acoes_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+
+			// Journaling
+			if ($objDatabase->JournalingDatabase) {
+				$objBalancoAcoesDepedencia->Journal('DELETE');
+			}
+		}
+
+		/**
+		 * Deletes all associated BalancoAcoesDepedencias
+		 * @return void
+		*/ 
+		public function DeleteAllBalancoAcoesDepedencias() {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateBalancoAcoesDepedencia on this unsaved BalancoAcoes.');
+
+			// Get the Database Object for this Class
+			$objDatabase = BalancoAcoes::GetDatabase();
+
+			// Journaling
+			if ($objDatabase->JournalingDatabase) {
+				foreach (BalancoAcoesDepedencia::LoadArrayByBalancoAcoesId($this->intId) as $objBalancoAcoesDepedencia) {
+					$objBalancoAcoesDepedencia->Journal('DELETE');
+				}
+			}
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`balanco_acoes_depedencia`
+				WHERE
+					`balanco_acoes_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
 
 			
 		
@@ -1414,7 +1612,7 @@
 			$strToReturn = '<complexType name="BalancoAcoes"><sequence>';
 			$strToReturn .= '<element name="Id" type="xsd:int"/>';
 			$strToReturn .= '<element name="OrdemProducaoGrade" type="xsd1:OrdemProducaoGrade"/>';
-			$strToReturn .= '<element name="FluxogramaItem" type="xsd1:FluxogramaItem"/>';
+			$strToReturn .= '<element name="FluxogramaItemReal" type="xsd1:FluxogramaItemReal"/>';
 			$strToReturn .= '<element name="QuantidadeDisponivel" type="xsd:int"/>';
 			$strToReturn .= '<element name="QuantidadeRemetida" type="xsd:int"/>';
 			$strToReturn .= '<element name="QuantidadeProduzida" type="xsd:int"/>';
@@ -1427,7 +1625,7 @@
 			if (!array_key_exists('BalancoAcoes', $strComplexTypeArray)) {
 				$strComplexTypeArray['BalancoAcoes'] = BalancoAcoes::GetSoapComplexTypeXml();
 				OrdemProducaoGrade::AlterSoapComplexTypeArray($strComplexTypeArray);
-				FluxogramaItem::AlterSoapComplexTypeArray($strComplexTypeArray);
+				FluxogramaItemReal::AlterSoapComplexTypeArray($strComplexTypeArray);
 			}
 		}
 
@@ -1447,9 +1645,9 @@
 			if ((property_exists($objSoapObject, 'OrdemProducaoGrade')) &&
 				($objSoapObject->OrdemProducaoGrade))
 				$objToReturn->OrdemProducaoGrade = OrdemProducaoGrade::GetObjectFromSoapObject($objSoapObject->OrdemProducaoGrade);
-			if ((property_exists($objSoapObject, 'FluxogramaItem')) &&
-				($objSoapObject->FluxogramaItem))
-				$objToReturn->FluxogramaItem = FluxogramaItem::GetObjectFromSoapObject($objSoapObject->FluxogramaItem);
+			if ((property_exists($objSoapObject, 'FluxogramaItemReal')) &&
+				($objSoapObject->FluxogramaItemReal))
+				$objToReturn->FluxogramaItemReal = FluxogramaItemReal::GetObjectFromSoapObject($objSoapObject->FluxogramaItemReal);
 			if (property_exists($objSoapObject, 'QuantidadeDisponivel'))
 				$objToReturn->intQuantidadeDisponivel = $objSoapObject->QuantidadeDisponivel;
 			if (property_exists($objSoapObject, 'QuantidadeRemetida'))
@@ -1478,10 +1676,10 @@
 				$objObject->objOrdemProducaoGrade = OrdemProducaoGrade::GetSoapObjectFromObject($objObject->objOrdemProducaoGrade, false);
 			else if (!$blnBindRelatedObjects)
 				$objObject->intOrdemProducaoGradeId = null;
-			if ($objObject->objFluxogramaItem)
-				$objObject->objFluxogramaItem = FluxogramaItem::GetSoapObjectFromObject($objObject->objFluxogramaItem, false);
+			if ($objObject->objFluxogramaItemReal)
+				$objObject->objFluxogramaItemReal = FluxogramaItemReal::GetSoapObjectFromObject($objObject->objFluxogramaItemReal, false);
 			else if (!$blnBindRelatedObjects)
-				$objObject->intFluxogramaItemId = null;
+				$objObject->intFluxogramaItemRealId = null;
 			return $objObject;
 		}
 
@@ -1500,11 +1698,12 @@
 	 * @property-read QQNode $Id
 	 * @property-read QQNode $OrdemProducaoGradeId
 	 * @property-read QQNodeOrdemProducaoGrade $OrdemProducaoGrade
-	 * @property-read QQNode $FluxogramaItemId
-	 * @property-read QQNodeFluxogramaItem $FluxogramaItem
+	 * @property-read QQNode $FluxogramaItemRealId
+	 * @property-read QQNodeFluxogramaItemReal $FluxogramaItemReal
 	 * @property-read QQNode $QuantidadeDisponivel
 	 * @property-read QQNode $QuantidadeRemetida
 	 * @property-read QQNode $QuantidadeProduzida
+	 * @property-read QQReverseReferenceNodeBalancoAcoesDepedencia $BalancoAcoesDepedencia
 	 * @property-read QQReverseReferenceNodeCostureiraProducao $CostureiraProducao
 	 */
 	class QQNodeBalancoAcoes extends QQNode {
@@ -1519,16 +1718,18 @@
 					return new QQNode('ordem_producao_grade_id', 'OrdemProducaoGradeId', 'integer', $this);
 				case 'OrdemProducaoGrade':
 					return new QQNodeOrdemProducaoGrade('ordem_producao_grade_id', 'OrdemProducaoGrade', 'integer', $this);
-				case 'FluxogramaItemId':
-					return new QQNode('fluxograma_item_id', 'FluxogramaItemId', 'integer', $this);
-				case 'FluxogramaItem':
-					return new QQNodeFluxogramaItem('fluxograma_item_id', 'FluxogramaItem', 'integer', $this);
+				case 'FluxogramaItemRealId':
+					return new QQNode('fluxograma_item_real_id', 'FluxogramaItemRealId', 'integer', $this);
+				case 'FluxogramaItemReal':
+					return new QQNodeFluxogramaItemReal('fluxograma_item_real_id', 'FluxogramaItemReal', 'integer', $this);
 				case 'QuantidadeDisponivel':
 					return new QQNode('quantidade_disponivel', 'QuantidadeDisponivel', 'integer', $this);
 				case 'QuantidadeRemetida':
 					return new QQNode('quantidade_remetida', 'QuantidadeRemetida', 'integer', $this);
 				case 'QuantidadeProduzida':
 					return new QQNode('quantidade_produzida', 'QuantidadeProduzida', 'integer', $this);
+				case 'BalancoAcoesDepedencia':
+					return new QQReverseReferenceNodeBalancoAcoesDepedencia($this, 'balancoacoesdepedencia', 'reverse_reference', 'balanco_acoes_id');
 				case 'CostureiraProducao':
 					return new QQReverseReferenceNodeCostureiraProducao($this, 'costureiraproducao', 'reverse_reference', 'balanco_acoes_id');
 
@@ -1549,11 +1750,12 @@
 	 * @property-read QQNode $Id
 	 * @property-read QQNode $OrdemProducaoGradeId
 	 * @property-read QQNodeOrdemProducaoGrade $OrdemProducaoGrade
-	 * @property-read QQNode $FluxogramaItemId
-	 * @property-read QQNodeFluxogramaItem $FluxogramaItem
+	 * @property-read QQNode $FluxogramaItemRealId
+	 * @property-read QQNodeFluxogramaItemReal $FluxogramaItemReal
 	 * @property-read QQNode $QuantidadeDisponivel
 	 * @property-read QQNode $QuantidadeRemetida
 	 * @property-read QQNode $QuantidadeProduzida
+	 * @property-read QQReverseReferenceNodeBalancoAcoesDepedencia $BalancoAcoesDepedencia
 	 * @property-read QQReverseReferenceNodeCostureiraProducao $CostureiraProducao
 	 * @property-read QQNode $_PrimaryKeyNode
 	 */
@@ -1569,16 +1771,18 @@
 					return new QQNode('ordem_producao_grade_id', 'OrdemProducaoGradeId', 'integer', $this);
 				case 'OrdemProducaoGrade':
 					return new QQNodeOrdemProducaoGrade('ordem_producao_grade_id', 'OrdemProducaoGrade', 'integer', $this);
-				case 'FluxogramaItemId':
-					return new QQNode('fluxograma_item_id', 'FluxogramaItemId', 'integer', $this);
-				case 'FluxogramaItem':
-					return new QQNodeFluxogramaItem('fluxograma_item_id', 'FluxogramaItem', 'integer', $this);
+				case 'FluxogramaItemRealId':
+					return new QQNode('fluxograma_item_real_id', 'FluxogramaItemRealId', 'integer', $this);
+				case 'FluxogramaItemReal':
+					return new QQNodeFluxogramaItemReal('fluxograma_item_real_id', 'FluxogramaItemReal', 'integer', $this);
 				case 'QuantidadeDisponivel':
 					return new QQNode('quantidade_disponivel', 'QuantidadeDisponivel', 'integer', $this);
 				case 'QuantidadeRemetida':
 					return new QQNode('quantidade_remetida', 'QuantidadeRemetida', 'integer', $this);
 				case 'QuantidadeProduzida':
 					return new QQNode('quantidade_produzida', 'QuantidadeProduzida', 'integer', $this);
+				case 'BalancoAcoesDepedencia':
+					return new QQReverseReferenceNodeBalancoAcoesDepedencia($this, 'balancoacoesdepedencia', 'reverse_reference', 'balanco_acoes_id');
 				case 'CostureiraProducao':
 					return new QQReverseReferenceNodeCostureiraProducao($this, 'costureiraproducao', 'reverse_reference', 'balanco_acoes_id');
 

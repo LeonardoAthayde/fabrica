@@ -58,28 +58,75 @@
 			$txtControl = $this->pnlSeamstress->GetChildControl($arr[1]);
 			$objCostureiraProducao = CostureiraProducao::Load($arr[0]);
 			
+			//$objBalancoAcoes = $objCostureiraProducao->BalancoAcoes;
+			//$objArrayFluxogramaItemFilho = $objBalancoAcoes->FluxogramaItemReal->GetFluxogramaItemRealAsFluxogramaDepedenciaRealArray();
+			
+			//foreach ($objArrayFluxogramaItemFilho as $objFluxogramaItemFilho){
+			//	QApplication::DisplayAlert($objFluxogramaItemFilho->Id);
+			//}
+			
 			if($objCostureiraProducao) {
-				$intMinimum = 0;
+				$intMinimum = 1;
 				$intMaximum = $objCostureiraProducao->QuantidadePlanejada-$objCostureiraProducao->QuantidadeRealizada;
 				if(is_numeric($txtControl->Text) && $txtControl->Text >= $intMinimum && $txtControl->Text <= $intMaximum) {
 							
-					$objCostureiraProducao->QuantidadeRealizada = $txtControl->Text;
+					$objCostureiraProducao->QuantidadeRealizada+= $txtControl->Text;
 					$objCostureiraProducao->QuantidadeEstocado+= $txtControl->Text;
 					$objCostureiraProducao->Save();
 				
 					$objBalancoAcoes = $objCostureiraProducao->BalancoAcoes;
 					$objBalancoAcoes->QuantidadeProduzida+= $txtControl->Text;
 					$objBalancoAcoes->Save();
+			
 				
-
-					$objFluxogramaItemNext = FluxogramaItem::QuerySingle(
+					$objArrayFluxogramaItemDepedentes = $objBalancoAcoes->FluxogramaItemReal->GetFluxogramaItemRealAsFluxogramaDepedenciaRealArray();
+					if(count($objArrayFluxogramaItemDepedentes) == 0){
+						$objBalancoPecas = BalancoPecas::LoadByOrdemProducaoGradeId($objBalancoAcoes->OrdemProducaoGradeId);
+						$objBalancoPecas->Balanco-=$txtControl->Text;
+						$objBalancoPecas->QuantidadeProduzida+=$txtControl->Text;
+						$objBalancoPecas->Save();
+					} else {
+						foreach ($objArrayFluxogramaItemDepedentes as $objFluxogramaItemNext){
+							//QApplication::DisplayAlert($objFluxogramaItemNext->Id);
+							$objBalancoAcoesNext = $objFluxogramaItemNext->BalancoAcoes;
+							//$objBalancoAcoesNext = BalancoAcoes::LoadByOrdemProducaoGradeIdFluxogramaItemId($objBalancoAcoes->OrdemProducaoGradeId,  $objFluxogramaItemNext->Id);
+							//if(!$objBalancoAcoesNext) {
+							//$objBalancoAcoesNext = new BalancoAcoes();
+							//$objBalancoAcoesNext->OrdemProducaoGradeId = $objBalancoAcoes->OrdemProducaoGradeId;
+							//$objBalancoAcoesNext->FluxogramaItemId = $objFluxogramaItemNext->Id;
+							//$objBalancoAcoesNext->QuantidadeDisponivel = 0;
+							//$objBalancoAcoesNext->QuantidadeProduzida = 0;
+							//$objBalancoAcoesNext->QuantidadeRemetida = 0;
+							//}
+							
+							
+							$intMin = 99999999;
+							foreach($objBalancoAcoesNext->GetBalancoAcoesDepedenciaArray() as $objBalancoAcoesDepedentes){
+								//QApplication::DisplayAlert($objBalancoAcoesDepedentes->FluxogramaItemRealId);
+								if($objBalancoAcoesDepedentes->FluxogramaItemRealId == $objBalancoAcoes->FluxogramaItemRealId){
+									$objBalancoAcoesDepedentes->QuantidadeDisponibilizada+=$txtControl->Text;
+									$objBalancoAcoesDepedentes->Save();
+									//QApplication::DisplayAlert('opa');
+								}
+								if($intMin > $objBalancoAcoesDepedentes->QuantidadeDisponibilizada)
+									$intMin = $objBalancoAcoesDepedentes->QuantidadeDisponibilizada;
+							}
+							
+							$intAdicionarQuantidadeDisponivel = $intMin - ($objBalancoAcoesNext->QuantidadeDisponivel+$objBalancoAcoesNext->QuantidadeRemetida);
+							
+							$objBalancoAcoesNext->QuantidadeDisponivel+= $intAdicionarQuantidadeDisponivel;
+							$objBalancoAcoesNext->Save();
+						}
+					}
+					
+					/*$objFluxogramaItemNext = FluxogramaItem::QuerySingle(
 						QQ::AndCondition(
 							QQ::Equal(QQN::FluxogramaItem()->Ordenacao, ($objBalancoAcoes->FluxogramaItem->Ordenacao+1)),
 							QQ::Equal(QQN::FluxogramaItem()->Ativo, true),
 							QQ::Equal(QQN::FluxogramaItem()->ReferenciaId, $objBalancoAcoes->OrdemProducaoGrade->OrdemProducao->ReferenciaId)));
 					
 					
-					if(!$objFluxogramaItemNext) {
+					/*if(!$objFluxogramaItemNext) {
 						$objBalancoPecas = BalancoPecas::LoadByOrdemProducaoGradeId($objBalancoAcoes->OrdemProducaoGradeId);
 						$objBalancoPecas->Balanco-=$txtControl->Text;
 						$objBalancoPecas->QuantidadeProduzida+=$txtControl->Text;
@@ -96,7 +143,7 @@
 						}
 						$objBalancoAcoesNext->QuantidadeDisponivel+= $txtControl->Text;
 						$objBalancoAcoesNext->Save();
-					}
+					}*/
 					
 					$this->pnlSeamstress->Refresh();
 				

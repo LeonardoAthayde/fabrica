@@ -19,7 +19,7 @@
 			$this->pxyConfirm_Create();
 			$this->lblSelected_Create();
 			QApplication::ExecuteJavaScript("SelectedListGroup();");
-			$this->SetPollingProcessor('OrdemExecucaoForm_Poling', $this, 1000 * 5);
+			$this->SetPollingProcessor('OrdemExecucaoForm_Poling', $this, 1000 * 60);
 		}
 		
 		protected function OrdemExecucaoForm_Poling(){
@@ -73,8 +73,8 @@
 			.' '.$objBalancoAcoes->OrdemProducaoGrade->OrdemProducao->Referencia->Nome.' | '
 			.' '.$objBalancoAcoes->OrdemProducaoGrade->Cor->Nome.' - '
 			.' '.$objBalancoAcoes->OrdemProducaoGrade->Tamanho->Valor
-			.'</div><div><b>'.$objBalancoAcoes->FluxogramaItem->Ordenacao.'º '
-			.$objBalancoAcoes->FluxogramaItem->FluxogramaAcoes->Nome.'</b></div>';
+			.'</div><div><b>'.$objBalancoAcoes->FluxogramaItemReal->Profundidade.'º '
+			.$objBalancoAcoes->FluxogramaItemReal->Acao.'</b></div>';
 			$chkControl->Text = $objBalancoAcoes->Id;
 			$chkControl->Display = false;	
 			return $chkControl->Render(false).$strString;
@@ -82,13 +82,17 @@
 		
 		protected function Create_SelectBox($objBalancoAcoes){
 			$lstControl = $this->GetControl('listboxcontrol'.$objBalancoAcoes->Id);
+			$intValue = -1;
 			if(!$lstControl) {
 				$lstControl =  new QListBox($this->pnlNewGrade, 'listboxcontrol'.$objBalancoAcoes->Id); 
 				$lstControl->CssClass = 'form-control input-lg';
-			}
-			$lstControl->RemoveAllItems();
-			for($i = $objBalancoAcoes->QuantidadeDisponivel; $i > 0; $i--)
-				$lstControl->AddItem ($i, $i);
+				for($i = $objBalancoAcoes->QuantidadeDisponivel; $i > 0; $i--)
+					$lstControl->AddItem ($i, $i);
+			} else if($objBalancoAcoes->QuantidadeDisponivel != $lstControl->ItemCount){
+				$lstControl->RemoveAllItems();
+				for($i = $objBalancoAcoes->QuantidadeDisponivel; $i > 0; $i--)
+					$lstControl->AddItem ($i, $i);			
+			}				
 			return $lstControl->Render(false);
 		}
 		

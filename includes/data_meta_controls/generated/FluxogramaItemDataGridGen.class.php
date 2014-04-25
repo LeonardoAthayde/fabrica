@@ -296,13 +296,12 @@
 				case 'Id': return QQN::FluxogramaItem()->Id;
 				case 'ReferenciaId': return QQN::FluxogramaItem()->ReferenciaId;
 				case 'Referencia': return QQN::FluxogramaItem()->Referencia;
-				case 'Ordenacao': return QQN::FluxogramaItem()->Ordenacao;
 				case 'FluxogramaAcoesId': return QQN::FluxogramaItem()->FluxogramaAcoesId;
 				case 'FluxogramaAcoes': return QQN::FluxogramaItem()->FluxogramaAcoes;
 				case 'MaquinaId': return QQN::FluxogramaItem()->MaquinaId;
 				case 'Maquina': return QQN::FluxogramaItem()->Maquina;
 				case 'Tempo': return QQN::FluxogramaItem()->Tempo;
-				case 'Ativo': return QQN::FluxogramaItem()->Ativo;
+				case 'Profundidade': return QQN::FluxogramaItem()->Profundidade;
 				default: throw new QCallerException('Simple Property not found in FluxogramaItemDataGrid content: ' . $mixContent);
 			} else if ($mixContent instanceof QQAssociationNode)
 				throw new QCallerException('Content QQNode cannot go through any "To Many" association nodes.');

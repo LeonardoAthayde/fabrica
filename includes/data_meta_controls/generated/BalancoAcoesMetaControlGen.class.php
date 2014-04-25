@@ -20,8 +20,8 @@
 	 * property-read QLabel $IdLabel
 	 * property QListBox $OrdemProducaoGradeIdControl
 	 * property-read QLabel $OrdemProducaoGradeIdLabel
-	 * property QListBox $FluxogramaItemIdControl
-	 * property-read QLabel $FluxogramaItemIdLabel
+	 * property QListBox $FluxogramaItemRealIdControl
+	 * property-read QLabel $FluxogramaItemRealIdLabel
 	 * property QIntegerTextBox $QuantidadeDisponivelControl
 	 * property-read QLabel $QuantidadeDisponivelLabel
 	 * property QIntegerTextBox $QuantidadeRemetidaControl
@@ -72,10 +72,10 @@
 		protected $lstOrdemProducaoGrade;
 
         /**
-         * @var QListBox lstFluxogramaItem;
+         * @var QListBox lstFluxogramaItemReal;
          * @access protected
          */
-		protected $lstFluxogramaItem;
+		protected $lstFluxogramaItemReal;
 
         /**
          * @var QIntegerTextBox txtQuantidadeDisponivel;
@@ -104,10 +104,10 @@
 		protected $lblOrdemProducaoGradeId;
 
         /**
-         * @var QLabel lblFluxogramaItemId
+         * @var QLabel lblFluxogramaItemRealId
          * @access protected
          */
-		protected $lblFluxogramaItemId;
+		protected $lblFluxogramaItemRealId;
 
         /**
          * @var QLabel lblQuantidadeDisponivel
@@ -284,46 +284,46 @@
 		}
 
 		/**
-		 * Create and setup QListBox lstFluxogramaItem
+		 * Create and setup QListBox lstFluxogramaItemReal
 		 * @param string $strControlId optional ControlId to use
 		 * @param QQCondition $objConditions override the default condition of QQ::All() to the query, itself
 		 * @param QQClause[] $objOptionalClauses additional optional QQClause object or array of QQClause objects for the query
 		 * @return QListBox
 		 */
-		public function lstFluxogramaItem_Create($strControlId = null, QQCondition $objCondition = null, $objOptionalClauses = null) {
-			$this->lstFluxogramaItem = new QListBox($this->objParentObject, $strControlId);
-			$this->lstFluxogramaItem->Name = QApplication::Translate('Fluxograma Item');
-			$this->lstFluxogramaItem->Required = true;
+		public function lstFluxogramaItemReal_Create($strControlId = null, QQCondition $objCondition = null, $objOptionalClauses = null) {
+			$this->lstFluxogramaItemReal = new QListBox($this->objParentObject, $strControlId);
+			$this->lstFluxogramaItemReal->Name = QApplication::Translate('Fluxograma Item Real');
+			$this->lstFluxogramaItemReal->Required = true;
 			if (!$this->blnEditMode)
-				$this->lstFluxogramaItem->AddItem(QApplication::Translate('- Select One -'), null);
+				$this->lstFluxogramaItemReal->AddItem(QApplication::Translate('- Select One -'), null);
 
 			// Setup and perform the Query
 			if (is_null($objCondition)) $objCondition = QQ::All();
-			$objFluxogramaItemCursor = FluxogramaItem::QueryCursor($objCondition, $objOptionalClauses);
+			$objFluxogramaItemRealCursor = FluxogramaItemReal::QueryCursor($objCondition, $objOptionalClauses);
 
 			// Iterate through the Cursor
-			while ($objFluxogramaItem = FluxogramaItem::InstantiateCursor($objFluxogramaItemCursor)) {
-				$objListItem = new QListItem($objFluxogramaItem->__toString(), $objFluxogramaItem->Id);
-				if (($this->objBalancoAcoes->FluxogramaItem) && ($this->objBalancoAcoes->FluxogramaItem->Id == $objFluxogramaItem->Id))
+			while ($objFluxogramaItemReal = FluxogramaItemReal::InstantiateCursor($objFluxogramaItemRealCursor)) {
+				$objListItem = new QListItem($objFluxogramaItemReal->__toString(), $objFluxogramaItemReal->Id);
+				if (($this->objBalancoAcoes->FluxogramaItemReal) && ($this->objBalancoAcoes->FluxogramaItemReal->Id == $objFluxogramaItemReal->Id))
 					$objListItem->Selected = true;
-				$this->lstFluxogramaItem->AddItem($objListItem);
+				$this->lstFluxogramaItemReal->AddItem($objListItem);
 			}
 
 			// Return the QListBox
-			return $this->lstFluxogramaItem;
+			return $this->lstFluxogramaItemReal;
 		}
 
 		/**
-		 * Create and setup QLabel lblFluxogramaItemId
+		 * Create and setup QLabel lblFluxogramaItemRealId
 		 * @param string $strControlId optional ControlId to use
 		 * @return QLabel
 		 */
-		public function lblFluxogramaItemId_Create($strControlId = null) {
-			$this->lblFluxogramaItemId = new QLabel($this->objParentObject, $strControlId);
-			$this->lblFluxogramaItemId->Name = QApplication::Translate('Fluxograma Item');
-			$this->lblFluxogramaItemId->Text = ($this->objBalancoAcoes->FluxogramaItem) ? $this->objBalancoAcoes->FluxogramaItem->__toString() : null;
-			$this->lblFluxogramaItemId->Required = true;
-			return $this->lblFluxogramaItemId;
+		public function lblFluxogramaItemRealId_Create($strControlId = null) {
+			$this->lblFluxogramaItemRealId = new QLabel($this->objParentObject, $strControlId);
+			$this->lblFluxogramaItemRealId->Name = QApplication::Translate('Fluxograma Item Real');
+			$this->lblFluxogramaItemRealId->Text = ($this->objBalancoAcoes->FluxogramaItemReal) ? $this->objBalancoAcoes->FluxogramaItemReal->__toString() : null;
+			$this->lblFluxogramaItemRealId->Required = true;
+			return $this->lblFluxogramaItemRealId;
 		}
 
 		/**
@@ -437,19 +437,19 @@
 			}
 			if ($this->lblOrdemProducaoGradeId) $this->lblOrdemProducaoGradeId->Text = ($this->objBalancoAcoes->OrdemProducaoGrade) ? $this->objBalancoAcoes->OrdemProducaoGrade->__toString() : null;
 
-			if ($this->lstFluxogramaItem) {
-					$this->lstFluxogramaItem->RemoveAllItems();
+			if ($this->lstFluxogramaItemReal) {
+					$this->lstFluxogramaItemReal->RemoveAllItems();
 				if (!$this->blnEditMode)
-					$this->lstFluxogramaItem->AddItem(QApplication::Translate('- Select One -'), null);
-				$objFluxogramaItemArray = FluxogramaItem::LoadAll();
-				if ($objFluxogramaItemArray) foreach ($objFluxogramaItemArray as $objFluxogramaItem) {
-					$objListItem = new QListItem($objFluxogramaItem->__toString(), $objFluxogramaItem->Id);
-					if (($this->objBalancoAcoes->FluxogramaItem) && ($this->objBalancoAcoes->FluxogramaItem->Id == $objFluxogramaItem->Id))
+					$this->lstFluxogramaItemReal->AddItem(QApplication::Translate('- Select One -'), null);
+				$objFluxogramaItemRealArray = FluxogramaItemReal::LoadAll();
+				if ($objFluxogramaItemRealArray) foreach ($objFluxogramaItemRealArray as $objFluxogramaItemReal) {
+					$objListItem = new QListItem($objFluxogramaItemReal->__toString(), $objFluxogramaItemReal->Id);
+					if (($this->objBalancoAcoes->FluxogramaItemReal) && ($this->objBalancoAcoes->FluxogramaItemReal->Id == $objFluxogramaItemReal->Id))
 						$objListItem->Selected = true;
-					$this->lstFluxogramaItem->AddItem($objListItem);
+					$this->lstFluxogramaItemReal->AddItem($objListItem);
 				}
 			}
-			if ($this->lblFluxogramaItemId) $this->lblFluxogramaItemId->Text = ($this->objBalancoAcoes->FluxogramaItem) ? $this->objBalancoAcoes->FluxogramaItem->__toString() : null;
+			if ($this->lblFluxogramaItemRealId) $this->lblFluxogramaItemRealId->Text = ($this->objBalancoAcoes->FluxogramaItemReal) ? $this->objBalancoAcoes->FluxogramaItemReal->__toString() : null;
 
 			if ($this->txtQuantidadeDisponivel) $this->txtQuantidadeDisponivel->Text = $this->objBalancoAcoes->QuantidadeDisponivel;
 			if ($this->lblQuantidadeDisponivel) $this->lblQuantidadeDisponivel->Text = $this->objBalancoAcoes->QuantidadeDisponivel;
@@ -484,7 +484,7 @@
 			try {
 				// Update any fields for controls that have been created
 				if ($this->lstOrdemProducaoGrade) $this->objBalancoAcoes->OrdemProducaoGradeId = $this->lstOrdemProducaoGrade->SelectedValue;
-				if ($this->lstFluxogramaItem) $this->objBalancoAcoes->FluxogramaItemId = $this->lstFluxogramaItem->SelectedValue;
+				if ($this->lstFluxogramaItemReal) $this->objBalancoAcoes->FluxogramaItemRealId = $this->lstFluxogramaItemReal->SelectedValue;
 				if ($this->txtQuantidadeDisponivel) $this->objBalancoAcoes->QuantidadeDisponivel = $this->txtQuantidadeDisponivel->Text;
 				if ($this->txtQuantidadeRemetida) $this->objBalancoAcoes->QuantidadeRemetida = $this->txtQuantidadeRemetida->Text;
 				if ($this->txtQuantidadeProduzida) $this->objBalancoAcoes->QuantidadeProduzida = $this->txtQuantidadeProduzida->Text;
@@ -542,12 +542,12 @@
 				case 'OrdemProducaoGradeIdLabel':
 					if (!$this->lblOrdemProducaoGradeId) return $this->lblOrdemProducaoGradeId_Create();
 					return $this->lblOrdemProducaoGradeId;
-				case 'FluxogramaItemIdControl':
-					if (!$this->lstFluxogramaItem) return $this->lstFluxogramaItem_Create();
-					return $this->lstFluxogramaItem;
-				case 'FluxogramaItemIdLabel':
-					if (!$this->lblFluxogramaItemId) return $this->lblFluxogramaItemId_Create();
-					return $this->lblFluxogramaItemId;
+				case 'FluxogramaItemRealIdControl':
+					if (!$this->lstFluxogramaItemReal) return $this->lstFluxogramaItemReal_Create();
+					return $this->lstFluxogramaItemReal;
+				case 'FluxogramaItemRealIdLabel':
+					if (!$this->lblFluxogramaItemRealId) return $this->lblFluxogramaItemRealId_Create();
+					return $this->lblFluxogramaItemRealId;
 				case 'QuantidadeDisponivelControl':
 					if (!$this->txtQuantidadeDisponivel) return $this->txtQuantidadeDisponivel_Create();
 					return $this->txtQuantidadeDisponivel;
@@ -592,8 +592,8 @@
 						return ($this->lblId = QType::Cast($mixValue, 'QControl'));
 					case 'OrdemProducaoGradeIdControl':
 						return ($this->lstOrdemProducaoGrade = QType::Cast($mixValue, 'QControl'));
-					case 'FluxogramaItemIdControl':
-						return ($this->lstFluxogramaItem = QType::Cast($mixValue, 'QControl'));
+					case 'FluxogramaItemRealIdControl':
+						return ($this->lstFluxogramaItemReal = QType::Cast($mixValue, 'QControl'));
 					case 'QuantidadeDisponivelControl':
 						return ($this->txtQuantidadeDisponivel = QType::Cast($mixValue, 'QControl'));
 					case 'QuantidadeRemetidaControl':

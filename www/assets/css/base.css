@@ -19,3 +19,10 @@ body{ padding-top: 70px; padding-bottom: 70px;}
 .marginBottom20{margin-bottom: 20px;}
 
 .width100{width: 100%;}
+
+.autocomplete-suggestions{border: 1px solid #000;}
+
+.autocomplete-suggestion{height: 35px; line-height: 35px; border-bottom: 1px dashed #ccc; background: fff;}
+.autocomplete-suggestions .autocomplete-suggestion:last-child{border: none}
+.autocomplete-suggestion:hover{background: #ccc;}
+.autocomplete-suggestion strong{color:#700;}

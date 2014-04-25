@@ -22,7 +22,7 @@
 		// Controls for BalancoAcoes's Data Fields
 		public $lblId;
 		public $lstOrdemProducaoGrade;
-		public $lstFluxogramaItem;
+		public $lstFluxogramaItemReal;
 		public $txtQuantidadeDisponivel;
 		public $txtQuantidadeRemetida;
 		public $txtQuantidadeProduzida;
@@ -57,7 +57,7 @@
 			// Call MetaControl's methods to create qcontrols based on BalancoAcoes's data fields
 			$this->lblId = $this->mctBalancoAcoes->lblId_Create();
 			$this->lstOrdemProducaoGrade = $this->mctBalancoAcoes->lstOrdemProducaoGrade_Create();
-			$this->lstFluxogramaItem = $this->mctBalancoAcoes->lstFluxogramaItem_Create();
+			$this->lstFluxogramaItemReal = $this->mctBalancoAcoes->lstFluxogramaItemReal_Create();
 			$this->txtQuantidadeDisponivel = $this->mctBalancoAcoes->txtQuantidadeDisponivel_Create();
 			$this->txtQuantidadeRemetida = $this->mctBalancoAcoes->txtQuantidadeRemetida_Create();
 			$this->txtQuantidadeProduzida = $this->mctBalancoAcoes->txtQuantidadeProduzida_Create();

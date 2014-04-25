@@ -4,34 +4,32 @@
 
 	/**
 	 * This is a quick-and-dirty draft QForm object to do Create, Edit, and Delete functionality
-	 * of the BalancoAcoes class.  It uses the code-generated
-	 * BalancoAcoesMetaControl class, which has meta-methods to help with
-	 * easily creating/defining controls to modify the fields of a BalancoAcoes columns.
+	 * of the BalancoAcoesDepedencia class.  It uses the code-generated
+	 * BalancoAcoesDepedenciaMetaControl class, which has meta-methods to help with
+	 * easily creating/defining controls to modify the fields of a BalancoAcoesDepedencia columns.
 	 *
 	 * Any display customizations and presentation-tier logic can be implemented
 	 * here by overriding existing or implementing new methods, properties and variables.
 	 * 
 	 * NOTE: This file is overwritten on any code regenerations.  If you want to make
-	 * permanent changes, it is STRONGLY RECOMMENDED to move both balanco_acoes_edit.php AND
-	 * balanco_acoes_edit.tpl.php out of this Form Drafts directory.
+	 * permanent changes, it is STRONGLY RECOMMENDED to move both balanco_acoes_depedencia_edit.php AND
+	 * balanco_acoes_depedencia_edit.tpl.php out of this Form Drafts directory.
 	 *
 	 * @package My Application
 	 * @subpackage Drafts
 	 */
-	class BalancoAcoesEditForm extends QForm {
+	class BalancoAcoesDepedenciaEditForm extends QForm {
 	
 		protected $objUsuario;
 	
-		// Local instance of the BalancoAcoesMetaControl
-		protected $mctBalancoAcoes;
+		// Local instance of the BalancoAcoesDepedenciaMetaControl
+		protected $mctBalancoAcoesDepedencia;
 
-		// Controls for BalancoAcoes's Data Fields
+		// Controls for BalancoAcoesDepedencia's Data Fields
 		protected $lblId;
-		protected $lstOrdemProducaoGrade;
 		protected $lstFluxogramaItemReal;
-		protected $txtQuantidadeDisponivel;
-		protected $txtQuantidadeRemetida;
-		protected $txtQuantidadeProduzida;
+		protected $lstBalancoAcoes;
+		protected $txtQuantidadeDisponibilizada;
 
 		// Other ListBoxes (if applicable) via Unique ReverseReferences and ManyToMany References
 
@@ -68,17 +66,15 @@
 		}		
 
 		protected function Form_Create() {
-			// Use the CreateFromPathInfo shortcut (this can also be done manually using the BalancoAcoesMetaControl constructor)
+			// Use the CreateFromPathInfo shortcut (this can also be done manually using the BalancoAcoesDepedenciaMetaControl constructor)
 			// MAKE SURE we specify "$this" as the MetaControl's (and thus all subsequent controls') parent
-			$this->mctBalancoAcoes = BalancoAcoesMetaControl::CreateFromPathInfo($this);
+			$this->mctBalancoAcoesDepedencia = BalancoAcoesDepedenciaMetaControl::CreateFromPathInfo($this);
 
-			// Call MetaControl's methods to create qcontrols based on BalancoAcoes's data fields
-			$this->lblId = $this->mctBalancoAcoes->lblId_Create();
-			$this->lstOrdemProducaoGrade = $this->mctBalancoAcoes->lstOrdemProducaoGrade_Create();
-			$this->lstFluxogramaItemReal = $this->mctBalancoAcoes->lstFluxogramaItemReal_Create();
-			$this->txtQuantidadeDisponivel = $this->mctBalancoAcoes->txtQuantidadeDisponivel_Create();
-			$this->txtQuantidadeRemetida = $this->mctBalancoAcoes->txtQuantidadeRemetida_Create();
-			$this->txtQuantidadeProduzida = $this->mctBalancoAcoes->txtQuantidadeProduzida_Create();
+			// Call MetaControl's methods to create qcontrols based on BalancoAcoesDepedencia's data fields
+			$this->lblId = $this->mctBalancoAcoesDepedencia->lblId_Create();
+			$this->lstFluxogramaItemReal = $this->mctBalancoAcoesDepedencia->lstFluxogramaItemReal_Create();
+			$this->lstBalancoAcoes = $this->mctBalancoAcoesDepedencia->lstBalancoAcoes_Create();
+			$this->txtQuantidadeDisponibilizada = $this->mctBalancoAcoesDepedencia->txtQuantidadeDisponibilizada_Create();
 
 			// Create Buttons and Actions on this Form
 			$this->btnSave = new QButton($this);
@@ -92,9 +88,9 @@
 
 			$this->btnDelete = new QButton($this);
 			$this->btnDelete->Text = QApplication::Translate('Delete');
-			$this->btnDelete->AddAction(new QClickEvent(), new QConfirmAction(QApplication::Translate('Are you SURE you want to DELETE this') . ' ' . QApplication::Translate('BalancoAcoes') . '?'));
+			$this->btnDelete->AddAction(new QClickEvent(), new QConfirmAction(QApplication::Translate('Are you SURE you want to DELETE this') . ' ' . QApplication::Translate('BalancoAcoesDepedencia') . '?'));
 			$this->btnDelete->AddAction(new QClickEvent(), new QAjaxAction('btnDelete_Click'));
-			$this->btnDelete->Visible = $this->mctBalancoAcoes->EditMode;
+			$this->btnDelete->Visible = $this->mctBalancoAcoesDepedencia->EditMode;
 		}
 
 		/**
@@ -126,14 +122,14 @@
 		// Button Event Handlers
 
 		protected function btnSave_Click($strFormId, $strControlId, $strParameter) {
-			// Delegate "Save" processing to the BalancoAcoesMetaControl
-			$this->mctBalancoAcoes->SaveBalancoAcoes();
+			// Delegate "Save" processing to the BalancoAcoesDepedenciaMetaControl
+			$this->mctBalancoAcoesDepedencia->SaveBalancoAcoesDepedencia();
 			$this->RedirectToListPage();
 		}
 
 		protected function btnDelete_Click($strFormId, $strControlId, $strParameter) {
-			// Delegate "Delete" processing to the BalancoAcoesMetaControl
-			$this->mctBalancoAcoes->DeleteBalancoAcoes();
+			// Delegate "Delete" processing to the BalancoAcoesDepedenciaMetaControl
+			$this->mctBalancoAcoesDepedencia->DeleteBalancoAcoesDepedencia();
 			$this->RedirectToListPage();
 		}
 
@@ -144,11 +140,11 @@
 		// Other Methods
 		
 		protected function RedirectToListPage() {
-			QApplication::Redirect(__VIRTUAL_DIRECTORY__ . __FORM_DRAFTS__ . '/balanco_acoes_list.php');
+			QApplication::Redirect(__VIRTUAL_DIRECTORY__ . __FORM_DRAFTS__ . '/balanco_acoes_depedencia_list.php');
 		}
 	}
 
 	// Go ahead and run this form object to render the page and its event handlers, implicitly using
-	// balanco_acoes_edit.tpl.php as the included HTML template file
-	BalancoAcoesEditForm::Run('BalancoAcoesEditForm');
+	// balanco_acoes_depedencia_edit.tpl.php as the included HTML template file
+	BalancoAcoesDepedenciaEditForm::Run('BalancoAcoesDepedenciaEditForm');
 ?>

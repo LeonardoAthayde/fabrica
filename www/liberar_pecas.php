@@ -12,11 +12,21 @@
 		
 		protected function Form_Create() {
 			parent::Form_Create();
+			$this->objDefaultWaitIcon = new QWaitIcon($this);
+			$this->objDefaultWaitIcon->Text = '
+				<div class="progress progress-striped active">
+					<div class="progress-bar"  role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
+						<span class="sr-only">100% Complete</span>
+					</div>
+				</div>';
+			
 			$this->dtgToReleased_Create();
 			$this->dtgReleased_Create();
 			$this->pxyRelease_Create();
 			$this->pxyBlock_Create();
-			$this->SetPollingProcessor('LiberarPecasForm_Poling', $this, 1000 * 5);
+			$this->SetPollingProcessor('LiberarPecasForm_Poling', $this, 1000 * 60);
+			
+			
 		}
 				
 		protected function dtgToReleased_Create(){
@@ -92,21 +102,95 @@
 		protected function pxyRelease_Click($strFormId, $strControlId, $strParameter){
 			$objOrdemProducaoGrade = OrdemProducaoGrade::Load($strParameter);
 			
-			$objBalancoAcoes = new BalancoAcoes();
-			$objBalancoAcoes->OrdemProducaoGradeId = $objOrdemProducaoGrade->Id;
-			$objBalancoAcoes->QuantidadeDisponivel = $objOrdemProducaoGrade->Quantidade;
-			$objBalancoAcoes->QuantidadeRemetida = 0;
-			$objBalancoAcoes->QuantidadeProduzida = 0;
-			$objFluxogramaItem = FluxogramaItem::QuerySingle(QQ::AndCondition(QQ::Equal(QQN::FluxogramaItem()->ReferenciaId, $objOrdemProducaoGrade->OrdemProducao->ReferenciaId), QQ::Equal(QQN::FluxogramaItem()->Ordenacao, 1)));
-			if($objFluxogramaItem){
-				$objBalancoAcoes->FluxogramaItemId = $objFluxogramaItem->Id;
-				$objBalancoAcoes->Save();
-				
-				$this->dtgReleased->Refresh();
-				$this->dtgToReleased->Refresh();
-			} else {
-				QApplication::DisplayAlert('Tem que cadastrar fluxograma para essa referencia');
+			$objArrayFluxogramaItemRoot = FluxogramaItem::QueryArray(QQ::AndCondition(
+						QQ::Equal(QQN::FluxogramaItem()->ParentFluxogramaItemAsFluxogramaDepedencia->FluxogramaItem->Id, null),
+						QQ::Equal(QQN::FluxogramaItem()->ReferenciaId, $objOrdemProducaoGrade->OrdemProducao->ReferenciaId)));
+						
+			//$objArrayFluxogramaItemFinal = FluxogramaItem::QueryArray(QQ::AndCondition(
+			//			QQ::Equal(QQN::FluxogramaItem()->FluxogramaItemAsFluxogramaDepedencia->Filho, null),
+			//			QQ::Equal(QQN::FluxogramaItem()->ReferenciaId, $objOrdemProducaoGrade->OrdemProducao->ReferenciaId)));
+			
+			
+			$objArrayFluxogramaItemFinal = FluxogramaItem::QueryArray(QQ::AndCondition(
+						QQ::Equal(QQN::FluxogramaItem()->FluxogramaItemAsFluxogramaDepedencia->Pai, null),
+						QQ::Equal(QQN::FluxogramaItem()->ReferenciaId, $objOrdemProducaoGrade->OrdemProducao->ReferenciaId)));	
+			
+			
+			if(count($objArrayFluxogramaItemFinal) > 1) {
+				QApplication::DisplayAlert('O Fluxograma da referência não pode ter mais de dois finais: '.count($objArrayFluxogramaItemFinal));
+				return;
+			} else if (count($objArrayFluxogramaItemRoot) == 0){
+				QApplication::DisplayAlert('O Fluxograma da referência precisa ter uma ação de inicio');
+				return;
 			}
+			
+			
+			if(count($objOrdemProducaoGrade->GetBalancoAcoesArray()) == 0) {
+				
+				foreach (FluxogramaItem::LoadArrayByReferenciaId($objOrdemProducaoGrade->OrdemProducao->ReferenciaId) as $objFluxogramaItem){
+					$objFluxogramaItemReal = new FluxogramaItemReal();
+					$objFluxogramaItemReal->Referencia = $objFluxogramaItem->Referencia->Nome;
+					$objFluxogramaItemReal->Acao = ($objFluxogramaItem->FluxogramaAcoes)?$objFluxogramaItem->FluxogramaAcoes->Nome:null;
+					$objFluxogramaItemReal->Maquina = ($objFluxogramaItem->Maquina)?$objFluxogramaItem->Maquina->Nome:null;
+					$objFluxogramaItemReal->Tempo = $objFluxogramaItem->Tempo;
+					$objFluxogramaItemReal->Profundidade = $objFluxogramaItem->Profundidade;
+					$objFluxogramaItemReal->FluxogramaItemModeloId = $objFluxogramaItem->Id;
+					$objFluxogramaItemReal->Save();
+					
+					
+					
+					$objBalancoAcoes = new BalancoAcoes();
+					$objBalancoAcoes->OrdemProducaoGradeId = $objOrdemProducaoGrade->Id;
+					$objBalancoAcoes->QuantidadeDisponivel = 0;
+					$objBalancoAcoes->QuantidadeRemetida = 0;
+					$objBalancoAcoes->QuantidadeProduzida = 0;
+					$objBalancoAcoes->FluxogramaItemRealId = $objFluxogramaItemReal->Id;
+					
+					foreach ($objArrayFluxogramaItemRoot as $objFluxogramaItemRoot)
+						if($objFluxogramaItem->Id == $objFluxogramaItemRoot->Id)
+							$objBalancoAcoes->QuantidadeDisponivel = $objOrdemProducaoGrade->Quantidade;
+						
+					$objBalancoAcoes->Save();	
+				}
+				
+				$objArrayFluxogramaItemReal = FluxogramaItemReal::QueryArray(QQ::Equal(QQN::FluxogramaItemReal()->BalancoAcoes->OrdemProducaoGradeId, $objOrdemProducaoGrade->Id));
+			
+				//QApplication::DisplayAlert(count($objArrayFluxogramaItemReal));
+				foreach ($objArrayFluxogramaItemReal as $objFluxogramaItemReal){
+					$objFluxogramaItemModelo = FluxogramaItem::Load($objFluxogramaItemReal->FluxogramaItemModeloId);
+					$objArrayFluxogramaItemModeloParent = $objFluxogramaItemModelo->GetParentFluxogramaItemAsFluxogramaDepedenciaArray();
+				
+					foreach ($objArrayFluxogramaItemModeloParent as $objFluxogramaItemModeloParent){
+						foreach ($objArrayFluxogramaItemReal as $objFluxogramaItemRealParent){
+							if($objFluxogramaItemRealParent->FluxogramaItemModeloId == $objFluxogramaItemModeloParent->Id){
+								$objFluxogramaItemReal->AssociateParentFluxogramaItemRealAsFluxogramaDepedenciaReal($objFluxogramaItemRealParent);
+							}
+						}
+					}
+				}
+			
+				$objArrayBalancoAcoes = BalancoAcoes::LoadArrayByOrdemProducaoGradeId($objOrdemProducaoGrade->Id);
+
+				foreach ($objArrayBalancoAcoes as $objBalancoAcoes){
+					$objFluxogramaItemReal = FluxogramaItemReal::QuerySingle(QQ::Equal(QQN::FluxogramaItemReal()->BalancoAcoes->Id, $objBalancoAcoes->Id));
+					$objArrayFluxogramaItemRealParent = $objFluxogramaItemReal->GetParentFluxogramaItemRealAsFluxogramaDepedenciaRealArray();
+					
+					foreach ($objArrayFluxogramaItemRealParent as $objFluxogramaItemRealParent){
+						//QApplication::DisplayAlert( $objBalancoAcoes->Id);
+						$objBalancoAcoesDepedencia = new BalancoAcoesDepedencia();
+						$objBalancoAcoesDepedencia->BalancoAcoesId = $objBalancoAcoes->Id;
+						$objBalancoAcoesDepedencia->FluxogramaItemRealId = $objFluxogramaItemRealParent->Id;
+						$objBalancoAcoesDepedencia->QuantidadeDisponibilizada = 0;
+						$objBalancoAcoesDepedencia->Save();
+					}
+				}
+
+			} else {
+				QApplication::DisplayAlert('Grade já foi liberada.');
+			}
+			
+			$this->dtgReleased->Refresh();
+			$this->dtgToReleased->Refresh();
 		}
 		
 		protected function pxyBlock_Create(){
@@ -117,8 +201,11 @@
 		protected function pxyBlock_Click($strFormId, $strControlId, $strParameter){
 			$objOrdemProducaoGrade = OrdemProducaoGrade::Load($strParameter);
 			
-			foreach ($objOrdemProducaoGrade->GetBalancoAcoesArray() as $objBalancoAcoes)
+			foreach ($objOrdemProducaoGrade->GetBalancoAcoesArray() as $objBalancoAcoes){
+				$objFluxogramaItemReal = FluxogramaItemReal::QuerySingle(QQ::Equal(QQN::FluxogramaItemReal()->BalancoAcoes->Id, $objBalancoAcoes->Id));
+				$objFluxogramaItemReal->Delete();
 				$objBalancoAcoes->Delete();
+			}
 			
 			$this->dtgReleased->Refresh();
 			$this->dtgToReleased->Refresh();			

@@ -7,6 +7,12 @@
 			return new QQNodeBalancoAcoes('balanco_acoes', null, null);
 		}
 		/**
+		 * @return QQNodeBalancoAcoesDepedencia
+		 */
+		static public function BalancoAcoesDepedencia() {
+			return new QQNodeBalancoAcoesDepedencia('balanco_acoes_depedencia', null, null);
+		}
+		/**
 		 * @return QQNodeBalancoPecas
 		 */
 		static public function BalancoPecas() {
@@ -49,6 +55,12 @@
 			return new QQNodeFluxogramaItem('fluxograma_item', null, null);
 		}
 		/**
+		 * @return QQNodeFluxogramaItemReal
+		 */
+		static public function FluxogramaItemReal() {
+			return new QQNodeFluxogramaItemReal('fluxograma_item_real', null, null);
+		}
+		/**
 		 * @return QQNodeMaquina
 		 */
 		static public function Maquina() {
@@ -71,12 +83,6 @@
 		 */
 		static public function OrdemProducaoGrade() {
 			return new QQNodeOrdemProducaoGrade('ordem_producao_grade', null, null);
-		}
-		/**
-		 * @return QQNodePacote
-		 */
-		static public function Pacote() {
-			return new QQNodePacote('pacote', null, null);
 		}
 		/**
 		 * @return QQNodeReferencia

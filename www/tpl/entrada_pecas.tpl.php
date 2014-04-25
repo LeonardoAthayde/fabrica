@@ -7,6 +7,12 @@
 	</div>	 
  </div>
 
+	<div class="row">
+		<div class="col-lg-12">
+			<?php $this->objDefaultWaitIcon->Render(); ?>
+		</div>
+	</div>	
+
 <div class="marginBottom20 custom-group-form">
 	<?php $this->lstProductionOrder->Render(); ?>
 	<?php $this->lstColor->Render(); ?>

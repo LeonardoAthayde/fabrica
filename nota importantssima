@@ -1,0 +1,16 @@
+ao gerar codigo sempre conferir
+
+FluxogramaItemReal
+
+
+AssociateParentFluxogramaItemRealAsFluxogramaDepedenciaReal()
+
+			$objDatabase->NonQuery('
+				INSERT INTO `fluxograma_depedencia_real_assn` (
+					`pai`,
+					`filho`
+				) VALUES (
+					' . $objDatabase->SqlVariable($this->intId) . ',
+					' . $objDatabase->SqlVariable($objFluxogramaItemReal->Id) . '
+				)
+			');

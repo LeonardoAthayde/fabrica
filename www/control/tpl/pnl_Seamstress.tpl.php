@@ -21,7 +21,7 @@
 <?php $strText = $objCostureiraProducao->BalancoAcoes->OrdemProducaoGrade->OrdemProducao->Referencia->Nome.' | '
 .$objCostureiraProducao->BalancoAcoes->OrdemProducaoGrade->Cor->Nome.', '
 .$objCostureiraProducao->BalancoAcoes->OrdemProducaoGrade->Tamanho->Valor.' | '
-.$objCostureiraProducao->QuantidadePlanejada; ?>
+.($objCostureiraProducao->QuantidadePlanejada-$objCostureiraProducao->QuantidadeRealizada); ?>
 				
 		<div class="row marginBottom20">
 								<div class="col-lg-12 col-md-12">

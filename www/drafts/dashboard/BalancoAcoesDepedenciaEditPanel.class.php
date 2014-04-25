@@ -1,35 +1,31 @@
 <?php
 	/**
 	 * This is a quick-and-dirty draft QPanel object to do Create, Edit, and Delete functionality
-	 * of the FluxogramaItem class.  It uses the code-generated
-	 * FluxogramaItemMetaControl class, which has meta-methods to help with
-	 * easily creating/defining controls to modify the fields of a FluxogramaItem columns.
+	 * of the BalancoAcoesDepedencia class.  It uses the code-generated
+	 * BalancoAcoesDepedenciaMetaControl class, which has meta-methods to help with
+	 * easily creating/defining controls to modify the fields of a BalancoAcoesDepedencia columns.
 	 *
 	 * Any display customizations and presentation-tier logic can be implemented
 	 * here by overriding existing or implementing new methods, properties and variables.
 	 * 
 	 * NOTE: This file is overwritten on any code regenerations.  If you want to make
-	 * permanent changes, it is STRONGLY RECOMMENDED to move both fluxograma_item_edit.php AND
-	 * fluxograma_item_edit.tpl.php out of this Form Drafts directory.
+	 * permanent changes, it is STRONGLY RECOMMENDED to move both balanco_acoes_depedencia_edit.php AND
+	 * balanco_acoes_depedencia_edit.tpl.php out of this Form Drafts directory.
 	 *
 	 * @package My Application
 	 * @subpackage Drafts
 	 */
-	class FluxogramaItemEditPanel extends QPanel {
-		// Local instance of the FluxogramaItemMetaControl
-		protected $mctFluxogramaItem;
+	class BalancoAcoesDepedenciaEditPanel extends QPanel {
+		// Local instance of the BalancoAcoesDepedenciaMetaControl
+		protected $mctBalancoAcoesDepedencia;
 
-		// Controls for FluxogramaItem's Data Fields
+		// Controls for BalancoAcoesDepedencia's Data Fields
 		public $lblId;
-		public $lstReferencia;
-		public $lstFluxogramaAcoes;
-		public $lstMaquina;
-		public $txtTempo;
-		public $txtProfundidade;
+		public $lstFluxogramaItemReal;
+		public $lstBalancoAcoes;
+		public $txtQuantidadeDisponibilizada;
 
 		// Other ListBoxes (if applicable) via Unique ReverseReferences and ManyToMany References
-		public $lstParentFluxogramaItemsAsFluxogramaDepedencia;
-		public $lstFluxogramaItemsAsFluxogramaDepedencia;
 
 		// Other Controls
 		public $btnSave;
@@ -49,22 +45,18 @@
 			}
 
 			// Setup Callback and Template
-			$this->strTemplate = 'FluxogramaItemEditPanel.tpl.php';
+			$this->strTemplate = 'BalancoAcoesDepedenciaEditPanel.tpl.php';
 			$this->strClosePanelMethod = $strClosePanelMethod;
 
-			// Construct the FluxogramaItemMetaControl
+			// Construct the BalancoAcoesDepedenciaMetaControl
 			// MAKE SURE we specify "$this" as the MetaControl's (and thus all subsequent controls') parent
-			$this->mctFluxogramaItem = FluxogramaItemMetaControl::Create($this, $intId);
+			$this->mctBalancoAcoesDepedencia = BalancoAcoesDepedenciaMetaControl::Create($this, $intId);
 
-			// Call MetaControl's methods to create qcontrols based on FluxogramaItem's data fields
-			$this->lblId = $this->mctFluxogramaItem->lblId_Create();
-			$this->lstReferencia = $this->mctFluxogramaItem->lstReferencia_Create();
-			$this->lstFluxogramaAcoes = $this->mctFluxogramaItem->lstFluxogramaAcoes_Create();
-			$this->lstMaquina = $this->mctFluxogramaItem->lstMaquina_Create();
-			$this->txtTempo = $this->mctFluxogramaItem->txtTempo_Create();
-			$this->txtProfundidade = $this->mctFluxogramaItem->txtProfundidade_Create();
-			$this->lstParentFluxogramaItemsAsFluxogramaDepedencia = $this->mctFluxogramaItem->lstParentFluxogramaItemsAsFluxogramaDepedencia_Create();
-			$this->lstFluxogramaItemsAsFluxogramaDepedencia = $this->mctFluxogramaItem->lstFluxogramaItemsAsFluxogramaDepedencia_Create();
+			// Call MetaControl's methods to create qcontrols based on BalancoAcoesDepedencia's data fields
+			$this->lblId = $this->mctBalancoAcoesDepedencia->lblId_Create();
+			$this->lstFluxogramaItemReal = $this->mctBalancoAcoesDepedencia->lstFluxogramaItemReal_Create();
+			$this->lstBalancoAcoes = $this->mctBalancoAcoesDepedencia->lstBalancoAcoes_Create();
+			$this->txtQuantidadeDisponibilizada = $this->mctBalancoAcoesDepedencia->txtQuantidadeDisponibilizada_Create();
 
 			// Create Buttons and Actions on this Form
 			$this->btnSave = new QButton($this);
@@ -78,21 +70,21 @@
 
 			$this->btnDelete = new QButton($this);
 			$this->btnDelete->Text = QApplication::Translate('Delete');
-			$this->btnDelete->AddAction(new QClickEvent(), new QConfirmAction(QApplication::Translate('Are you SURE you want to DELETE this') . ' ' . QApplication::Translate('FluxogramaItem') . '?'));
+			$this->btnDelete->AddAction(new QClickEvent(), new QConfirmAction(QApplication::Translate('Are you SURE you want to DELETE this') . ' ' . QApplication::Translate('BalancoAcoesDepedencia') . '?'));
 			$this->btnDelete->AddAction(new QClickEvent(), new QAjaxControlAction($this, 'btnDelete_Click'));
-			$this->btnDelete->Visible = $this->mctFluxogramaItem->EditMode;
+			$this->btnDelete->Visible = $this->mctBalancoAcoesDepedencia->EditMode;
 		}
 
 		// Control AjaxAction Event Handlers
 		public function btnSave_Click($strFormId, $strControlId, $strParameter) {
-			// Delegate "Save" processing to the FluxogramaItemMetaControl
-			$this->mctFluxogramaItem->SaveFluxogramaItem();
+			// Delegate "Save" processing to the BalancoAcoesDepedenciaMetaControl
+			$this->mctBalancoAcoesDepedencia->SaveBalancoAcoesDepedencia();
 			$this->CloseSelf(true);
 		}
 
 		public function btnDelete_Click($strFormId, $strControlId, $strParameter) {
-			// Delegate "Delete" processing to the FluxogramaItemMetaControl
-			$this->mctFluxogramaItem->DeleteFluxogramaItem();
+			// Delegate "Delete" processing to the BalancoAcoesDepedenciaMetaControl
+			$this->mctBalancoAcoesDepedencia->DeleteBalancoAcoesDepedencia();
 			$this->CloseSelf(true);
 		}
 

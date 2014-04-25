@@ -1,5 +1,5 @@
 <?php
-	// This is the HTML template include file (.tpl.php) for balanco_acoesEditPanel.
+	// This is the HTML template include file (.tpl.php) for balanco_acoes_depedenciaEditPanel.
 	// Remember that this is a DRAFT.  It is MEANT to be altered/modified.
 	// Be sure to move this out of the drafts/dashboard subdirectory before modifying to ensure that subsequent 
 	// code re-generations do not overwrite your changes.
@@ -7,15 +7,11 @@
 	<div id="formControls">
 		<?php $_CONTROL->lblId->RenderWithName(); ?>
 
-		<?php $_CONTROL->lstOrdemProducaoGrade->RenderWithName(); ?>
-
 		<?php $_CONTROL->lstFluxogramaItemReal->RenderWithName(); ?>
 
-		<?php $_CONTROL->txtQuantidadeDisponivel->RenderWithName(); ?>
+		<?php $_CONTROL->lstBalancoAcoes->RenderWithName(); ?>
 
-		<?php $_CONTROL->txtQuantidadeRemetida->RenderWithName(); ?>
-
-		<?php $_CONTROL->txtQuantidadeProduzida->RenderWithName(); ?>
+		<?php $_CONTROL->txtQuantidadeDisponibilizada->RenderWithName(); ?>
 
 	</div>
 

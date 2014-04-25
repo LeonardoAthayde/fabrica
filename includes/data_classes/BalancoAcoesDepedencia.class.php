@@ -1,11 +1,11 @@
 <?php
-	require(__DATAGEN_CLASSES__ . '/FluxogramaItemGen.class.php');
+	require(__DATAGEN_CLASSES__ . '/BalancoAcoesDepedenciaGen.class.php');
 
 	/**
-	 * The FluxogramaItem class defined here contains any
-	 * customized code for the FluxogramaItem class in the
-	 * Object Relational Model.  It represents the "fluxograma_item" table 
-	 * in the database, and extends from the code generated abstract FluxogramaItemGen
+	 * The BalancoAcoesDepedencia class defined here contains any
+	 * customized code for the BalancoAcoesDepedencia class in the
+	 * Object Relational Model.  It represents the "balanco_acoes_depedencia" table 
+	 * in the database, and extends from the code generated abstract BalancoAcoesDepedenciaGen
 	 * class, which contains all the basic CRUD-type functionality as well as
 	 * basic methods to handle relationships and index-based loading.
 	 * 
@@ -13,19 +13,19 @@
 	 * @subpackage DataObjects
 	 * 
 	 */
-	class FluxogramaItem extends FluxogramaItemGen {
+	class BalancoAcoesDepedencia extends BalancoAcoesDepedenciaGen {
 		/**
 		 * Default "to string" handler
 		 * Allows pages to _p()/echo()/print() this object, and to define the default
 		 * way this object would be outputted.
 		 *
-		 * Can also be called directly via $objFluxogramaItem->__toString().
+		 * Can also be called directly via $objBalancoAcoesDepedencia->__toString().
 		 *
 		 * @return string a nicely formatted string representation of this object
 		 */
 		public function __toString() {
-			//return sprintf('FluxogramaItem Object %s',  $this->intId);
-			return $this->Referencia->Nome.' |'.$this->FluxogramaAcoes->Nome;			
+			//return sprintf('BalancoAcoesDepedencia Object %s',  $this->intId);
+			return $this->FluxogramaItemRealId;			
 		}
 
 
@@ -34,33 +34,33 @@
 		// but feel free to use these as a starting point)
 /*
 		public static function LoadArrayBySample($strParam1, $intParam2, $objOptionalClauses = null) {
-			// This will return an array of FluxogramaItem objects
-			return FluxogramaItem::QueryArray(
+			// This will return an array of BalancoAcoesDepedencia objects
+			return BalancoAcoesDepedencia::QueryArray(
 				QQ::AndCondition(
-					QQ::Equal(QQN::FluxogramaItem()->Param1, $strParam1),
-					QQ::GreaterThan(QQN::FluxogramaItem()->Param2, $intParam2)
+					QQ::Equal(QQN::BalancoAcoesDepedencia()->Param1, $strParam1),
+					QQ::GreaterThan(QQN::BalancoAcoesDepedencia()->Param2, $intParam2)
 				),
 				$objOptionalClauses
 			);
 		}
 
 		public static function LoadBySample($strParam1, $intParam2, $objOptionalClauses = null) {
-			// This will return a single FluxogramaItem object
-			return FluxogramaItem::QuerySingle(
+			// This will return a single BalancoAcoesDepedencia object
+			return BalancoAcoesDepedencia::QuerySingle(
 				QQ::AndCondition(
-					QQ::Equal(QQN::FluxogramaItem()->Param1, $strParam1),
-					QQ::GreaterThan(QQN::FluxogramaItem()->Param2, $intParam2)
+					QQ::Equal(QQN::BalancoAcoesDepedencia()->Param1, $strParam1),
+					QQ::GreaterThan(QQN::BalancoAcoesDepedencia()->Param2, $intParam2)
 				),
 				$objOptionalClauses
 			);
 		}
 
 		public static function CountBySample($strParam1, $intParam2, $objOptionalClauses = null) {
-			// This will return a count of FluxogramaItem objects
-			return FluxogramaItem::QueryCount(
+			// This will return a count of BalancoAcoesDepedencia objects
+			return BalancoAcoesDepedencia::QueryCount(
 				QQ::AndCondition(
-					QQ::Equal(QQN::FluxogramaItem()->Param1, $strParam1),
-					QQ::Equal(QQN::FluxogramaItem()->Param2, $intParam2)
+					QQ::Equal(QQN::BalancoAcoesDepedencia()->Param1, $strParam1),
+					QQ::Equal(QQN::BalancoAcoesDepedencia()->Param2, $intParam2)
 				),
 				$objOptionalClauses
 			);
@@ -70,7 +70,7 @@
 			// Performing the load manually (instead of using Qcodo Query)
 
 			// Get the Database Object for this Class
-			$objDatabase = FluxogramaItem::GetDatabase();
+			$objDatabase = BalancoAcoesDepedencia::GetDatabase();
 
 			// Properly Escape All Input Parameters using Database->SqlVariable()
 			$strParam1 = $objDatabase->SqlVariable($strParam1);
@@ -79,9 +79,9 @@
 			// Setup the SQL Query
 			$strQuery = sprintf('
 				SELECT
-					`fluxograma_item`.*
+					`balanco_acoes_depedencia`.*
 				FROM
-					`fluxograma_item` AS `fluxograma_item`
+					`balanco_acoes_depedencia` AS `balanco_acoes_depedencia`
 				WHERE
 					param_1 = %s AND
 					param_2 < %s',
@@ -89,7 +89,7 @@
 
 			// Perform the Query and Instantiate the Result
 			$objDbResult = $objDatabase->Query($strQuery);
-			return FluxogramaItem::InstantiateDbResult($objDbResult);
+			return BalancoAcoesDepedencia::InstantiateDbResult($objDbResult);
 		}
 */
 
