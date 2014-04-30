@@ -1,5 +1,9 @@
 <?php require 'header.inc.php'; ?>
-
+<div class="row">
+		<div class="col-lg-12">
+			<?php $this->objDefaultWaitIcon->Render(); ?>
+		</div>
+</div>
  <div class="input-group marginBottom20">
 	<?php $this->txtSearchFlowchart->Render(); ?>
 	<div class="input-group-btn">
@@ -9,7 +13,7 @@
 
 <div class="row marginBottom20">
 	<div class="col-lg-4 col-md-4">
-		<?php $this->lstFluxogramaAcoes->Render(); ?>
+		<?php $this->txtFluxogramaAcoes->Render(); ?>
 	</div>
 	<div class="col-lg-4 col-md-4">
 		<?php $this->lstMaquina->Render(); ?>
