@@ -185,11 +185,11 @@
 			 */
 			define('DB_CONNECTION_1', serialize(array(
 				'adapter' => 'MySqli5',
-				'server' => 'localhost',
+				'server' => 'mysql.kinghost.com.br',
 				'port' => null,
-				'database' => 'fabrica3',
-				'username' => 'root',
-				'password' => 'gal190385',
+				'database' => 'cila11',
+				'username' => 'cila11',
+				'password' => '123456',
 				'profiling' => false)));
 
 			// Additional Database Connection Strings can be defined here (e.g. for connection #2, #3, #4, #5, etc.)
