@@ -26,7 +26,7 @@
 			$this->txtComprimento->Name = 'RENDIMENTO';
 			$this->txtComprimento->Required = true;
 			$this->txtComprimento->CssClass = 'form-control input-lg';
-			if($this->objReferenciaRendimento) $this->txtComprimento->Text = $this->objReferenciaRendimento->Comprimento;
+			$this->txtComprimento->Text = $this->objReferenciaRendimento->Comprimento;
 		}
 		
 		protected function txtPecas_Create(){
@@ -35,7 +35,7 @@
 			$this->txtPecas->Minimum = 1;
 			$this->txtPecas->Required = true;
 			$this->txtPecas->CssClass= 'form-control input-lg';
-			if($this->objReferenciaRendimento) $this->txtPecas->Text = $this->objReferenciaRendimento->Pecas;
+			$this->txtPecas->Text = $this->objReferenciaRendimento->Pecas;
 		}
 		
 		protected function lstTecido_Create(){
@@ -90,6 +90,12 @@
 				return number_format ($this->objReferenciaRendimento->Peso, 3).' Kg';
 			else
 				return 'N/A';
+		}
+		
+		public function UpdateObjectFromControl(){
+			$this->objReferenciaRendimento->Comprimento = $this->txtComprimento->Text;
+			$this->objReferenciaRendimento->Pecas = $this->txtPecas->Text;
+			$this->objReferenciaRendimento->TecidoId = $this->lstTecido->SelectedValue;
 		}
 
 	}

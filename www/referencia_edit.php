@@ -99,6 +99,10 @@
 			foreach ($this->objArrayReferenciaRendimento as $i => $objReferenciaRendimento)
 				$this->objArrayReferenciaRendimento[$i+1] = $objReferenciaRendimento;
 			$this->objArrayReferenciaRendimento[0] = new ReferenciaRendimento();
+			
+			foreach ($this->dtrReferenciaRendimento->GetChildControls() as $objControl)
+				$objControl->UpdateObjectFromControl();
+			$this->dtrReferenciaRendimento->RemoveChildControls(true);
 			$this->dtrReferenciaRendimento->Refresh();
 		}
 		
@@ -118,7 +122,7 @@
 		}
 		
 		protected function RenderReferenciaRendimentoPanel(ReferenciaRendimento $objReferenciaRendimento){
-			$pnlReferenciaRendimento = new QReferenciaRendimentoPanel($this->dtrReferenciaRendimento, null, $objReferenciaRendimento, $this->mctReferencia->Referencia);
+			$pnlReferenciaRendimento = new QReferenciaRendimentoPanel($this->dtrReferenciaRendimento, null, $objReferenciaRendimento);
 			return $pnlReferenciaRendimento->Render(false);
 		}
 		
