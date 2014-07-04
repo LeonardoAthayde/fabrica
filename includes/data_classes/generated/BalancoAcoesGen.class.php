@@ -21,7 +21,7 @@
 	 * @property integer $QuantidadeDisponivel the value for intQuantidadeDisponivel (Not Null)
 	 * @property integer $QuantidadeRemetida the value for intQuantidadeRemetida (Not Null)
 	 * @property integer $QuantidadeProduzida the value for intQuantidadeProduzida (Not Null)
-	 * @property OrdemProducaoGrade $OrdemProducaoGrade the value for the OrdemProducaoGrade object referenced by intOrdemProducaoGradeId (Not Null)
+	 * @property ComandoRisco $OrdemProducaoGrade the value for the ComandoRisco object referenced by intOrdemProducaoGradeId (Not Null)
 	 * @property FluxogramaItemReal $FluxogramaItemReal the value for the FluxogramaItemReal object referenced by intFluxogramaItemRealId (Unique)
 	 * @property BalancoAcoesDepedencia $_BalancoAcoesDepedencia the value for the private _objBalancoAcoesDepedencia (Read-Only) if set due to an expansion on the balanco_acoes_depedencia.balanco_acoes_id reverse relationship
 	 * @property BalancoAcoesDepedencia[] $_BalancoAcoesDepedenciaArray the value for the private _objBalancoAcoesDepedenciaArray (Read-Only) if set due to an ExpandAsArray on the balanco_acoes_depedencia.balanco_acoes_id reverse relationship
@@ -141,9 +141,9 @@
 		 * Protected member variable that contains the object pointed by the reference
 		 * in the database column balanco_acoes.ordem_producao_grade_id.
 		 *
-		 * NOTE: Always use the OrdemProducaoGrade property getter to correctly retrieve this OrdemProducaoGrade object.
+		 * NOTE: Always use the OrdemProducaoGrade property getter to correctly retrieve this ComandoRisco object.
 		 * (Because this class implements late binding, this variable reference MAY be null.)
-		 * @var OrdemProducaoGrade objOrdemProducaoGrade
+		 * @var ComandoRisco objOrdemProducaoGrade
 		 */
 		protected $objOrdemProducaoGrade;
 
@@ -579,7 +579,7 @@
 			$strAlias = $strAliasPrefix . 'ordem_producao_grade_id__id';
 			$strAliasName = array_key_exists($strAlias, $strColumnAliasArray) ? $strColumnAliasArray[$strAlias] : $strAlias;
 			if (!is_null($objDbRow->GetColumn($strAliasName)))
-				$objToReturn->objOrdemProducaoGrade = OrdemProducaoGrade::InstantiateDbRow($objDbRow, $strAliasPrefix . 'ordem_producao_grade_id__', $strExpandAsArrayNodes, null, $strColumnAliasArray);
+				$objToReturn->objOrdemProducaoGrade = ComandoRisco::InstantiateDbRow($objDbRow, $strAliasPrefix . 'ordem_producao_grade_id__', $strExpandAsArrayNodes, null, $strColumnAliasArray);
 
 			// Check for FluxogramaItemReal Early Binding
 			$strAlias = $strAliasPrefix . 'fluxograma_item_real_id__id';
@@ -1008,11 +1008,11 @@
 				// Member Objects
 				///////////////////
 				case 'OrdemProducaoGrade':
-					// Gets the value for the OrdemProducaoGrade object referenced by intOrdemProducaoGradeId (Not Null)
-					// @return OrdemProducaoGrade
+					// Gets the value for the ComandoRisco object referenced by intOrdemProducaoGradeId (Not Null)
+					// @return ComandoRisco
 					try {
 						if ((!$this->objOrdemProducaoGrade) && (!is_null($this->intOrdemProducaoGradeId)))
-							$this->objOrdemProducaoGrade = OrdemProducaoGrade::Load($this->intOrdemProducaoGradeId);
+							$this->objOrdemProducaoGrade = ComandoRisco::Load($this->intOrdemProducaoGradeId);
 						return $this->objOrdemProducaoGrade;
 					} catch (QCallerException $objExc) {
 						$objExc->IncrementOffset();
@@ -1150,23 +1150,23 @@
 				// Member Objects
 				///////////////////
 				case 'OrdemProducaoGrade':
-					// Sets the value for the OrdemProducaoGrade object referenced by intOrdemProducaoGradeId (Not Null)
-					// @param OrdemProducaoGrade $mixValue
-					// @return OrdemProducaoGrade
+					// Sets the value for the ComandoRisco object referenced by intOrdemProducaoGradeId (Not Null)
+					// @param ComandoRisco $mixValue
+					// @return ComandoRisco
 					if (is_null($mixValue)) {
 						$this->intOrdemProducaoGradeId = null;
 						$this->objOrdemProducaoGrade = null;
 						return null;
 					} else {
-						// Make sure $mixValue actually is a OrdemProducaoGrade object
+						// Make sure $mixValue actually is a ComandoRisco object
 						try {
-							$mixValue = QType::Cast($mixValue, 'OrdemProducaoGrade');
+							$mixValue = QType::Cast($mixValue, 'ComandoRisco');
 						} catch (QInvalidCastException $objExc) {
 							$objExc->IncrementOffset();
 							throw $objExc;
 						} 
 
-						// Make sure $mixValue is a SAVED OrdemProducaoGrade object
+						// Make sure $mixValue is a SAVED ComandoRisco object
 						if (is_null($mixValue->Id))
 							throw new QCallerException('Unable to set an unsaved OrdemProducaoGrade for this BalancoAcoes');
 
@@ -1611,7 +1611,7 @@
 		public static function GetSoapComplexTypeXml() {
 			$strToReturn = '<complexType name="BalancoAcoes"><sequence>';
 			$strToReturn .= '<element name="Id" type="xsd:int"/>';
-			$strToReturn .= '<element name="OrdemProducaoGrade" type="xsd1:OrdemProducaoGrade"/>';
+			$strToReturn .= '<element name="OrdemProducaoGrade" type="xsd1:ComandoRisco"/>';
 			$strToReturn .= '<element name="FluxogramaItemReal" type="xsd1:FluxogramaItemReal"/>';
 			$strToReturn .= '<element name="QuantidadeDisponivel" type="xsd:int"/>';
 			$strToReturn .= '<element name="QuantidadeRemetida" type="xsd:int"/>';
@@ -1624,7 +1624,7 @@
 		public static function AlterSoapComplexTypeArray(&$strComplexTypeArray) {
 			if (!array_key_exists('BalancoAcoes', $strComplexTypeArray)) {
 				$strComplexTypeArray['BalancoAcoes'] = BalancoAcoes::GetSoapComplexTypeXml();
-				OrdemProducaoGrade::AlterSoapComplexTypeArray($strComplexTypeArray);
+				ComandoRisco::AlterSoapComplexTypeArray($strComplexTypeArray);
 				FluxogramaItemReal::AlterSoapComplexTypeArray($strComplexTypeArray);
 			}
 		}
@@ -1644,7 +1644,7 @@
 				$objToReturn->intId = $objSoapObject->Id;
 			if ((property_exists($objSoapObject, 'OrdemProducaoGrade')) &&
 				($objSoapObject->OrdemProducaoGrade))
-				$objToReturn->OrdemProducaoGrade = OrdemProducaoGrade::GetObjectFromSoapObject($objSoapObject->OrdemProducaoGrade);
+				$objToReturn->OrdemProducaoGrade = ComandoRisco::GetObjectFromSoapObject($objSoapObject->OrdemProducaoGrade);
 			if ((property_exists($objSoapObject, 'FluxogramaItemReal')) &&
 				($objSoapObject->FluxogramaItemReal))
 				$objToReturn->FluxogramaItemReal = FluxogramaItemReal::GetObjectFromSoapObject($objSoapObject->FluxogramaItemReal);
@@ -1673,7 +1673,7 @@
 
 		public static function GetSoapObjectFromObject($objObject, $blnBindRelatedObjects) {
 			if ($objObject->objOrdemProducaoGrade)
-				$objObject->objOrdemProducaoGrade = OrdemProducaoGrade::GetSoapObjectFromObject($objObject->objOrdemProducaoGrade, false);
+				$objObject->objOrdemProducaoGrade = ComandoRisco::GetSoapObjectFromObject($objObject->objOrdemProducaoGrade, false);
 			else if (!$blnBindRelatedObjects)
 				$objObject->intOrdemProducaoGradeId = null;
 			if ($objObject->objFluxogramaItemReal)
@@ -1697,7 +1697,7 @@
 	/**
 	 * @property-read QQNode $Id
 	 * @property-read QQNode $OrdemProducaoGradeId
-	 * @property-read QQNodeOrdemProducaoGrade $OrdemProducaoGrade
+	 * @property-read QQNodeComandoRisco $OrdemProducaoGrade
 	 * @property-read QQNode $FluxogramaItemRealId
 	 * @property-read QQNodeFluxogramaItemReal $FluxogramaItemReal
 	 * @property-read QQNode $QuantidadeDisponivel
@@ -1717,7 +1717,7 @@
 				case 'OrdemProducaoGradeId':
 					return new QQNode('ordem_producao_grade_id', 'OrdemProducaoGradeId', 'integer', $this);
 				case 'OrdemProducaoGrade':
-					return new QQNodeOrdemProducaoGrade('ordem_producao_grade_id', 'OrdemProducaoGrade', 'integer', $this);
+					return new QQNodeComandoRisco('ordem_producao_grade_id', 'OrdemProducaoGrade', 'integer', $this);
 				case 'FluxogramaItemRealId':
 					return new QQNode('fluxograma_item_real_id', 'FluxogramaItemRealId', 'integer', $this);
 				case 'FluxogramaItemReal':
@@ -1749,7 +1749,7 @@
 	/**
 	 * @property-read QQNode $Id
 	 * @property-read QQNode $OrdemProducaoGradeId
-	 * @property-read QQNodeOrdemProducaoGrade $OrdemProducaoGrade
+	 * @property-read QQNodeComandoRisco $OrdemProducaoGrade
 	 * @property-read QQNode $FluxogramaItemRealId
 	 * @property-read QQNodeFluxogramaItemReal $FluxogramaItemReal
 	 * @property-read QQNode $QuantidadeDisponivel
@@ -1770,7 +1770,7 @@
 				case 'OrdemProducaoGradeId':
 					return new QQNode('ordem_producao_grade_id', 'OrdemProducaoGradeId', 'integer', $this);
 				case 'OrdemProducaoGrade':
-					return new QQNodeOrdemProducaoGrade('ordem_producao_grade_id', 'OrdemProducaoGrade', 'integer', $this);
+					return new QQNodeComandoRisco('ordem_producao_grade_id', 'OrdemProducaoGrade', 'integer', $this);
 				case 'FluxogramaItemRealId':
 					return new QQNode('fluxograma_item_real_id', 'FluxogramaItemRealId', 'integer', $this);
 				case 'FluxogramaItemReal':

@@ -68,6 +68,7 @@
 			$this->dtgUsuarios->MetaAddColumn('Id');
 			$this->dtgUsuarios->MetaAddColumn('Nome');
 			$this->dtgUsuarios->MetaAddColumn('Senha');
+			$this->dtgUsuarios->MetaAddColumn(QQN::Usuario()->Costureira);
 
 			// Setup the Create New button
 			$this->btnCreateNew = new QButton($this);

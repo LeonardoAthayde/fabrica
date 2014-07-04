@@ -17,13 +17,14 @@
 	 * @subpackage GeneratedDataObjects
 	 * @property integer $Id the value for intId (Read-Only PK)
 	 * @property integer $ReferenciaId the value for intReferenciaId (Not Null)
+	 * @property integer $CorId the value for intCorId 
 	 * @property integer $FluxogramaAcoesId the value for intFluxogramaAcoesId 
-	 * @property integer $MaquinaId the value for intMaquinaId 
-	 * @property integer $Tempo the value for intTempo 
+	 * @property integer $FluxogramaAcoesTempoId the value for intFluxogramaAcoesTempoId 
 	 * @property integer $Profundidade the value for intProfundidade (Not Null)
 	 * @property Referencia $Referencia the value for the Referencia object referenced by intReferenciaId (Not Null)
+	 * @property Cor $Cor the value for the Cor object referenced by intCorId 
 	 * @property FluxogramaAcoes $FluxogramaAcoes the value for the FluxogramaAcoes object referenced by intFluxogramaAcoesId 
-	 * @property Maquina $Maquina the value for the Maquina object referenced by intMaquinaId 
+	 * @property FluxogramaAcoesTempo $FluxogramaAcoesTempo the value for the FluxogramaAcoesTempo object referenced by intFluxogramaAcoesTempoId 
 	 * @property FluxogramaItem $_ParentFluxogramaItemAsFluxogramaDepedencia the value for the private _objParentFluxogramaItemAsFluxogramaDepedencia (Read-Only) if set due to an expansion on the fluxograma_depedencia_assn association table
 	 * @property FluxogramaItem[] $_ParentFluxogramaItemAsFluxogramaDepedenciaArray the value for the private _objParentFluxogramaItemAsFluxogramaDepedenciaArray (Read-Only) if set due to an ExpandAsArray on the fluxograma_depedencia_assn association table
 	 * @property FluxogramaItem $_FluxogramaItemAsFluxogramaDepedencia the value for the private _objFluxogramaItemAsFluxogramaDepedencia (Read-Only) if set due to an expansion on the fluxograma_depedencia_assn association table
@@ -53,6 +54,14 @@
 
 
 		/**
+		 * Protected member variable that maps to the database column fluxograma_item.cor_id
+		 * @var integer intCorId
+		 */
+		protected $intCorId;
+		const CorIdDefault = null;
+
+
+		/**
 		 * Protected member variable that maps to the database column fluxograma_item.fluxograma_acoes_id
 		 * @var integer intFluxogramaAcoesId
 		 */
@@ -61,19 +70,11 @@
 
 
 		/**
-		 * Protected member variable that maps to the database column fluxograma_item.maquina_id
-		 * @var integer intMaquinaId
+		 * Protected member variable that maps to the database column fluxograma_item.fluxograma_acoes_tempo_id
+		 * @var integer intFluxogramaAcoesTempoId
 		 */
-		protected $intMaquinaId;
-		const MaquinaIdDefault = null;
-
-
-		/**
-		 * Protected member variable that maps to the database column fluxograma_item.tempo
-		 * @var integer intTempo
-		 */
-		protected $intTempo;
-		const TempoDefault = null;
+		protected $intFluxogramaAcoesTempoId;
+		const FluxogramaAcoesTempoIdDefault = null;
 
 
 		/**
@@ -150,6 +151,16 @@
 
 		/**
 		 * Protected member variable that contains the object pointed by the reference
+		 * in the database column fluxograma_item.cor_id.
+		 *
+		 * NOTE: Always use the Cor property getter to correctly retrieve this Cor object.
+		 * (Because this class implements late binding, this variable reference MAY be null.)
+		 * @var Cor objCor
+		 */
+		protected $objCor;
+
+		/**
+		 * Protected member variable that contains the object pointed by the reference
 		 * in the database column fluxograma_item.fluxograma_acoes_id.
 		 *
 		 * NOTE: Always use the FluxogramaAcoes property getter to correctly retrieve this FluxogramaAcoes object.
@@ -160,13 +171,13 @@
 
 		/**
 		 * Protected member variable that contains the object pointed by the reference
-		 * in the database column fluxograma_item.maquina_id.
+		 * in the database column fluxograma_item.fluxograma_acoes_tempo_id.
 		 *
-		 * NOTE: Always use the Maquina property getter to correctly retrieve this Maquina object.
+		 * NOTE: Always use the FluxogramaAcoesTempo property getter to correctly retrieve this FluxogramaAcoesTempo object.
 		 * (Because this class implements late binding, this variable reference MAY be null.)
-		 * @var Maquina objMaquina
+		 * @var FluxogramaAcoesTempo objFluxogramaAcoesTempo
 		 */
-		protected $objMaquina;
+		protected $objFluxogramaAcoesTempo;
 
 
 
@@ -480,9 +491,9 @@
 
 			$objBuilder->AddSelectItem($strTableName, 'id', $strAliasPrefix . 'id');
 			$objBuilder->AddSelectItem($strTableName, 'referencia_id', $strAliasPrefix . 'referencia_id');
+			$objBuilder->AddSelectItem($strTableName, 'cor_id', $strAliasPrefix . 'cor_id');
 			$objBuilder->AddSelectItem($strTableName, 'fluxograma_acoes_id', $strAliasPrefix . 'fluxograma_acoes_id');
-			$objBuilder->AddSelectItem($strTableName, 'maquina_id', $strAliasPrefix . 'maquina_id');
-			$objBuilder->AddSelectItem($strTableName, 'tempo', $strAliasPrefix . 'tempo');
+			$objBuilder->AddSelectItem($strTableName, 'fluxograma_acoes_tempo_id', $strAliasPrefix . 'fluxograma_acoes_tempo_id');
 			$objBuilder->AddSelectItem($strTableName, 'profundidade', $strAliasPrefix . 'profundidade');
 		}
 
@@ -565,12 +576,12 @@
 			$objToReturn->intId = $objDbRow->GetColumn($strAliasName, 'Integer');
 			$strAliasName = array_key_exists($strAliasPrefix . 'referencia_id', $strColumnAliasArray) ? $strColumnAliasArray[$strAliasPrefix . 'referencia_id'] : $strAliasPrefix . 'referencia_id';
 			$objToReturn->intReferenciaId = $objDbRow->GetColumn($strAliasName, 'Integer');
+			$strAliasName = array_key_exists($strAliasPrefix . 'cor_id', $strColumnAliasArray) ? $strColumnAliasArray[$strAliasPrefix . 'cor_id'] : $strAliasPrefix . 'cor_id';
+			$objToReturn->intCorId = $objDbRow->GetColumn($strAliasName, 'Integer');
 			$strAliasName = array_key_exists($strAliasPrefix . 'fluxograma_acoes_id', $strColumnAliasArray) ? $strColumnAliasArray[$strAliasPrefix . 'fluxograma_acoes_id'] : $strAliasPrefix . 'fluxograma_acoes_id';
 			$objToReturn->intFluxogramaAcoesId = $objDbRow->GetColumn($strAliasName, 'Integer');
-			$strAliasName = array_key_exists($strAliasPrefix . 'maquina_id', $strColumnAliasArray) ? $strColumnAliasArray[$strAliasPrefix . 'maquina_id'] : $strAliasPrefix . 'maquina_id';
-			$objToReturn->intMaquinaId = $objDbRow->GetColumn($strAliasName, 'Integer');
-			$strAliasName = array_key_exists($strAliasPrefix . 'tempo', $strColumnAliasArray) ? $strColumnAliasArray[$strAliasPrefix . 'tempo'] : $strAliasPrefix . 'tempo';
-			$objToReturn->intTempo = $objDbRow->GetColumn($strAliasName, 'Integer');
+			$strAliasName = array_key_exists($strAliasPrefix . 'fluxograma_acoes_tempo_id', $strColumnAliasArray) ? $strColumnAliasArray[$strAliasPrefix . 'fluxograma_acoes_tempo_id'] : $strAliasPrefix . 'fluxograma_acoes_tempo_id';
+			$objToReturn->intFluxogramaAcoesTempoId = $objDbRow->GetColumn($strAliasName, 'Integer');
 			$strAliasName = array_key_exists($strAliasPrefix . 'profundidade', $strColumnAliasArray) ? $strColumnAliasArray[$strAliasPrefix . 'profundidade'] : $strAliasPrefix . 'profundidade';
 			$objToReturn->intProfundidade = $objDbRow->GetColumn($strAliasName, 'Integer');
 
@@ -592,17 +603,23 @@
 			if (!is_null($objDbRow->GetColumn($strAliasName)))
 				$objToReturn->objReferencia = Referencia::InstantiateDbRow($objDbRow, $strAliasPrefix . 'referencia_id__', $strExpandAsArrayNodes, null, $strColumnAliasArray);
 
+			// Check for Cor Early Binding
+			$strAlias = $strAliasPrefix . 'cor_id__id';
+			$strAliasName = array_key_exists($strAlias, $strColumnAliasArray) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			if (!is_null($objDbRow->GetColumn($strAliasName)))
+				$objToReturn->objCor = Cor::InstantiateDbRow($objDbRow, $strAliasPrefix . 'cor_id__', $strExpandAsArrayNodes, null, $strColumnAliasArray);
+
 			// Check for FluxogramaAcoes Early Binding
 			$strAlias = $strAliasPrefix . 'fluxograma_acoes_id__id';
 			$strAliasName = array_key_exists($strAlias, $strColumnAliasArray) ? $strColumnAliasArray[$strAlias] : $strAlias;
 			if (!is_null($objDbRow->GetColumn($strAliasName)))
 				$objToReturn->objFluxogramaAcoes = FluxogramaAcoes::InstantiateDbRow($objDbRow, $strAliasPrefix . 'fluxograma_acoes_id__', $strExpandAsArrayNodes, null, $strColumnAliasArray);
 
-			// Check for Maquina Early Binding
-			$strAlias = $strAliasPrefix . 'maquina_id__id';
+			// Check for FluxogramaAcoesTempo Early Binding
+			$strAlias = $strAliasPrefix . 'fluxograma_acoes_tempo_id__id';
 			$strAliasName = array_key_exists($strAlias, $strColumnAliasArray) ? $strColumnAliasArray[$strAlias] : $strAlias;
 			if (!is_null($objDbRow->GetColumn($strAliasName)))
-				$objToReturn->objMaquina = Maquina::InstantiateDbRow($objDbRow, $strAliasPrefix . 'maquina_id__', $strExpandAsArrayNodes, null, $strColumnAliasArray);
+				$objToReturn->objFluxogramaAcoesTempo = FluxogramaAcoesTempo::InstantiateDbRow($objDbRow, $strAliasPrefix . 'fluxograma_acoes_tempo_id__', $strExpandAsArrayNodes, null, $strColumnAliasArray);
 
 
 
@@ -747,40 +764,6 @@
 			
 		/**
 		 * Load an array of FluxogramaItem objects,
-		 * by MaquinaId Index(es)
-		 * @param integer $intMaquinaId
-		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
-		 * @return FluxogramaItem[]
-		*/
-		public static function LoadArrayByMaquinaId($intMaquinaId, $objOptionalClauses = null) {
-			// Call FluxogramaItem::QueryArray to perform the LoadArrayByMaquinaId query
-			try {
-				return FluxogramaItem::QueryArray(
-					QQ::Equal(QQN::FluxogramaItem()->MaquinaId, $intMaquinaId),
-					$objOptionalClauses
-					);
-			} catch (QCallerException $objExc) {
-				$objExc->IncrementOffset();
-				throw $objExc;
-			}
-		}
-
-		/**
-		 * Count FluxogramaItems
-		 * by MaquinaId Index(es)
-		 * @param integer $intMaquinaId
-		 * @return int
-		*/
-		public static function CountByMaquinaId($intMaquinaId, $objOptionalClauses = null) {
-			// Call FluxogramaItem::QueryCount to perform the CountByMaquinaId query
-			return FluxogramaItem::QueryCount(
-				QQ::Equal(QQN::FluxogramaItem()->MaquinaId, $intMaquinaId)
-			, $objOptionalClauses
-			);
-		}
-			
-		/**
-		 * Load an array of FluxogramaItem objects,
 		 * by ReferenciaId Index(es)
 		 * @param integer $intReferenciaId
 		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
@@ -809,6 +792,116 @@
 			// Call FluxogramaItem::QueryCount to perform the CountByReferenciaId query
 			return FluxogramaItem::QueryCount(
 				QQ::Equal(QQN::FluxogramaItem()->ReferenciaId, $intReferenciaId)
+			, $objOptionalClauses
+			);
+		}
+			
+		/**
+		 * Load an array of FluxogramaItem objects,
+		 * by CorId Index(es)
+		 * @param integer $intCorId
+		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
+		 * @return FluxogramaItem[]
+		*/
+		public static function LoadArrayByCorId($intCorId, $objOptionalClauses = null) {
+			// Call FluxogramaItem::QueryArray to perform the LoadArrayByCorId query
+			try {
+				return FluxogramaItem::QueryArray(
+					QQ::Equal(QQN::FluxogramaItem()->CorId, $intCorId),
+					$objOptionalClauses
+					);
+			} catch (QCallerException $objExc) {
+				$objExc->IncrementOffset();
+				throw $objExc;
+			}
+		}
+
+		/**
+		 * Count FluxogramaItems
+		 * by CorId Index(es)
+		 * @param integer $intCorId
+		 * @return int
+		*/
+		public static function CountByCorId($intCorId, $objOptionalClauses = null) {
+			// Call FluxogramaItem::QueryCount to perform the CountByCorId query
+			return FluxogramaItem::QueryCount(
+				QQ::Equal(QQN::FluxogramaItem()->CorId, $intCorId)
+			, $objOptionalClauses
+			);
+		}
+			
+		/**
+		 * Load an array of FluxogramaItem objects,
+		 * by FluxogramaAcoesTempoId Index(es)
+		 * @param integer $intFluxogramaAcoesTempoId
+		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
+		 * @return FluxogramaItem[]
+		*/
+		public static function LoadArrayByFluxogramaAcoesTempoId($intFluxogramaAcoesTempoId, $objOptionalClauses = null) {
+			// Call FluxogramaItem::QueryArray to perform the LoadArrayByFluxogramaAcoesTempoId query
+			try {
+				return FluxogramaItem::QueryArray(
+					QQ::Equal(QQN::FluxogramaItem()->FluxogramaAcoesTempoId, $intFluxogramaAcoesTempoId),
+					$objOptionalClauses
+					);
+			} catch (QCallerException $objExc) {
+				$objExc->IncrementOffset();
+				throw $objExc;
+			}
+		}
+
+		/**
+		 * Count FluxogramaItems
+		 * by FluxogramaAcoesTempoId Index(es)
+		 * @param integer $intFluxogramaAcoesTempoId
+		 * @return int
+		*/
+		public static function CountByFluxogramaAcoesTempoId($intFluxogramaAcoesTempoId, $objOptionalClauses = null) {
+			// Call FluxogramaItem::QueryCount to perform the CountByFluxogramaAcoesTempoId query
+			return FluxogramaItem::QueryCount(
+				QQ::Equal(QQN::FluxogramaItem()->FluxogramaAcoesTempoId, $intFluxogramaAcoesTempoId)
+			, $objOptionalClauses
+			);
+		}
+			
+		/**
+		 * Load an array of FluxogramaItem objects,
+		 * by ReferenciaId, CorId Index(es)
+		 * @param integer $intReferenciaId
+		 * @param integer $intCorId
+		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
+		 * @return FluxogramaItem[]
+		*/
+		public static function LoadArrayByReferenciaIdCorId($intReferenciaId, $intCorId, $objOptionalClauses = null) {
+			// Call FluxogramaItem::QueryArray to perform the LoadArrayByReferenciaIdCorId query
+			try {
+				return FluxogramaItem::QueryArray(
+					QQ::AndCondition(
+					QQ::Equal(QQN::FluxogramaItem()->ReferenciaId, $intReferenciaId),
+					QQ::Equal(QQN::FluxogramaItem()->CorId, $intCorId)
+					),
+					$objOptionalClauses
+					);
+			} catch (QCallerException $objExc) {
+				$objExc->IncrementOffset();
+				throw $objExc;
+			}
+		}
+
+		/**
+		 * Count FluxogramaItems
+		 * by ReferenciaId, CorId Index(es)
+		 * @param integer $intReferenciaId
+		 * @param integer $intCorId
+		 * @return int
+		*/
+		public static function CountByReferenciaIdCorId($intReferenciaId, $intCorId, $objOptionalClauses = null) {
+			// Call FluxogramaItem::QueryCount to perform the CountByReferenciaIdCorId query
+			return FluxogramaItem::QueryCount(
+				QQ::AndCondition(
+				QQ::Equal(QQN::FluxogramaItem()->ReferenciaId, $intReferenciaId),
+				QQ::Equal(QQN::FluxogramaItem()->CorId, $intCorId)
+				)
 			, $objOptionalClauses
 			);
 		}
@@ -908,15 +1001,15 @@
 					$objDatabase->NonQuery('
 						INSERT INTO `fluxograma_item` (
 							`referencia_id`,
+							`cor_id`,
 							`fluxograma_acoes_id`,
-							`maquina_id`,
-							`tempo`,
+							`fluxograma_acoes_tempo_id`,
 							`profundidade`
 						) VALUES (
 							' . $objDatabase->SqlVariable($this->intReferenciaId) . ',
+							' . $objDatabase->SqlVariable($this->intCorId) . ',
 							' . $objDatabase->SqlVariable($this->intFluxogramaAcoesId) . ',
-							' . $objDatabase->SqlVariable($this->intMaquinaId) . ',
-							' . $objDatabase->SqlVariable($this->intTempo) . ',
+							' . $objDatabase->SqlVariable($this->intFluxogramaAcoesTempoId) . ',
 							' . $objDatabase->SqlVariable($this->intProfundidade) . '
 						)
 					');
@@ -938,9 +1031,9 @@
 							`fluxograma_item`
 						SET
 							`referencia_id` = ' . $objDatabase->SqlVariable($this->intReferenciaId) . ',
+							`cor_id` = ' . $objDatabase->SqlVariable($this->intCorId) . ',
 							`fluxograma_acoes_id` = ' . $objDatabase->SqlVariable($this->intFluxogramaAcoesId) . ',
-							`maquina_id` = ' . $objDatabase->SqlVariable($this->intMaquinaId) . ',
-							`tempo` = ' . $objDatabase->SqlVariable($this->intTempo) . ',
+							`fluxograma_acoes_tempo_id` = ' . $objDatabase->SqlVariable($this->intFluxogramaAcoesTempoId) . ',
 							`profundidade` = ' . $objDatabase->SqlVariable($this->intProfundidade) . '
 						WHERE
 							`id` = ' . $objDatabase->SqlVariable($this->intId) . '
@@ -1027,9 +1120,9 @@
 
 			// Update $this's local variables to match
 			$this->ReferenciaId = $objReloaded->ReferenciaId;
+			$this->CorId = $objReloaded->CorId;
 			$this->FluxogramaAcoesId = $objReloaded->FluxogramaAcoesId;
-			$this->MaquinaId = $objReloaded->MaquinaId;
-			$this->intTempo = $objReloaded->intTempo;
+			$this->FluxogramaAcoesTempoId = $objReloaded->FluxogramaAcoesTempoId;
 			$this->intProfundidade = $objReloaded->intProfundidade;
 		}
 
@@ -1045,9 +1138,9 @@
 				INSERT INTO `fluxograma_item` (
 					`id`,
 					`referencia_id`,
+					`cor_id`,
 					`fluxograma_acoes_id`,
-					`maquina_id`,
-					`tempo`,
+					`fluxograma_acoes_tempo_id`,
 					`profundidade`,
 					__sys_login_id,
 					__sys_action,
@@ -1055,9 +1148,9 @@
 				) VALUES (
 					' . $objDatabase->SqlVariable($this->intId) . ',
 					' . $objDatabase->SqlVariable($this->intReferenciaId) . ',
+					' . $objDatabase->SqlVariable($this->intCorId) . ',
 					' . $objDatabase->SqlVariable($this->intFluxogramaAcoesId) . ',
-					' . $objDatabase->SqlVariable($this->intMaquinaId) . ',
-					' . $objDatabase->SqlVariable($this->intTempo) . ',
+					' . $objDatabase->SqlVariable($this->intFluxogramaAcoesTempoId) . ',
 					' . $objDatabase->SqlVariable($this->intProfundidade) . ',
 					' . (($objDatabase->JournaledById) ? $objDatabase->JournaledById : 'NULL') . ',
 					' . $objDatabase->SqlVariable($strJournalCommand) . ',
@@ -1119,20 +1212,20 @@
 					// @return integer
 					return $this->intReferenciaId;
 
+				case 'CorId':
+					// Gets the value for intCorId 
+					// @return integer
+					return $this->intCorId;
+
 				case 'FluxogramaAcoesId':
 					// Gets the value for intFluxogramaAcoesId 
 					// @return integer
 					return $this->intFluxogramaAcoesId;
 
-				case 'MaquinaId':
-					// Gets the value for intMaquinaId 
+				case 'FluxogramaAcoesTempoId':
+					// Gets the value for intFluxogramaAcoesTempoId 
 					// @return integer
-					return $this->intMaquinaId;
-
-				case 'Tempo':
-					// Gets the value for intTempo 
-					// @return integer
-					return $this->intTempo;
+					return $this->intFluxogramaAcoesTempoId;
 
 				case 'Profundidade':
 					// Gets the value for intProfundidade (Not Null)
@@ -1155,6 +1248,18 @@
 						throw $objExc;
 					}
 
+				case 'Cor':
+					// Gets the value for the Cor object referenced by intCorId 
+					// @return Cor
+					try {
+						if ((!$this->objCor) && (!is_null($this->intCorId)))
+							$this->objCor = Cor::Load($this->intCorId);
+						return $this->objCor;
+					} catch (QCallerException $objExc) {
+						$objExc->IncrementOffset();
+						throw $objExc;
+					}
+
 				case 'FluxogramaAcoes':
 					// Gets the value for the FluxogramaAcoes object referenced by intFluxogramaAcoesId 
 					// @return FluxogramaAcoes
@@ -1167,13 +1272,13 @@
 						throw $objExc;
 					}
 
-				case 'Maquina':
-					// Gets the value for the Maquina object referenced by intMaquinaId 
-					// @return Maquina
+				case 'FluxogramaAcoesTempo':
+					// Gets the value for the FluxogramaAcoesTempo object referenced by intFluxogramaAcoesTempoId 
+					// @return FluxogramaAcoesTempo
 					try {
-						if ((!$this->objMaquina) && (!is_null($this->intMaquinaId)))
-							$this->objMaquina = Maquina::Load($this->intMaquinaId);
-						return $this->objMaquina;
+						if ((!$this->objFluxogramaAcoesTempo) && (!is_null($this->intFluxogramaAcoesTempoId)))
+							$this->objFluxogramaAcoesTempo = FluxogramaAcoesTempo::Load($this->intFluxogramaAcoesTempoId);
+						return $this->objFluxogramaAcoesTempo;
 					} catch (QCallerException $objExc) {
 						$objExc->IncrementOffset();
 						throw $objExc;
@@ -1248,6 +1353,18 @@
 						throw $objExc;
 					}
 
+				case 'CorId':
+					// Sets the value for intCorId 
+					// @param integer $mixValue
+					// @return integer
+					try {
+						$this->objCor = null;
+						return ($this->intCorId = QType::Cast($mixValue, QType::Integer));
+					} catch (QCallerException $objExc) {
+						$objExc->IncrementOffset();
+						throw $objExc;
+					}
+
 				case 'FluxogramaAcoesId':
 					// Sets the value for intFluxogramaAcoesId 
 					// @param integer $mixValue
@@ -1260,24 +1377,13 @@
 						throw $objExc;
 					}
 
-				case 'MaquinaId':
-					// Sets the value for intMaquinaId 
+				case 'FluxogramaAcoesTempoId':
+					// Sets the value for intFluxogramaAcoesTempoId 
 					// @param integer $mixValue
 					// @return integer
 					try {
-						$this->objMaquina = null;
-						return ($this->intMaquinaId = QType::Cast($mixValue, QType::Integer));
-					} catch (QCallerException $objExc) {
-						$objExc->IncrementOffset();
-						throw $objExc;
-					}
-
-				case 'Tempo':
-					// Sets the value for intTempo 
-					// @param integer $mixValue
-					// @return integer
-					try {
-						return ($this->intTempo = QType::Cast($mixValue, QType::Integer));
+						$this->objFluxogramaAcoesTempo = null;
+						return ($this->intFluxogramaAcoesTempoId = QType::Cast($mixValue, QType::Integer));
 					} catch (QCallerException $objExc) {
 						$objExc->IncrementOffset();
 						throw $objExc;
@@ -1328,6 +1434,36 @@
 					}
 					break;
 
+				case 'Cor':
+					// Sets the value for the Cor object referenced by intCorId 
+					// @param Cor $mixValue
+					// @return Cor
+					if (is_null($mixValue)) {
+						$this->intCorId = null;
+						$this->objCor = null;
+						return null;
+					} else {
+						// Make sure $mixValue actually is a Cor object
+						try {
+							$mixValue = QType::Cast($mixValue, 'Cor');
+						} catch (QInvalidCastException $objExc) {
+							$objExc->IncrementOffset();
+							throw $objExc;
+						} 
+
+						// Make sure $mixValue is a SAVED Cor object
+						if (is_null($mixValue->Id))
+							throw new QCallerException('Unable to set an unsaved Cor for this FluxogramaItem');
+
+						// Update Local Member Variables
+						$this->objCor = $mixValue;
+						$this->intCorId = $mixValue->Id;
+
+						// Return $mixValue
+						return $mixValue;
+					}
+					break;
+
 				case 'FluxogramaAcoes':
 					// Sets the value for the FluxogramaAcoes object referenced by intFluxogramaAcoesId 
 					// @param FluxogramaAcoes $mixValue
@@ -1358,30 +1494,30 @@
 					}
 					break;
 
-				case 'Maquina':
-					// Sets the value for the Maquina object referenced by intMaquinaId 
-					// @param Maquina $mixValue
-					// @return Maquina
+				case 'FluxogramaAcoesTempo':
+					// Sets the value for the FluxogramaAcoesTempo object referenced by intFluxogramaAcoesTempoId 
+					// @param FluxogramaAcoesTempo $mixValue
+					// @return FluxogramaAcoesTempo
 					if (is_null($mixValue)) {
-						$this->intMaquinaId = null;
-						$this->objMaquina = null;
+						$this->intFluxogramaAcoesTempoId = null;
+						$this->objFluxogramaAcoesTempo = null;
 						return null;
 					} else {
-						// Make sure $mixValue actually is a Maquina object
+						// Make sure $mixValue actually is a FluxogramaAcoesTempo object
 						try {
-							$mixValue = QType::Cast($mixValue, 'Maquina');
+							$mixValue = QType::Cast($mixValue, 'FluxogramaAcoesTempo');
 						} catch (QInvalidCastException $objExc) {
 							$objExc->IncrementOffset();
 							throw $objExc;
 						} 
 
-						// Make sure $mixValue is a SAVED Maquina object
+						// Make sure $mixValue is a SAVED FluxogramaAcoesTempo object
 						if (is_null($mixValue->Id))
-							throw new QCallerException('Unable to set an unsaved Maquina for this FluxogramaItem');
+							throw new QCallerException('Unable to set an unsaved FluxogramaAcoesTempo for this FluxogramaItem');
 
 						// Update Local Member Variables
-						$this->objMaquina = $mixValue;
-						$this->intMaquinaId = $mixValue->Id;
+						$this->objFluxogramaAcoesTempo = $mixValue;
+						$this->intFluxogramaAcoesTempoId = $mixValue->Id;
 
 						// Return $mixValue
 						return $mixValue;
@@ -1793,9 +1929,9 @@
 			$strToReturn = '<complexType name="FluxogramaItem"><sequence>';
 			$strToReturn .= '<element name="Id" type="xsd:int"/>';
 			$strToReturn .= '<element name="Referencia" type="xsd1:Referencia"/>';
+			$strToReturn .= '<element name="Cor" type="xsd1:Cor"/>';
 			$strToReturn .= '<element name="FluxogramaAcoes" type="xsd1:FluxogramaAcoes"/>';
-			$strToReturn .= '<element name="Maquina" type="xsd1:Maquina"/>';
-			$strToReturn .= '<element name="Tempo" type="xsd:int"/>';
+			$strToReturn .= '<element name="FluxogramaAcoesTempo" type="xsd1:FluxogramaAcoesTempo"/>';
 			$strToReturn .= '<element name="Profundidade" type="xsd:int"/>';
 			$strToReturn .= '<element name="__blnRestored" type="xsd:boolean"/>';
 			$strToReturn .= '</sequence></complexType>';
@@ -1806,8 +1942,9 @@
 			if (!array_key_exists('FluxogramaItem', $strComplexTypeArray)) {
 				$strComplexTypeArray['FluxogramaItem'] = FluxogramaItem::GetSoapComplexTypeXml();
 				Referencia::AlterSoapComplexTypeArray($strComplexTypeArray);
+				Cor::AlterSoapComplexTypeArray($strComplexTypeArray);
 				FluxogramaAcoes::AlterSoapComplexTypeArray($strComplexTypeArray);
-				Maquina::AlterSoapComplexTypeArray($strComplexTypeArray);
+				FluxogramaAcoesTempo::AlterSoapComplexTypeArray($strComplexTypeArray);
 			}
 		}
 
@@ -1827,14 +1964,15 @@
 			if ((property_exists($objSoapObject, 'Referencia')) &&
 				($objSoapObject->Referencia))
 				$objToReturn->Referencia = Referencia::GetObjectFromSoapObject($objSoapObject->Referencia);
+			if ((property_exists($objSoapObject, 'Cor')) &&
+				($objSoapObject->Cor))
+				$objToReturn->Cor = Cor::GetObjectFromSoapObject($objSoapObject->Cor);
 			if ((property_exists($objSoapObject, 'FluxogramaAcoes')) &&
 				($objSoapObject->FluxogramaAcoes))
 				$objToReturn->FluxogramaAcoes = FluxogramaAcoes::GetObjectFromSoapObject($objSoapObject->FluxogramaAcoes);
-			if ((property_exists($objSoapObject, 'Maquina')) &&
-				($objSoapObject->Maquina))
-				$objToReturn->Maquina = Maquina::GetObjectFromSoapObject($objSoapObject->Maquina);
-			if (property_exists($objSoapObject, 'Tempo'))
-				$objToReturn->intTempo = $objSoapObject->Tempo;
+			if ((property_exists($objSoapObject, 'FluxogramaAcoesTempo')) &&
+				($objSoapObject->FluxogramaAcoesTempo))
+				$objToReturn->FluxogramaAcoesTempo = FluxogramaAcoesTempo::GetObjectFromSoapObject($objSoapObject->FluxogramaAcoesTempo);
 			if (property_exists($objSoapObject, 'Profundidade'))
 				$objToReturn->intProfundidade = $objSoapObject->Profundidade;
 			if (property_exists($objSoapObject, '__blnRestored'))
@@ -1859,14 +1997,18 @@
 				$objObject->objReferencia = Referencia::GetSoapObjectFromObject($objObject->objReferencia, false);
 			else if (!$blnBindRelatedObjects)
 				$objObject->intReferenciaId = null;
+			if ($objObject->objCor)
+				$objObject->objCor = Cor::GetSoapObjectFromObject($objObject->objCor, false);
+			else if (!$blnBindRelatedObjects)
+				$objObject->intCorId = null;
 			if ($objObject->objFluxogramaAcoes)
 				$objObject->objFluxogramaAcoes = FluxogramaAcoes::GetSoapObjectFromObject($objObject->objFluxogramaAcoes, false);
 			else if (!$blnBindRelatedObjects)
 				$objObject->intFluxogramaAcoesId = null;
-			if ($objObject->objMaquina)
-				$objObject->objMaquina = Maquina::GetSoapObjectFromObject($objObject->objMaquina, false);
+			if ($objObject->objFluxogramaAcoesTempo)
+				$objObject->objFluxogramaAcoesTempo = FluxogramaAcoesTempo::GetSoapObjectFromObject($objObject->objFluxogramaAcoesTempo, false);
 			else if (!$blnBindRelatedObjects)
-				$objObject->intMaquinaId = null;
+				$objObject->intFluxogramaAcoesTempoId = null;
 			return $objObject;
 		}
 
@@ -1949,11 +2091,12 @@
 	 * @property-read QQNode $Id
 	 * @property-read QQNode $ReferenciaId
 	 * @property-read QQNodeReferencia $Referencia
+	 * @property-read QQNode $CorId
+	 * @property-read QQNodeCor $Cor
 	 * @property-read QQNode $FluxogramaAcoesId
 	 * @property-read QQNodeFluxogramaAcoes $FluxogramaAcoes
-	 * @property-read QQNode $MaquinaId
-	 * @property-read QQNodeMaquina $Maquina
-	 * @property-read QQNode $Tempo
+	 * @property-read QQNode $FluxogramaAcoesTempoId
+	 * @property-read QQNodeFluxogramaAcoesTempo $FluxogramaAcoesTempo
 	 * @property-read QQNode $Profundidade
 	 * @property-read QQNodeFluxogramaItemParentFluxogramaItemAsFluxogramaDepedencia $ParentFluxogramaItemAsFluxogramaDepedencia
 	 * @property-read QQNodeFluxogramaItemFluxogramaItemAsFluxogramaDepedencia $FluxogramaItemAsFluxogramaDepedencia
@@ -1970,16 +2113,18 @@
 					return new QQNode('referencia_id', 'ReferenciaId', 'integer', $this);
 				case 'Referencia':
 					return new QQNodeReferencia('referencia_id', 'Referencia', 'integer', $this);
+				case 'CorId':
+					return new QQNode('cor_id', 'CorId', 'integer', $this);
+				case 'Cor':
+					return new QQNodeCor('cor_id', 'Cor', 'integer', $this);
 				case 'FluxogramaAcoesId':
 					return new QQNode('fluxograma_acoes_id', 'FluxogramaAcoesId', 'integer', $this);
 				case 'FluxogramaAcoes':
 					return new QQNodeFluxogramaAcoes('fluxograma_acoes_id', 'FluxogramaAcoes', 'integer', $this);
-				case 'MaquinaId':
-					return new QQNode('maquina_id', 'MaquinaId', 'integer', $this);
-				case 'Maquina':
-					return new QQNodeMaquina('maquina_id', 'Maquina', 'integer', $this);
-				case 'Tempo':
-					return new QQNode('tempo', 'Tempo', 'integer', $this);
+				case 'FluxogramaAcoesTempoId':
+					return new QQNode('fluxograma_acoes_tempo_id', 'FluxogramaAcoesTempoId', 'integer', $this);
+				case 'FluxogramaAcoesTempo':
+					return new QQNodeFluxogramaAcoesTempo('fluxograma_acoes_tempo_id', 'FluxogramaAcoesTempo', 'integer', $this);
 				case 'Profundidade':
 					return new QQNode('profundidade', 'Profundidade', 'integer', $this);
 				case 'ParentFluxogramaItemAsFluxogramaDepedencia':
@@ -2004,11 +2149,12 @@
 	 * @property-read QQNode $Id
 	 * @property-read QQNode $ReferenciaId
 	 * @property-read QQNodeReferencia $Referencia
+	 * @property-read QQNode $CorId
+	 * @property-read QQNodeCor $Cor
 	 * @property-read QQNode $FluxogramaAcoesId
 	 * @property-read QQNodeFluxogramaAcoes $FluxogramaAcoes
-	 * @property-read QQNode $MaquinaId
-	 * @property-read QQNodeMaquina $Maquina
-	 * @property-read QQNode $Tempo
+	 * @property-read QQNode $FluxogramaAcoesTempoId
+	 * @property-read QQNodeFluxogramaAcoesTempo $FluxogramaAcoesTempo
 	 * @property-read QQNode $Profundidade
 	 * @property-read QQNodeFluxogramaItemParentFluxogramaItemAsFluxogramaDepedencia $ParentFluxogramaItemAsFluxogramaDepedencia
 	 * @property-read QQNodeFluxogramaItemFluxogramaItemAsFluxogramaDepedencia $FluxogramaItemAsFluxogramaDepedencia
@@ -2026,16 +2172,18 @@
 					return new QQNode('referencia_id', 'ReferenciaId', 'integer', $this);
 				case 'Referencia':
 					return new QQNodeReferencia('referencia_id', 'Referencia', 'integer', $this);
+				case 'CorId':
+					return new QQNode('cor_id', 'CorId', 'integer', $this);
+				case 'Cor':
+					return new QQNodeCor('cor_id', 'Cor', 'integer', $this);
 				case 'FluxogramaAcoesId':
 					return new QQNode('fluxograma_acoes_id', 'FluxogramaAcoesId', 'integer', $this);
 				case 'FluxogramaAcoes':
 					return new QQNodeFluxogramaAcoes('fluxograma_acoes_id', 'FluxogramaAcoes', 'integer', $this);
-				case 'MaquinaId':
-					return new QQNode('maquina_id', 'MaquinaId', 'integer', $this);
-				case 'Maquina':
-					return new QQNodeMaquina('maquina_id', 'Maquina', 'integer', $this);
-				case 'Tempo':
-					return new QQNode('tempo', 'Tempo', 'integer', $this);
+				case 'FluxogramaAcoesTempoId':
+					return new QQNode('fluxograma_acoes_tempo_id', 'FluxogramaAcoesTempoId', 'integer', $this);
+				case 'FluxogramaAcoesTempo':
+					return new QQNodeFluxogramaAcoesTempo('fluxograma_acoes_tempo_id', 'FluxogramaAcoesTempo', 'integer', $this);
 				case 'Profundidade':
 					return new QQNode('profundidade', 'Profundidade', 'integer', $this);
 				case 'ParentFluxogramaItemAsFluxogramaDepedencia':

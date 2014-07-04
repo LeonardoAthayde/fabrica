@@ -22,9 +22,9 @@
 		// Controls for FluxogramaItem's Data Fields
 		public $lblId;
 		public $lstReferencia;
+		public $lstCor;
 		public $lstFluxogramaAcoes;
-		public $lstMaquina;
-		public $txtTempo;
+		public $lstFluxogramaAcoesTempo;
 		public $txtProfundidade;
 
 		// Other ListBoxes (if applicable) via Unique ReverseReferences and ManyToMany References
@@ -59,9 +59,9 @@
 			// Call MetaControl's methods to create qcontrols based on FluxogramaItem's data fields
 			$this->lblId = $this->mctFluxogramaItem->lblId_Create();
 			$this->lstReferencia = $this->mctFluxogramaItem->lstReferencia_Create();
+			$this->lstCor = $this->mctFluxogramaItem->lstCor_Create();
 			$this->lstFluxogramaAcoes = $this->mctFluxogramaItem->lstFluxogramaAcoes_Create();
-			$this->lstMaquina = $this->mctFluxogramaItem->lstMaquina_Create();
-			$this->txtTempo = $this->mctFluxogramaItem->txtTempo_Create();
+			$this->lstFluxogramaAcoesTempo = $this->mctFluxogramaItem->lstFluxogramaAcoesTempo_Create();
 			$this->txtProfundidade = $this->mctFluxogramaItem->txtProfundidade_Create();
 			$this->lstParentFluxogramaItemsAsFluxogramaDepedencia = $this->mctFluxogramaItem->lstParentFluxogramaItemsAsFluxogramaDepedencia_Create();
 			$this->lstFluxogramaItemsAsFluxogramaDepedencia = $this->mctFluxogramaItem->lstFluxogramaItemsAsFluxogramaDepedencia_Create();

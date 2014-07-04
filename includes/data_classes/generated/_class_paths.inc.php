@@ -20,6 +20,34 @@
 		QApplicationBase::$ClassFile['balancopecasmetacontrol'] = __DATA_META_CONTROLS__ . '/BalancoPecasMetaControl.class.php';
 		QApplicationBase::$ClassFile['balancopecasdatagrid'] = __DATA_META_CONTROLS__ . '/BalancoPecasDataGrid.class.php';
 
+	// ClassPaths for the Comando class
+		QApplicationBase::$ClassFile['comando'] = __DATA_CLASSES__ . '/Comando.class.php';
+		QApplicationBase::$ClassFile['qqnodecomando'] = __DATA_CLASSES__ . '/Comando.class.php';
+		QApplicationBase::$ClassFile['qqreversereferencenodecomando'] = __DATA_CLASSES__ . '/Comando.class.php';
+		QApplicationBase::$ClassFile['comandometacontrol'] = __DATA_META_CONTROLS__ . '/ComandoMetaControl.class.php';
+		QApplicationBase::$ClassFile['comandodatagrid'] = __DATA_META_CONTROLS__ . '/ComandoDataGrid.class.php';
+
+	// ClassPaths for the ComandoPeca class
+		QApplicationBase::$ClassFile['comandopeca'] = __DATA_CLASSES__ . '/ComandoPeca.class.php';
+		QApplicationBase::$ClassFile['qqnodecomandopeca'] = __DATA_CLASSES__ . '/ComandoPeca.class.php';
+		QApplicationBase::$ClassFile['qqreversereferencenodecomandopeca'] = __DATA_CLASSES__ . '/ComandoPeca.class.php';
+		QApplicationBase::$ClassFile['comandopecametacontrol'] = __DATA_META_CONTROLS__ . '/ComandoPecaMetaControl.class.php';
+		QApplicationBase::$ClassFile['comandopecadatagrid'] = __DATA_META_CONTROLS__ . '/ComandoPecaDataGrid.class.php';
+
+	// ClassPaths for the ComandoRisco class
+		QApplicationBase::$ClassFile['comandorisco'] = __DATA_CLASSES__ . '/ComandoRisco.class.php';
+		QApplicationBase::$ClassFile['qqnodecomandorisco'] = __DATA_CLASSES__ . '/ComandoRisco.class.php';
+		QApplicationBase::$ClassFile['qqreversereferencenodecomandorisco'] = __DATA_CLASSES__ . '/ComandoRisco.class.php';
+		QApplicationBase::$ClassFile['comandoriscometacontrol'] = __DATA_META_CONTROLS__ . '/ComandoRiscoMetaControl.class.php';
+		QApplicationBase::$ClassFile['comandoriscodatagrid'] = __DATA_META_CONTROLS__ . '/ComandoRiscoDataGrid.class.php';
+
+	// ClassPaths for the ComandoRiscoPeca class
+		QApplicationBase::$ClassFile['comandoriscopeca'] = __DATA_CLASSES__ . '/ComandoRiscoPeca.class.php';
+		QApplicationBase::$ClassFile['qqnodecomandoriscopeca'] = __DATA_CLASSES__ . '/ComandoRiscoPeca.class.php';
+		QApplicationBase::$ClassFile['qqreversereferencenodecomandoriscopeca'] = __DATA_CLASSES__ . '/ComandoRiscoPeca.class.php';
+		QApplicationBase::$ClassFile['comandoriscopecametacontrol'] = __DATA_META_CONTROLS__ . '/ComandoRiscoPecaMetaControl.class.php';
+		QApplicationBase::$ClassFile['comandoriscopecadatagrid'] = __DATA_META_CONTROLS__ . '/ComandoRiscoPecaDataGrid.class.php';
+
 	// ClassPaths for the Cor class
 		QApplicationBase::$ClassFile['cor'] = __DATA_CLASSES__ . '/Cor.class.php';
 		QApplicationBase::$ClassFile['qqnodecor'] = __DATA_CLASSES__ . '/Cor.class.php';
@@ -48,12 +76,26 @@
 		QApplicationBase::$ClassFile['costureiratempometacontrol'] = __DATA_META_CONTROLS__ . '/CostureiraTempoMetaControl.class.php';
 		QApplicationBase::$ClassFile['costureiratempodatagrid'] = __DATA_META_CONTROLS__ . '/CostureiraTempoDataGrid.class.php';
 
+	// ClassPaths for the CostureiraTempoEficiente class
+		QApplicationBase::$ClassFile['costureiratempoeficiente'] = __DATA_CLASSES__ . '/CostureiraTempoEficiente.class.php';
+		QApplicationBase::$ClassFile['qqnodecostureiratempoeficiente'] = __DATA_CLASSES__ . '/CostureiraTempoEficiente.class.php';
+		QApplicationBase::$ClassFile['qqreversereferencenodecostureiratempoeficiente'] = __DATA_CLASSES__ . '/CostureiraTempoEficiente.class.php';
+		QApplicationBase::$ClassFile['costureiratempoeficientemetacontrol'] = __DATA_META_CONTROLS__ . '/CostureiraTempoEficienteMetaControl.class.php';
+		QApplicationBase::$ClassFile['costureiratempoeficientedatagrid'] = __DATA_META_CONTROLS__ . '/CostureiraTempoEficienteDataGrid.class.php';
+
 	// ClassPaths for the FluxogramaAcoes class
 		QApplicationBase::$ClassFile['fluxogramaacoes'] = __DATA_CLASSES__ . '/FluxogramaAcoes.class.php';
 		QApplicationBase::$ClassFile['qqnodefluxogramaacoes'] = __DATA_CLASSES__ . '/FluxogramaAcoes.class.php';
 		QApplicationBase::$ClassFile['qqreversereferencenodefluxogramaacoes'] = __DATA_CLASSES__ . '/FluxogramaAcoes.class.php';
 		QApplicationBase::$ClassFile['fluxogramaacoesmetacontrol'] = __DATA_META_CONTROLS__ . '/FluxogramaAcoesMetaControl.class.php';
 		QApplicationBase::$ClassFile['fluxogramaacoesdatagrid'] = __DATA_META_CONTROLS__ . '/FluxogramaAcoesDataGrid.class.php';
+
+	// ClassPaths for the FluxogramaAcoesTempo class
+		QApplicationBase::$ClassFile['fluxogramaacoestempo'] = __DATA_CLASSES__ . '/FluxogramaAcoesTempo.class.php';
+		QApplicationBase::$ClassFile['qqnodefluxogramaacoestempo'] = __DATA_CLASSES__ . '/FluxogramaAcoesTempo.class.php';
+		QApplicationBase::$ClassFile['qqreversereferencenodefluxogramaacoestempo'] = __DATA_CLASSES__ . '/FluxogramaAcoesTempo.class.php';
+		QApplicationBase::$ClassFile['fluxogramaacoestempometacontrol'] = __DATA_META_CONTROLS__ . '/FluxogramaAcoesTempoMetaControl.class.php';
+		QApplicationBase::$ClassFile['fluxogramaacoestempodatagrid'] = __DATA_META_CONTROLS__ . '/FluxogramaAcoesTempoDataGrid.class.php';
 
 	// ClassPaths for the FluxogramaItem class
 		QApplicationBase::$ClassFile['fluxogramaitem'] = __DATA_CLASSES__ . '/FluxogramaItem.class.php';
@@ -83,20 +125,6 @@
 		QApplicationBase::$ClassFile['menumetacontrol'] = __DATA_META_CONTROLS__ . '/MenuMetaControl.class.php';
 		QApplicationBase::$ClassFile['menudatagrid'] = __DATA_META_CONTROLS__ . '/MenuDataGrid.class.php';
 
-	// ClassPaths for the OrdemProducao class
-		QApplicationBase::$ClassFile['ordemproducao'] = __DATA_CLASSES__ . '/OrdemProducao.class.php';
-		QApplicationBase::$ClassFile['qqnodeordemproducao'] = __DATA_CLASSES__ . '/OrdemProducao.class.php';
-		QApplicationBase::$ClassFile['qqreversereferencenodeordemproducao'] = __DATA_CLASSES__ . '/OrdemProducao.class.php';
-		QApplicationBase::$ClassFile['ordemproducaometacontrol'] = __DATA_META_CONTROLS__ . '/OrdemProducaoMetaControl.class.php';
-		QApplicationBase::$ClassFile['ordemproducaodatagrid'] = __DATA_META_CONTROLS__ . '/OrdemProducaoDataGrid.class.php';
-
-	// ClassPaths for the OrdemProducaoGrade class
-		QApplicationBase::$ClassFile['ordemproducaograde'] = __DATA_CLASSES__ . '/OrdemProducaoGrade.class.php';
-		QApplicationBase::$ClassFile['qqnodeordemproducaograde'] = __DATA_CLASSES__ . '/OrdemProducaoGrade.class.php';
-		QApplicationBase::$ClassFile['qqreversereferencenodeordemproducaograde'] = __DATA_CLASSES__ . '/OrdemProducaoGrade.class.php';
-		QApplicationBase::$ClassFile['ordemproducaogrademetacontrol'] = __DATA_META_CONTROLS__ . '/OrdemProducaoGradeMetaControl.class.php';
-		QApplicationBase::$ClassFile['ordemproducaogradedatagrid'] = __DATA_META_CONTROLS__ . '/OrdemProducaoGradeDataGrid.class.php';
-
 	// ClassPaths for the Referencia class
 		QApplicationBase::$ClassFile['referencia'] = __DATA_CLASSES__ . '/Referencia.class.php';
 		QApplicationBase::$ClassFile['qqnodereferencia'] = __DATA_CLASSES__ . '/Referencia.class.php';
@@ -111,6 +139,13 @@
 		QApplicationBase::$ClassFile['referenciacategoriametacontrol'] = __DATA_META_CONTROLS__ . '/ReferenciaCategoriaMetaControl.class.php';
 		QApplicationBase::$ClassFile['referenciacategoriadatagrid'] = __DATA_META_CONTROLS__ . '/ReferenciaCategoriaDataGrid.class.php';
 
+	// ClassPaths for the ReferenciaRendimento class
+		QApplicationBase::$ClassFile['referenciarendimento'] = __DATA_CLASSES__ . '/ReferenciaRendimento.class.php';
+		QApplicationBase::$ClassFile['qqnodereferenciarendimento'] = __DATA_CLASSES__ . '/ReferenciaRendimento.class.php';
+		QApplicationBase::$ClassFile['qqreversereferencenodereferenciarendimento'] = __DATA_CLASSES__ . '/ReferenciaRendimento.class.php';
+		QApplicationBase::$ClassFile['referenciarendimentometacontrol'] = __DATA_META_CONTROLS__ . '/ReferenciaRendimentoMetaControl.class.php';
+		QApplicationBase::$ClassFile['referenciarendimentodatagrid'] = __DATA_META_CONTROLS__ . '/ReferenciaRendimentoDataGrid.class.php';
+
 	// ClassPaths for the Tamanho class
 		QApplicationBase::$ClassFile['tamanho'] = __DATA_CLASSES__ . '/Tamanho.class.php';
 		QApplicationBase::$ClassFile['qqnodetamanho'] = __DATA_CLASSES__ . '/Tamanho.class.php';
@@ -124,6 +159,13 @@
 		QApplicationBase::$ClassFile['qqreversereferencenodetecido'] = __DATA_CLASSES__ . '/Tecido.class.php';
 		QApplicationBase::$ClassFile['tecidometacontrol'] = __DATA_META_CONTROLS__ . '/TecidoMetaControl.class.php';
 		QApplicationBase::$ClassFile['tecidodatagrid'] = __DATA_META_CONTROLS__ . '/TecidoDataGrid.class.php';
+
+	// ClassPaths for the TecidoRendimento class
+		QApplicationBase::$ClassFile['tecidorendimento'] = __DATA_CLASSES__ . '/TecidoRendimento.class.php';
+		QApplicationBase::$ClassFile['qqnodetecidorendimento'] = __DATA_CLASSES__ . '/TecidoRendimento.class.php';
+		QApplicationBase::$ClassFile['qqreversereferencenodetecidorendimento'] = __DATA_CLASSES__ . '/TecidoRendimento.class.php';
+		QApplicationBase::$ClassFile['tecidorendimentometacontrol'] = __DATA_META_CONTROLS__ . '/TecidoRendimentoMetaControl.class.php';
+		QApplicationBase::$ClassFile['tecidorendimentodatagrid'] = __DATA_META_CONTROLS__ . '/TecidoRendimentoDataGrid.class.php';
 
 	// ClassPaths for the Usuario class
 		QApplicationBase::$ClassFile['usuario'] = __DATA_CLASSES__ . '/Usuario.class.php';

@@ -24,6 +24,8 @@
 
 		<?php $this->txtSenha->RenderWithName(); ?>
 
+		<?php $this->lstCostureira->RenderWithName(); ?>
+
 		<?php $this->lstMenus->RenderWithName(true, "Rows=7"); ?>
 
 	</div>

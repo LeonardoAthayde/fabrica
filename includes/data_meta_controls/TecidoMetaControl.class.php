@@ -19,5 +19,33 @@
 	 * @subpackage MetaControls
 	 */
 	class TecidoMetaControl extends TecidoMetaControlGen {
+		
+		///////////////////////////////////////////////
+		// PUBLIC TECIDO OBJECT MANIPULATORS
+		///////////////////////////////////////////////
+
+		/**
+		 * This will save this object's Tecido instance,
+		 * updating only the fields which have had a control created for it.
+		 */
+		public function SaveTecido() {
+			try {
+				// Update any fields for controls that have been created
+				if ($this->txtNome) $this->objTecido->Nome = $this->txtNome->Text;
+				if ($this->txtCodigo) $this->objTecido->Codigo = $this->txtCodigo->Text;
+				if ($this->txtMetro) $this->objTecido->Metro = $this->txtMetro->Text;
+
+				// Update any UniqueReverseReferences (if any) for controls that have been created for it
+
+				// Save the Tecido object
+				$this->objTecido->Save();
+
+				// Finally, update any ManyToManyReferences (if any)
+			} catch (QCallerException $objExc) {
+				$objExc->IncrementOffset();
+				throw $objExc;
+			}
+		}		
+		
 	}
 ?>

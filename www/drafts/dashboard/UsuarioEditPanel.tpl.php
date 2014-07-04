@@ -11,6 +11,8 @@
 
 		<?php $_CONTROL->txtSenha->RenderWithName(); ?>
 
+		<?php $_CONTROL->lstCostureira->RenderWithName(); ?>
+
 		<?php $_CONTROL->lstMenus->RenderWithName(true, "Rows=7"); ?>
 
 	</div>

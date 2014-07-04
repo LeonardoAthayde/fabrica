@@ -28,6 +28,7 @@
 		// Controls for FluxogramaAcoes's Data Fields
 		protected $lblId;
 		protected $txtNome;
+		protected $lstMaquina;
 
 		// Other ListBoxes (if applicable) via Unique ReverseReferences and ManyToMany References
 
@@ -71,6 +72,7 @@
 			// Call MetaControl's methods to create qcontrols based on FluxogramaAcoes's data fields
 			$this->lblId = $this->mctFluxogramaAcoes->lblId_Create();
 			$this->txtNome = $this->mctFluxogramaAcoes->txtNome_Create();
+			$this->lstMaquina = $this->mctFluxogramaAcoes->lstMaquina_Create();
 
 			// Create Buttons and Actions on this Form
 			$this->btnSave = new QButton($this);

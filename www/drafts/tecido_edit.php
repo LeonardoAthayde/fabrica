@@ -29,6 +29,7 @@
 		protected $lblId;
 		protected $txtNome;
 		protected $txtCodigo;
+		protected $txtMetro;
 
 		// Other ListBoxes (if applicable) via Unique ReverseReferences and ManyToMany References
 
@@ -73,6 +74,7 @@
 			$this->lblId = $this->mctTecido->lblId_Create();
 			$this->txtNome = $this->mctTecido->txtNome_Create();
 			$this->txtCodigo = $this->mctTecido->txtCodigo_Create();
+			$this->txtMetro = $this->mctTecido->txtMetro_Create();
 
 			// Create Buttons and Actions on this Form
 			$this->btnSave = new QButton($this);

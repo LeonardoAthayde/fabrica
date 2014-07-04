@@ -21,13 +21,13 @@
 			$this->txtUser = new QTextBox($this);
 			$this->txtUser->Name = QApplication::Translate('User');
 			$this->txtUser->SetCustomAttribute('placeholder', QApplication::Translate('User'));
-			$this->txtUser->CssClass = 'input-block-level';
+			$this->txtUser->CssClass = 'input-block-level form-control input-lg';
 			$this->txtUser->Required = true;
 		}
 		
 		protected function txtPassword_Create(){
 			$this->txtPassword = new QTextBox($this);
-			$this->txtPassword->CssClass = 'input-block-level';
+			$this->txtPassword->CssClass = 'input-block-level form-control input-lg';
 			$this->txtPassword->SetCustomAttribute('placeholder', QApplication::Translate('Password'));
 			$this->txtPassword->Name = QApplication::Translate('Password');
 			$this->txtPassword->TextMode = QTextMode::Password;
@@ -37,7 +37,7 @@
 			$this->btnConfirm = new QButton($this);
 			$this->btnConfirm->Text = QApplication::Translate('Confirm');
 			$this->btnConfirm->CausesValidation = true;
-			$this->btnConfirm->CssClass = "btn btn-large btn-primary";
+			$this->btnConfirm->CssClass = "btn btn-large btn-default btn-lg";
 			$this->btnConfirm->AddAction(new QClickEvent(), new QAjaxAction('btnConfirm_Click'));
 		}
 		

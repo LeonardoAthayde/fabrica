@@ -22,6 +22,8 @@
 	 * property-read QLabel $NomeLabel
 	 * property QIntegerTextBox $SenhaControl
 	 * property-read QLabel $SenhaLabel
+	 * property QListBox $CostureiraIdControl
+	 * property-read QLabel $CostureiraIdLabel
 	 * property QListBox $MenuControl
 	 * property-read QLabel $MenuLabel
 	 * property-read string $TitleVerb a verb indicating whether or not this is being edited or created
@@ -73,6 +75,12 @@
          */
 		protected $txtSenha;
 
+        /**
+         * @var QListBox lstCostureira;
+         * @access protected
+         */
+		protected $lstCostureira;
+
 
 		// Controls that allow the viewing of Usuario's individual data fields
         /**
@@ -86,6 +94,12 @@
          * @access protected
          */
 		protected $lblSenha;
+
+        /**
+         * @var QLabel lblCostureiraId
+         * @access protected
+         */
+		protected $lblCostureiraId;
 
 
 		// QListBox Controls (if applicable) to edit Unique ReverseReferences and ManyToMany References
@@ -260,6 +274,46 @@
 		}
 
 		/**
+		 * Create and setup QListBox lstCostureira
+		 * @param string $strControlId optional ControlId to use
+		 * @param QQCondition $objConditions override the default condition of QQ::All() to the query, itself
+		 * @param QQClause[] $objOptionalClauses additional optional QQClause object or array of QQClause objects for the query
+		 * @return QListBox
+		 */
+		public function lstCostureira_Create($strControlId = null, QQCondition $objCondition = null, $objOptionalClauses = null) {
+			$this->lstCostureira = new QListBox($this->objParentObject, $strControlId);
+			$this->lstCostureira->Name = QApplication::Translate('Costureira');
+			$this->lstCostureira->AddItem(QApplication::Translate('- Select One -'), null);
+
+			// Setup and perform the Query
+			if (is_null($objCondition)) $objCondition = QQ::All();
+			$objCostureiraCursor = Costureira::QueryCursor($objCondition, $objOptionalClauses);
+
+			// Iterate through the Cursor
+			while ($objCostureira = Costureira::InstantiateCursor($objCostureiraCursor)) {
+				$objListItem = new QListItem($objCostureira->__toString(), $objCostureira->Id);
+				if (($this->objUsuario->Costureira) && ($this->objUsuario->Costureira->Id == $objCostureira->Id))
+					$objListItem->Selected = true;
+				$this->lstCostureira->AddItem($objListItem);
+			}
+
+			// Return the QListBox
+			return $this->lstCostureira;
+		}
+
+		/**
+		 * Create and setup QLabel lblCostureiraId
+		 * @param string $strControlId optional ControlId to use
+		 * @return QLabel
+		 */
+		public function lblCostureiraId_Create($strControlId = null) {
+			$this->lblCostureiraId = new QLabel($this->objParentObject, $strControlId);
+			$this->lblCostureiraId->Name = QApplication::Translate('Costureira');
+			$this->lblCostureiraId->Text = ($this->objUsuario->Costureira) ? $this->objUsuario->Costureira->__toString() : null;
+			return $this->lblCostureiraId;
+		}
+
+		/**
 		 * Create and setup QListBox lstMenus
 		 * @param string $strControlId optional ControlId to use
 		 * @param QQCondition $objConditions override the default condition of QQ::All() to the query, itself
@@ -329,6 +383,19 @@
 			if ($this->txtSenha) $this->txtSenha->Text = $this->objUsuario->Senha;
 			if ($this->lblSenha) $this->lblSenha->Text = $this->objUsuario->Senha;
 
+			if ($this->lstCostureira) {
+					$this->lstCostureira->RemoveAllItems();
+				$this->lstCostureira->AddItem(QApplication::Translate('- Select One -'), null);
+				$objCostureiraArray = Costureira::LoadAll();
+				if ($objCostureiraArray) foreach ($objCostureiraArray as $objCostureira) {
+					$objListItem = new QListItem($objCostureira->__toString(), $objCostureira->Id);
+					if (($this->objUsuario->Costureira) && ($this->objUsuario->Costureira->Id == $objCostureira->Id))
+						$objListItem->Selected = true;
+					$this->lstCostureira->AddItem($objListItem);
+				}
+			}
+			if ($this->lblCostureiraId) $this->lblCostureiraId->Text = ($this->objUsuario->Costureira) ? $this->objUsuario->Costureira->__toString() : null;
+
 			if ($this->lstMenus) {
 				$this->lstMenus->RemoveAllItems();
 				$objAssociatedArray = $this->objUsuario->GetMenuArray();
@@ -385,6 +452,7 @@
 				// Update any fields for controls that have been created
 				if ($this->txtNome) $this->objUsuario->Nome = $this->txtNome->Text;
 				if ($this->txtSenha) $this->objUsuario->Senha = $this->txtSenha->Text;
+				if ($this->lstCostureira) $this->objUsuario->CostureiraId = $this->lstCostureira->SelectedValue;
 
 				// Update any UniqueReverseReferences (if any) for controls that have been created for it
 
@@ -447,6 +515,12 @@
 				case 'SenhaLabel':
 					if (!$this->lblSenha) return $this->lblSenha_Create();
 					return $this->lblSenha;
+				case 'CostureiraIdControl':
+					if (!$this->lstCostureira) return $this->lstCostureira_Create();
+					return $this->lstCostureira;
+				case 'CostureiraIdLabel':
+					if (!$this->lblCostureiraId) return $this->lblCostureiraId_Create();
+					return $this->lblCostureiraId;
 				case 'MenuControl':
 					if (!$this->lstMenus) return $this->lstMenus_Create();
 					return $this->lstMenus;
@@ -481,6 +555,8 @@
 						return ($this->txtNome = QType::Cast($mixValue, 'QControl'));
 					case 'SenhaControl':
 						return ($this->txtSenha = QType::Cast($mixValue, 'QControl'));
+					case 'CostureiraIdControl':
+						return ($this->lstCostureira = QType::Cast($mixValue, 'QControl'));
 					case 'MenuControl':
 						return ($this->lstMenus = QType::Cast($mixValue, 'QControl'));
 					default:

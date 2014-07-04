@@ -24,6 +24,8 @@
 
 		<?php $this->txtCodigo->RenderWithName(); ?>
 
+		<?php $this->txtMetro->RenderWithName(); ?>
+
 	</div>
 
 	<div id="formActions">

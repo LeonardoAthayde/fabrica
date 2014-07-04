@@ -5,17 +5,21 @@
 	class FluxogramaEditarForm extends BaseForm {
 	
 		public $txtSearchFlowchart;
+		protected $lstCor;
 		protected $btnSearchFlowchart;
 		
 		protected $txtFluxogramaAcoes;
-		protected $lstMaquina;
-		protected $txtTempo;
+		protected $btnConfirm;
+		protected $lstTempo;
 		protected $btnAdd;
 		
 		protected $dtgFlowchart;
 		public $pxyDesactve;
 		
 		protected $objReferencia;
+		protected $objCor;
+		protected $objFluxogramaAcoes;
+		
 		public $objFlowchartArray = array();
 		
 		protected function Form_Create() {
@@ -27,37 +31,14 @@
 						<span class="sr-only">100% Complete</span>
 					</div>
 				</div>';			
-			//$objArrayFluxogramaItemFinal = FluxogramaItem::QueryArray(QQ::AndCondition(
-			//			QQ::Equal(QQN::FluxogramaItem()->FluxogramaItemAsFluxogramaDepedencia->Pai, null),
-			//			QQ::Equal(QQN::FluxogramaItem()->ReferenciaId, 1)));
-
-			//foreach ($objArrayFluxogramaItemFinal as $obj)
-			//	QApplication::DisplayAlert ($obj->Id);
-			
-			//QApplication::DisplayAlert(count($objArrayFluxogramaItemFinal));
-			
-			//$objFluxogramaItem = FluxogramaItem::Load(3);
-			//QApplication::DisplayAlert('Possui filhos '.count($objFluxogramaItem->GetFluxogramaItemAsFluxogramaDepedenciaArray()));
-			
-			//foreach ($objFluxogramaItem->GetFluxogramaItemAsFluxogramaDepedenciaArray() as $obj)
-			//	QApplication::DisplayAlert ($obj->Id);
-			
-			//$objFluxogramaItem = FluxogramaItem::Load(3);
-			//QApplication::DisplayAlert('Possui pais '.count($objFluxogramaItem->GetParentFluxogramaItemAsFluxogramaDepedenciaArray()));			
-			
-			//foreach ($objFluxogramaItem->GetParentFluxogramaItemAsFluxogramaDepedenciaArray()as $obj)
-			//	QApplication::DisplayAlert ($obj->Id);
-			
-			
-			//$objFluxogramaItemReal = FluxogramaItemReal::Load(626);
-			//QApplication::DisplayAlert(count($objFluxogramaItemReal->GetFluxogramaItemRealArray()));
 			
 			$this->txtSearchFlowchart_Create();
+			$this->lstCor_Create();
 			$this->btnSearchFlowchart_Create();
 			
 			$this->txtFluxogramaAcoes_Create();
-			$this->lstMaquina_Create();
-			$this->txtTempo_Create();
+			$this->btnConfirm_Create();
+			$this->lstTempo_Create();
 			$this->btnAdd_Create();
 			
 			$this->dtgFlowchart_Create();
@@ -67,57 +48,57 @@
 		protected function txtSearchFlowchart_Create(){
 			$this->txtSearchFlowchart = new QTextBox($this);
 			$this->txtSearchFlowchart->CssClass = 'form-control input-lg';
+			$this->txtSearchFlowchart->SetCustomAttribute('placeholder', 'Referência');
+			$this->txtSearchFlowchart_Fill();
+		}
+		
+		protected function txtSearchFlowchart_Fill(){
 			$strJavaScript = '';
 			foreach (Referencia::LoadAll() as $objReference)
 				$strJavaScript.= ", {value:'".$objReference."', data: '".$objReference."'}";
 			$strJavaScript=  substr($strJavaScript, 1);
-			QApplication::ExecuteJavaScript("$('#".$this->txtSearchFlowchart->ControlId."').autocomplete( {lookup: [".$strJavaScript."]});");		
+			QApplication::ExecuteJavaScript("$('#".$this->txtSearchFlowchart->ControlId."').autocomplete( {lookup: [".$strJavaScript."]});");			
 		}
 		
 		protected function btnSearchFlowchart_Create(){
 			$this->btnSearchFlowchart = new QControlProxy($this);
-			//$this->btnSearchFlowchart->Text = 'Pesquisar';
 			$this->btnSearchFlowchart->AddAction(new QClickEvent(), new QAjaxAction('btnSearchFlowchart_Click'));
 		}
 		
 		protected function btnSearchFlowchart_Click($strFormId, $strControlId, $strParameter){
-			$this->objFlowchartArray = array();
 			$this->objReferencia = Referencia::LoadByNome($this->txtSearchFlowchart->Text);
-			if(!$this->objReferencia){
-				QApplication::DisplayAlert('Referência não encontrada');
-				$this->txtFluxogramaAcoes->Display = false;
-				$this->lstMaquina->Display = false;
-				$this->txtTempo->Display = false;
-				$this->btnAdd->Display = false;
+			if($this->objReferencia){
+				$this->lstCor_Fill();
+				$this->objCor = Cor::Load($this->lstCor->SelectedValue);
+				$this->dtgFlowchart->Refresh();
+				if($this->objFluxogramaAcoes)
+					$this->btnAdd->Enabled = true;
 			} else {
-				
-				//$intCount = OrdemProducaoGrade::QueryCount(QQ::AndCondition(
-				//	QQ::Equal(QQN::OrdemProducaoGrade()->OrdemProducao->ReferenciaId, $this->objReferencia->Id),
-				//	QQ::Equal(QQN::OrdemProducaoGrade()->BalancoPecas->Concluido, false)
-				//	));
-				
-				//if($intCount > 0){
-				//	QApplication::DisplayAlert('Para Editar o Fluxograma não pode ter nenhuma peça dessa referência no marquinário');
-				//	$this->lstFluxogramaAcoes->Display = false;
-				//	$this->lstMaquina->Display = false;
-				//	$this->txtTempo->Display = false;
-				//	$this->btnAdd->Display = false;
-				//	$this->objReferencia = null;
-				//} else {
-					$this->txtFluxogramaAcoes->Display = true;
-					$strJavaScript = '';
-					foreach (FluxogramaAcoes::LoadAll() as $objFluxogramaAcoes)
-						$strJavaScript.= ", {value:'".$objFluxogramaAcoes."', data: '".$objFluxogramaAcoes."'}";
-					$strJavaScript=  substr($strJavaScript, 1);
-					QApplication::ExecuteJavaScript("$('#".$this->txtFluxogramaAcoes->ControlId."').autocomplete( {lookup: [".$strJavaScript."]});");			
-
-					$this->lstMaquina->Display = true;
-					$this->txtTempo->Display = true;
-					$this->btnAdd->Display = true;
-					
-				//}
-				
+				QApplication::DisplayAlert ('Referência não encontrada');
+				$this->objReferencia = null;
+				$this->objCor = null;
+				$this->btnAdd->Enabled = false;
+				$this->lstCor_Fill();
 			}
+		}		
+		
+		protected function lstCor_Create(){
+			$this->lstCor = new QListBox($this);
+			$this->lstCor->CssClass = 'form-control input-lg';
+			$this->lstCor->AddAction(new QChangeEvent(), new QAjaxAction('lstCor_Change'));
+		}
+		
+		protected function lstCor_Fill(){
+			$this->lstCor->RemoveAllItems();
+			if($this->objReferencia){
+				$this->lstCor->AddItem('NENHUMA COR');
+				foreach ($this->objReferencia->GetCorArray() as $objCor)
+					$this->lstCor->AddItem($objCor->Nome, $objCor->Id);
+			}
+		}		
+		
+		protected function lstCor_Change($strFormId, $strControlId, $strParameter){
+			$this->objCor = Cor::Load($this->lstCor->SelectedValue);
 			$this->dtgFlowchart->Refresh();
 		}
 		
@@ -125,83 +106,84 @@
 		protected function txtFluxogramaAcoes_Create(){
 			$this->txtFluxogramaAcoes = new QTextBox($this);
 			$this->txtFluxogramaAcoes->CssClass = 'form-control input-lg';
-			$this->txtFluxogramaAcoes->Required = true;
-			$this->txtFluxogramaAcoes->Display = false;
-
-			//$this->txtFluxogramaAcoes->AddItem('Selecione uma ação ==>');
-			//foreach (FluxogramaAcoes::LoadAll() as $objFluxogramaAcoes)
-			//	$this->lstFluxogramaAcoes->AddItem($objFluxogramaAcoes->Nome, $objFluxogramaAcoes->Id);			
+			$this->txtFluxogramaAcoes->SetCustomAttribute('placeholder', 'Operação');
+			$this->txtFluxogramaAcoes_Fill();
 		}
 		
-		protected function lstMaquina_Create(){
-			$this->lstMaquina = new QListBox($this);
-			$this->lstMaquina->CssClass = 'form-control input-lg';
-			$this->lstMaquina->Required = true;
-			$this->lstMaquina->Display = false;
-			
-			$this->lstMaquina->AddItem('Selecione uma maquina ==>');
-			foreach (Maquina::LoadAll() as $objMaquina)
-				$this->lstMaquina->AddItem($objMaquina->Nome, $objMaquina->Id);			
+		protected function txtFluxogramaAcoes_Fill(){
+			$strJavaScript = '';
+			foreach (FluxogramaAcoes::LoadAll() as $objFluxogramaAcoes)
+				$strJavaScript.= ", {value:'".$objFluxogramaAcoes."', data: '".$objFluxogramaAcoes."'}";
+			$strJavaScript=  substr($strJavaScript, 1);
+			QApplication::ExecuteJavaScript("$('#".$this->txtFluxogramaAcoes->ControlId."').autocomplete( {lookup: [".$strJavaScript."]});");			
 		}
 		
 		
-		protected function txtTempo_Create(){
-			$this->txtTempo = new QIntegerTextBox($this);
-			$this->txtTempo->Minimum = 0;
-			$this->txtTempo->Required = true;
-			$this->txtTempo->CssClass = 'form-control input-lg';
-			$this->txtTempo->Display = false;
-			$this->txtTempo->SetCustomAttribute('placeholder', 'Tempo');	
+		protected function btnConfirm_Create(){
+			$this->btnConfirm = new QLinkButton($this);
+			$this->btnConfirm->Text = '<pan class="glyphicon glyphicon-ok-circle"></span>';
+			$this->btnConfirm->CssClass = 'btn btn-lg btn-default width100';
+			$this->btnConfirm->HtmlEntities = false;
+			$this->btnConfirm->AddAction(new QClickEvent(), new QAjaxAction('btnConfirm_Click'));
 		}
 		
+		protected function btnConfirm_Click($strFormId, $strControlId){
+			$this->objFluxogramaAcoes = FluxogramaAcoes::LoadByNome($this->txtFluxogramaAcoes->Text);
+			if(!$this->objFluxogramaAcoes) {
+				QApplication::DisplayAlert ('Operação Inválida');
+				$this->btnAdd->Enabled = false;
+			} else if($this->objReferencia)
+				$this->btnAdd->Enabled = true;
+			$this->lstTempo_Fill();			
+		}
+		
+		
+		protected function lstTempo_Create(){
+			$this->lstTempo = new QListBox($this);
+			$this->lstTempo->CssClass = 'form-control input-lg';
+			$this->lstTempo_Fill();
+		}
+		
+		protected function lstTempo_Fill(){
+			$this->lstTempo->RemoveAllItems();
+			$objFLuxogramaAcao = FluxogramaAcoes::LoadByNome($this->txtFluxogramaAcoes->Text);
+			if(!$objFLuxogramaAcao)
+				$this->lstTempo->AddItem('Confirme uma operação');
+			else {
+				$this->lstTempo->AddItem('Escolha um tempo');
+				foreach (FluxogramaAcoesTempo::LoadArrayByFluxogramaAcoesId($objFLuxogramaAcao->Id) as $objFLuxogramaAcoesTempo)
+					$this->lstTempo->AddItem(gmdate("H:i:s", $objFLuxogramaAcoesTempo->Tempo), $objFLuxogramaAcoesTempo->Id);
+			}
+		}
 		
 		protected function btnAdd_Create(){
 			$this->btnAdd = new QLinkButton($this);
 			$this->btnAdd->Text = '<span class="glyphicon glyphicon-plus"></span>';
 			$this->btnAdd->CssClass = 'btn btn-default btn-lg';
 			$this->btnAdd->Height = 46;
-			$this->btnAdd->Display = false;
+			$this->btnAdd->Enabled = false;
 			$this->btnAdd->HtmlEntities = false;
 			$this->btnAdd->CausesValidation = true;
 			$this->btnAdd->AddAction(new QClickEvent(), new QAjaxAction('btnAdd_Click'));
 		}
 		
-		protected function btnAdd_Click($strFormId, $strControlId, $strParameter){
+		protected function btnAdd_Click($strFormId, $strControlId, $strParameter){						
 			$objFluxogramaItem = new FluxogramaItem();
-			$objFLuxogramaAcao = FluxogramaAcoes::LoadByNome($this->txtFluxogramaAcoes->Text);
-			if(!$objFLuxogramaAcao){
-				$objFLuxogramaAcao = new FluxogramaAcoes();
-				$objFLuxogramaAcao->Nome = $this->txtFluxogramaAcoes->Text;
-				$objFLuxogramaAcao->Save();
-			}
-			$objFluxogramaItem->FluxogramaAcoesId = $objFLuxogramaAcao->Id;
-			$objFluxogramaItem->MaquinaId = $this->lstMaquina->SelectedValue;
-			//$objFluxogramaItem->Ordenacao = $this->GetOrdenacao();
+			$objFluxogramaItem->FluxogramaAcoesId = $this->objFluxogramaAcoes->Id;
 			$objFluxogramaItem->ReferenciaId = $this->objReferencia->Id;
-			$objFluxogramaItem->Tempo = $this->txtTempo->Text;
+			$objFluxogramaItem->CorId = ($this->objCor)?$this->objCor->Id:null;
+			$objFluxogramaItem->FluxogramaAcoesTempoId = $this->lstTempo->SelectedValue;
 			$objFluxogramaItem->Profundidade = 0;
 			$objFluxogramaItem->Save();
 			
+
 			$this->txtFluxogramaAcoes->Text = '';
-			$strJavaScript = '';
-			foreach (FluxogramaAcoes::LoadAll() as $objFluxogramaAcoes)
-				$strJavaScript.= ", {value:'".$objFluxogramaAcoes."', data: '".$objFluxogramaAcoes."'}";
-			$strJavaScript=  substr($strJavaScript, 1);
-			QApplication::ExecuteJavaScript("$('#".$this->txtFluxogramaAcoes->ControlId."').autocomplete( {lookup: [".$strJavaScript."]});");			
-			
-			$this->lstMaquina->SelectedIndex = 0;
-			$this->txtTempo->Text = '';
-			
+			$this->txtFluxogramaAcoes_Fill();
+			$this->objFluxogramaAcoes = null;
+			$this->lstTempo_Fill();
 			$this->dtgFlowchart->Refresh();
 		}
 		
-		/*protected function GetOrdenacao(){
-			$objFluxogramaItem = FluxogramaItem::QuerySingle(QQ::AndCondition(QQ::Equal(QQN::FluxogramaItem()->ReferenciaId, $this->objReferencia->Id), QQ::Equal(QQN::FluxogramaItem()->Ativo, true)), QQ::Clause (QQ::OrderBy(QQN::FluxogramaItem()->Ordenacao, false)));
-			if($objFluxogramaItem)
-				return $objFluxogramaItem->Ordenacao+1;
-			else
-				return 1;
-		}*/
 		
 
 		
@@ -210,18 +192,18 @@
 			$this->dtgFlowchart->AddColumn(new QDataGridColumn('Profundidade', '<?= $_ITEM->Profundidade ?>'));
 			$this->dtgFlowchart->AddColumn(new QDataGridColumn('Id', '<?= $_ITEM->Id ?>'));
 			$this->dtgFlowchart->AddColumn(new QDataGridColumn('Depedencia', '<?= $_FORM->Render_Depedencia($_ITEM) ?>', 'HtmlEntities=false'));			
-			$this->dtgFlowchart->AddColumn(new QDataGridColumn('fluxograma', '<?= $_FORM->Render_FluxogramaAcao($_ITEM) ?>', 'HtmlEntities=false'));
-			$this->dtgFlowchart->AddColumn(new QDataGridColumn('maquina', '<?= $_FORM->Render_Maquina($_ITEM) ?>', 'HtmlEntities=false'));
-			$this->dtgFlowchart->AddColumn(new QDataGridColumn('tempo', '<?= $_FORM->Render_Tempo($_ITEM) ?>', 'HtmlEntities=false'));
+			$this->dtgFlowchart->AddColumn(new QDataGridColumn('Operação', '<?= $_FORM->Render_FluxogramaAcao($_ITEM) ?>', 'HtmlEntities=false'));
+			$this->dtgFlowchart->AddColumn(new QDataGridColumn('Maquina', '<?= ($_ITEM->FluxogramaAcoes->Maquina)?$_ITEM->FluxogramaAcoes->Maquina->Nome:"Manual" ?>'));
+			$this->dtgFlowchart->AddColumn(new QDataGridColumn('Tempo', '<?= $_FORM->Render_Tempo($_ITEM) ?>', 'HtmlEntities=false'));
 			$this->dtgFlowchart->AddColumn(new QDataGridColumn('Ação', '<button <?= $_FORM->pxyDesactve->RenderAsEvents($_ITEM->Id, false) ?> type="button" class="btn btn-default btn-lg"><span class="glyphicon glyphicon-remove"></span></button>', 'HtmlEntities=false'));
-			/*$this->dtgFlowchart->AddColumn(new QDataGridColumn('tempo', '<?= gmdate("H:i:s", $_ITEM->Tempo) ?>'));*/
 			$this->dtgFlowchart->SetDataBinder('dtgFlowchart_Bind');
 			$this->dtgFlowchart->CssClass = 'table table-striped table-bordered';
 		}
 		
 		protected function dtgFlowchart_Bind(){
+			$this->objFlowchartArray = array();
 			if($this->objReferencia){
-				$this->objFlowchartArray = FluxogramaItem::LoadArrayByReferenciaId($this->objReferencia->Id, QQ::Clause(QQ::OrderBy(QQN::FluxogramaItem()->Profundidade), QQ::OrderBy(QQN::FluxogramaItem()->Id)));
+				$this->objFlowchartArray = FluxogramaItem::LoadArrayByReferenciaIdCorId($this->objReferencia->Id, $this->lstCor->SelectedValue, QQ::Clause(QQ::OrderBy(QQN::FluxogramaItem()->Profundidade), QQ::OrderBy(QQN::FluxogramaItem()->Id)));
 				foreach ($this->objFlowchartArray as $intIndex => $objFluxogramaItem){
 					$objRowStyle = new QDataGridRowStyle();
 					if(count($objFluxogramaItem->GetFluxogramaItemAsFluxogramaDepedenciaArray()) == 0)
@@ -251,6 +233,7 @@
 			$lstDepedencia->RemoveAllItems();
 			foreach (FluxogramaItem::QueryArray(QQ::AndCondition(
 							QQ::Equal(QQN::FluxogramaItem()->ReferenciaId, $objFluxogramaItem->ReferenciaId),
+							QQ::Equal(QQN::FluxogramaItem()->CorId, $objFluxogramaItem->CorId),
 							QQ::NotEqual(QQN::FluxogramaItem()->Id, $objFluxogramaItem->Id))) as $objFluxogramaItemRef){
 				
 				if($this->CheckIsValidUpdateInterface($objFluxogramaItem, $objFluxogramaItemRef->Id)){
@@ -363,18 +346,6 @@
 				$this->UpdateProfundidade($objFluxogramaItem->GetFluxogramaItemAsFluxogramaDepedenciaArray(), $intProfundidade+1);
 			}
 		}		
-		
-		/*protected function UpdateProfundidade($objArrayFluxogramaItem, $intProfundidade){
-			foreach ($objArrayFluxogramaItem as $objFluxogramaItem){
-				QApplication::DisplayAlert($objFluxogramaItem->Id." | ".$objFluxogramaItem->Profundidade.' < '.$intProfundidade);
-				if($objFluxogramaItem->Profundidade < $intProfundidade){
-					QApplication::DisplayAlert('entrou');
-					$objFluxogramaItem->Profundidade = $intProfundidade;
-					$objFluxogramaItem->Save();
-				}
-				$this->UpdateProfundidade($objFluxogramaItem->GetFluxogramaItemArray(), $intProfundidade+1);
-			}
-		}*/
 			
 		
 		public function Render_FluxogramaAcao(FluxogramaItem $objFluxogramaItem){
@@ -426,54 +397,7 @@
 			$this->dtgFlowchart->Refresh();
 		}
 		
-		public function Render_Maquina(FluxogramaItem $objFluxogramaItem){
-			$objWaitIconMaquina = $this->dtgFlowchart->GetChildControl('objWaitIconMaquina'.$objFluxogramaItem->Id);
-			if(!$objWaitIconMaquina)
-				$objWaitIconMaquina = new QWaitIcon($this->dtgFlowchart, 'objWaitIconMaquina'.$objFluxogramaItem->Id);
-			
-			$lstMaquina = $this->dtgFlowchart->GetChildControl('lstMaquina'.$objFluxogramaItem->Id);
-			if(!$lstMaquina){
-				$lstMaquina = new QListBox($this->dtgFlowchart, 'lstMaquina'.$objFluxogramaItem->Id);
-				$lstMaquina->CssClass = 'form-control input-lg';
-				$lstMaquina->AddAction(new QChangeEvent(), new QAjaxAction('lstMaquina_Change'));
-			}
-			$lstMaquina->RemoveAllItems();
-			foreach (Maquina::LoadAll() as $objMaquina)
-				if($objFluxogramaItem->Maquina && $objMaquina->Id == $objFluxogramaItem->Maquina->Id)
-					$lstMaquina->AddItem ($objMaquina->Nome, $objMaquina->Id, true);
-				else	
-					$lstMaquina->AddItem ($objMaquina->Nome, $objMaquina->Id);
-			$lstMaquina->Display = false;
-			$lstMaquina->ActionParameter = $objFluxogramaItem->Id.'#'.$lstMaquina->ControlId;
-			
-			$lblMaquina = $this->dtgFlowchart->GetChildControl('lblMaquina'.$objFluxogramaItem->Id);
-			if(!$lblMaquina){
-				$lblMaquina = new QLabel($this->dtgFlowchart, 'lblMaquina'.$objFluxogramaItem->Id);
-				$lblMaquina->AddAction(new QClickEvent(), new QToggleDisplayAction($lblMaquina));
-				$lblMaquina->AddAction(new QClickEvent(), new QToggleDisplayAction($lstMaquina));			
-				$lblMaquina->Cursor = QCursor::Pointer;
-				
-			}
-			$lblMaquina->Display = true;
-			if($objFluxogramaItem->Maquina)
-				$lblMaquina->Text = $objFluxogramaItem->Maquina->Nome;
-			else
-				$lblMaquina->Text = 'N/A';
-			return	$lblMaquina->Render(false).
-				$lstMaquina->Render(false).
-				$objWaitIconMaquina->Render(false);
-		}
 		
-		protected function lstMaquina_Change($strFormId, $strControlId, $strParameter){
-			$arrParameter = split('#', $strParameter);
-			$lstMaquina = $this->dtgFlowchart->GetChildControl($arrParameter[1]);
-			
-			$objFluxogramaItem = FluxogramaItem::Load($arrParameter[0]);
-			$objFluxogramaItem->MaquinaId = $lstMaquina->SelectedValue;
-			$objFluxogramaItem->Save();
-			
-			$this->dtgFlowchart->Refresh();
-		}
 		
 		public function Render_Tempo(FluxogramaItem $objFluxogramaItem){
 			$objWaitIconTempo = $this->dtgFlowchart->GetChildControl('objWaitIconTempo'.$objFluxogramaItem->Id);
@@ -482,13 +406,17 @@
 			
 			$txtTempo = $this->dtgFlowchart->GetChildControl('txtTempo'.$objFluxogramaItem->Id);
 			if(!$txtTempo){
-				$txtTempo = new QIntegerTextBox($this->dtgFlowchart, 'txtTempo'.$objFluxogramaItem->Id);
+				$txtTempo = new QListBox($this->dtgFlowchart, 'txtTempo'.$objFluxogramaItem->Id);
 				$txtTempo->CssClass = 'form-control input-lg';
-				$txtTempo->Minimum = 0;
-				$txtTempo->AddAction(new QEnterKeyEvent(), new QAjaxAction('lstTempo_KeyUp'));			
+				$txtTempo->AddAction(new QChangeEvent(), new QAjaxAction('lstTempo_Change'));			
 			}
 			$txtTempo->Display = false;
-			$txtTempo->Text = $objFluxogramaItem->Tempo;
+			$txtTempo->RemoveAllItems();
+			foreach (FluxogramaAcoesTempo::LoadArrayByFluxogramaAcoesId($objFluxogramaItem->FluxogramaAcoesId) as $objFluxogramaAcoesTempo)
+				if($objFluxogramaAcoesTempo->Id == $objFluxogramaItem->FluxogramaAcoesTempoId)
+					$txtTempo->AddItem(gmdate("H:i:s", $objFluxogramaAcoesTempo->Tempo), $objFluxogramaAcoesTempo->Id, true);
+				else	
+					$txtTempo->AddItem (gmdate("H:i:s", $objFluxogramaAcoesTempo->Tempo), $objFluxogramaAcoesTempo->Id);
 			$txtTempo->ActionParameter = $objFluxogramaItem->Id.'#'.$txtTempo->ControlId;
 			
 			$lblTempo = $this->dtgFlowchart->GetChildControl('lblTempo'.$objFluxogramaItem->Id);
@@ -500,19 +428,20 @@
 				
 			}
 			$lblTempo->Display = true;
-			$lblTempo->Text = gmdate("H:i:s", $objFluxogramaItem->Tempo);
+			if($objFluxogramaItem->FluxogramaAcoesTempoId)
+				$lblTempo->Text = gmdate("H:i:s", $objFluxogramaItem->FluxogramaAcoesTempo->Tempo);
 			
 			return	$lblTempo->Render(false).
 				$txtTempo->Render(false).
 				$objWaitIconTempo->Render(false);
 		}
 		
-		protected function lstTempo_KeyUp($strFormId, $strControlId, $strParameter){
+		protected function lstTempo_Change($strFormId, $strControlId, $strParameter){
 			$arrParameter = split('#', $strParameter);
 			$txtTtempo = $this->dtgFlowchart->GetChildControl($arrParameter[1]);
 			
 			$objFluxogramaItem = FluxogramaItem::Load($arrParameter[0]);
-			$objFluxogramaItem->Tempo = $txtTtempo->Text;
+			$objFluxogramaItem->FluxogramaAcoesTempoId = $txtTtempo->SelectedValue;
 			$objFluxogramaItem->Save();
 			
 			$this->dtgFlowchart->Refresh();
@@ -526,15 +455,7 @@
 		
 		protected function pxyDesactve_Click($strFormId, $strControlId, $strParameter){
 			$objFluxogramaItem = FluxogramaItem::Load($strParameter);
-			/*$objArrayFluxogramaItem = FluxogramaItem::QueryArray(QQ::AndCondition(
-				QQ::Equal(QQN::FluxogramaItem()->ReferenciaId, $objFluxogramaItem->ReferenciaId),
-				QQ::GreaterThan(QQN::FluxogramaItem()->Ordenacao, $objFluxogramaItem->Ordenacao)));
-			foreach ($objArrayFluxogramaItem as $objFluxogramaItemGreater){
-				$objFluxogramaItemGreater->Ordenacao--;
-				$objFluxogramaItemGreater->Save();
-			}
-			$objFluxogramaItem->Ativo = false;
-			$objFluxogramaItem->Save();*/
+
 			
 			$objFluxogramaItem->Delete();
 			$objArrayFluxogramaItemRoot = FluxogramaItem::QueryArray(QQ::AndCondition(

@@ -19,6 +19,30 @@
 			return new QQNodeBalancoPecas('balanco_pecas', null, null);
 		}
 		/**
+		 * @return QQNodeComando
+		 */
+		static public function Comando() {
+			return new QQNodeComando('comando', null, null);
+		}
+		/**
+		 * @return QQNodeComandoPeca
+		 */
+		static public function ComandoPeca() {
+			return new QQNodeComandoPeca('comando_peca', null, null);
+		}
+		/**
+		 * @return QQNodeComandoRisco
+		 */
+		static public function ComandoRisco() {
+			return new QQNodeComandoRisco('comando_risco', null, null);
+		}
+		/**
+		 * @return QQNodeComandoRiscoPeca
+		 */
+		static public function ComandoRiscoPeca() {
+			return new QQNodeComandoRiscoPeca('comando_risco_peca', null, null);
+		}
+		/**
 		 * @return QQNodeCor
 		 */
 		static public function Cor() {
@@ -43,10 +67,22 @@
 			return new QQNodeCostureiraTempo('costureira_tempo', null, null);
 		}
 		/**
+		 * @return QQNodeCostureiraTempoEficiente
+		 */
+		static public function CostureiraTempoEficiente() {
+			return new QQNodeCostureiraTempoEficiente('costureira_tempo_eficiente', null, null);
+		}
+		/**
 		 * @return QQNodeFluxogramaAcoes
 		 */
 		static public function FluxogramaAcoes() {
 			return new QQNodeFluxogramaAcoes('fluxograma_acoes', null, null);
+		}
+		/**
+		 * @return QQNodeFluxogramaAcoesTempo
+		 */
+		static public function FluxogramaAcoesTempo() {
+			return new QQNodeFluxogramaAcoesTempo('fluxograma_acoes_tempo', null, null);
 		}
 		/**
 		 * @return QQNodeFluxogramaItem
@@ -73,18 +109,6 @@
 			return new QQNodeMenu('menu', null, null);
 		}
 		/**
-		 * @return QQNodeOrdemProducao
-		 */
-		static public function OrdemProducao() {
-			return new QQNodeOrdemProducao('ordem_producao', null, null);
-		}
-		/**
-		 * @return QQNodeOrdemProducaoGrade
-		 */
-		static public function OrdemProducaoGrade() {
-			return new QQNodeOrdemProducaoGrade('ordem_producao_grade', null, null);
-		}
-		/**
 		 * @return QQNodeReferencia
 		 */
 		static public function Referencia() {
@@ -97,6 +121,12 @@
 			return new QQNodeReferenciaCategoria('referencia_categoria', null, null);
 		}
 		/**
+		 * @return QQNodeReferenciaRendimento
+		 */
+		static public function ReferenciaRendimento() {
+			return new QQNodeReferenciaRendimento('referencia_rendimento', null, null);
+		}
+		/**
 		 * @return QQNodeTamanho
 		 */
 		static public function Tamanho() {
@@ -107,6 +137,12 @@
 		 */
 		static public function Tecido() {
 			return new QQNodeTecido('tecido', null, null);
+		}
+		/**
+		 * @return QQNodeTecidoRendimento
+		 */
+		static public function TecidoRendimento() {
+			return new QQNodeTecidoRendimento('tecido_rendimento', null, null);
 		}
 		/**
 		 * @return QQNodeUsuario

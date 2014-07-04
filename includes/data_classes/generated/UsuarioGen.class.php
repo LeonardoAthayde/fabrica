@@ -18,6 +18,8 @@
 	 * @property integer $Id the value for intId (Read-Only PK)
 	 * @property string $Nome the value for strNome (Not Null)
 	 * @property integer $Senha the value for intSenha (Not Null)
+	 * @property integer $CostureiraId the value for intCostureiraId 
+	 * @property Costureira $Costureira the value for the Costureira object referenced by intCostureiraId 
 	 * @property Menu $_Menu the value for the private _objMenu (Read-Only) if set due to an expansion on the usuario_menu_assn association table
 	 * @property Menu[] $_MenuArray the value for the private _objMenuArray (Read-Only) if set due to an ExpandAsArray on the usuario_menu_assn association table
 	 * @property boolean $__Restored whether or not this object was restored from the database (as opposed to created new)
@@ -51,6 +53,14 @@
 		 */
 		protected $intSenha;
 		const SenhaDefault = null;
+
+
+		/**
+		 * Protected member variable that maps to the database column usuario.costureira_id
+		 * @var integer intCostureiraId
+		 */
+		protected $intCostureiraId;
+		const CostureiraIdDefault = null;
 
 
 		/**
@@ -90,6 +100,16 @@
 		///////////////////////////////
 		// PROTECTED MEMBER OBJECTS
 		///////////////////////////////
+
+		/**
+		 * Protected member variable that contains the object pointed by the reference
+		 * in the database column usuario.costureira_id.
+		 *
+		 * NOTE: Always use the Costureira property getter to correctly retrieve this Costureira object.
+		 * (Because this class implements late binding, this variable reference MAY be null.)
+		 * @var Costureira objCostureira
+		 */
+		protected $objCostureira;
 
 
 
@@ -404,6 +424,7 @@
 			$objBuilder->AddSelectItem($strTableName, 'id', $strAliasPrefix . 'id');
 			$objBuilder->AddSelectItem($strTableName, 'nome', $strAliasPrefix . 'nome');
 			$objBuilder->AddSelectItem($strTableName, 'senha', $strAliasPrefix . 'senha');
+			$objBuilder->AddSelectItem($strTableName, 'costureira_id', $strAliasPrefix . 'costureira_id');
 		}
 
 
@@ -473,6 +494,8 @@
 			$objToReturn->strNome = $objDbRow->GetColumn($strAliasName, 'VarChar');
 			$strAliasName = array_key_exists($strAliasPrefix . 'senha', $strColumnAliasArray) ? $strColumnAliasArray[$strAliasPrefix . 'senha'] : $strAliasPrefix . 'senha';
 			$objToReturn->intSenha = $objDbRow->GetColumn($strAliasName, 'Integer');
+			$strAliasName = array_key_exists($strAliasPrefix . 'costureira_id', $strColumnAliasArray) ? $strColumnAliasArray[$strAliasPrefix . 'costureira_id'] : $strAliasPrefix . 'costureira_id';
+			$objToReturn->intCostureiraId = $objDbRow->GetColumn($strAliasName, 'Integer');
 
 			// Instantiate Virtual Attributes
 			foreach ($objDbRow->GetColumnNameArray() as $strColumnName => $mixValue) {
@@ -485,6 +508,12 @@
 			// Prepare to Check for Early/Virtual Binding
 			if (!$strAliasPrefix)
 				$strAliasPrefix = 'usuario__';
+
+			// Check for Costureira Early Binding
+			$strAlias = $strAliasPrefix . 'costureira_id__id';
+			$strAliasName = array_key_exists($strAlias, $strColumnAliasArray) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			if (!is_null($objDbRow->GetColumn($strAliasName)))
+				$objToReturn->objCostureira = Costureira::InstantiateDbRow($objDbRow, $strAliasPrefix . 'costureira_id__', $strExpandAsArrayNodes, null, $strColumnAliasArray);
 
 
 
@@ -599,6 +628,40 @@
 			, $objOptionalClauses
 			);
 		}
+			
+		/**
+		 * Load an array of Usuario objects,
+		 * by CostureiraId Index(es)
+		 * @param integer $intCostureiraId
+		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
+		 * @return Usuario[]
+		*/
+		public static function LoadArrayByCostureiraId($intCostureiraId, $objOptionalClauses = null) {
+			// Call Usuario::QueryArray to perform the LoadArrayByCostureiraId query
+			try {
+				return Usuario::QueryArray(
+					QQ::Equal(QQN::Usuario()->CostureiraId, $intCostureiraId),
+					$objOptionalClauses
+					);
+			} catch (QCallerException $objExc) {
+				$objExc->IncrementOffset();
+				throw $objExc;
+			}
+		}
+
+		/**
+		 * Count Usuarios
+		 * by CostureiraId Index(es)
+		 * @param integer $intCostureiraId
+		 * @return int
+		*/
+		public static function CountByCostureiraId($intCostureiraId, $objOptionalClauses = null) {
+			// Call Usuario::QueryCount to perform the CountByCostureiraId query
+			return Usuario::QueryCount(
+				QQ::Equal(QQN::Usuario()->CostureiraId, $intCostureiraId)
+			, $objOptionalClauses
+			);
+		}
 
 
 
@@ -663,10 +726,12 @@
 					$objDatabase->NonQuery('
 						INSERT INTO `usuario` (
 							`nome`,
-							`senha`
+							`senha`,
+							`costureira_id`
 						) VALUES (
 							' . $objDatabase->SqlVariable($this->strNome) . ',
-							' . $objDatabase->SqlVariable($this->intSenha) . '
+							' . $objDatabase->SqlVariable($this->intSenha) . ',
+							' . $objDatabase->SqlVariable($this->intCostureiraId) . '
 						)
 					');
 
@@ -687,7 +752,8 @@
 							`usuario`
 						SET
 							`nome` = ' . $objDatabase->SqlVariable($this->strNome) . ',
-							`senha` = ' . $objDatabase->SqlVariable($this->intSenha) . '
+							`senha` = ' . $objDatabase->SqlVariable($this->intSenha) . ',
+							`costureira_id` = ' . $objDatabase->SqlVariable($this->intCostureiraId) . '
 						WHERE
 							`id` = ' . $objDatabase->SqlVariable($this->intId) . '
 					');
@@ -774,6 +840,7 @@
 			// Update $this's local variables to match
 			$this->strNome = $objReloaded->strNome;
 			$this->intSenha = $objReloaded->intSenha;
+			$this->CostureiraId = $objReloaded->CostureiraId;
 		}
 
 		/**
@@ -789,6 +856,7 @@
 					`id`,
 					`nome`,
 					`senha`,
+					`costureira_id`,
 					__sys_login_id,
 					__sys_action,
 					__sys_date
@@ -796,6 +864,7 @@
 					' . $objDatabase->SqlVariable($this->intId) . ',
 					' . $objDatabase->SqlVariable($this->strNome) . ',
 					' . $objDatabase->SqlVariable($this->intSenha) . ',
+					' . $objDatabase->SqlVariable($this->intCostureiraId) . ',
 					' . (($objDatabase->JournaledById) ? $objDatabase->JournaledById : 'NULL') . ',
 					' . $objDatabase->SqlVariable($strJournalCommand) . ',
 					NOW()
@@ -861,10 +930,27 @@
 					// @return integer
 					return $this->intSenha;
 
+				case 'CostureiraId':
+					// Gets the value for intCostureiraId 
+					// @return integer
+					return $this->intCostureiraId;
+
 
 				///////////////////
 				// Member Objects
 				///////////////////
+				case 'Costureira':
+					// Gets the value for the Costureira object referenced by intCostureiraId 
+					// @return Costureira
+					try {
+						if ((!$this->objCostureira) && (!is_null($this->intCostureiraId)))
+							$this->objCostureira = Costureira::Load($this->intCostureiraId);
+						return $this->objCostureira;
+					} catch (QCallerException $objExc) {
+						$objExc->IncrementOffset();
+						throw $objExc;
+					}
+
 
 				////////////////////////////
 				// Virtual Object References (Many to Many and Reverse References)
@@ -932,10 +1018,52 @@
 						throw $objExc;
 					}
 
+				case 'CostureiraId':
+					// Sets the value for intCostureiraId 
+					// @param integer $mixValue
+					// @return integer
+					try {
+						$this->objCostureira = null;
+						return ($this->intCostureiraId = QType::Cast($mixValue, QType::Integer));
+					} catch (QCallerException $objExc) {
+						$objExc->IncrementOffset();
+						throw $objExc;
+					}
+
 
 				///////////////////
 				// Member Objects
 				///////////////////
+				case 'Costureira':
+					// Sets the value for the Costureira object referenced by intCostureiraId 
+					// @param Costureira $mixValue
+					// @return Costureira
+					if (is_null($mixValue)) {
+						$this->intCostureiraId = null;
+						$this->objCostureira = null;
+						return null;
+					} else {
+						// Make sure $mixValue actually is a Costureira object
+						try {
+							$mixValue = QType::Cast($mixValue, 'Costureira');
+						} catch (QInvalidCastException $objExc) {
+							$objExc->IncrementOffset();
+							throw $objExc;
+						} 
+
+						// Make sure $mixValue is a SAVED Costureira object
+						if (is_null($mixValue->Id))
+							throw new QCallerException('Unable to set an unsaved Costureira for this Usuario');
+
+						// Update Local Member Variables
+						$this->objCostureira = $mixValue;
+						$this->intCostureiraId = $mixValue->Id;
+
+						// Return $mixValue
+						return $mixValue;
+					}
+					break;
+
 				default:
 					try {
 						return parent::__set($strName, $mixValue);
@@ -1159,6 +1287,7 @@
 			$strToReturn .= '<element name="Id" type="xsd:int"/>';
 			$strToReturn .= '<element name="Nome" type="xsd:string"/>';
 			$strToReturn .= '<element name="Senha" type="xsd:int"/>';
+			$strToReturn .= '<element name="Costureira" type="xsd1:Costureira"/>';
 			$strToReturn .= '<element name="__blnRestored" type="xsd:boolean"/>';
 			$strToReturn .= '</sequence></complexType>';
 			return $strToReturn;
@@ -1167,6 +1296,7 @@
 		public static function AlterSoapComplexTypeArray(&$strComplexTypeArray) {
 			if (!array_key_exists('Usuario', $strComplexTypeArray)) {
 				$strComplexTypeArray['Usuario'] = Usuario::GetSoapComplexTypeXml();
+				Costureira::AlterSoapComplexTypeArray($strComplexTypeArray);
 			}
 		}
 
@@ -1187,6 +1317,9 @@
 				$objToReturn->strNome = $objSoapObject->Nome;
 			if (property_exists($objSoapObject, 'Senha'))
 				$objToReturn->intSenha = $objSoapObject->Senha;
+			if ((property_exists($objSoapObject, 'Costureira')) &&
+				($objSoapObject->Costureira))
+				$objToReturn->Costureira = Costureira::GetObjectFromSoapObject($objSoapObject->Costureira);
 			if (property_exists($objSoapObject, '__blnRestored'))
 				$objToReturn->__blnRestored = $objSoapObject->__blnRestored;
 			return $objToReturn;
@@ -1205,6 +1338,10 @@
 		}
 
 		public static function GetSoapObjectFromObject($objObject, $blnBindRelatedObjects) {
+			if ($objObject->objCostureira)
+				$objObject->objCostureira = Costureira::GetSoapObjectFromObject($objObject->objCostureira, false);
+			else if (!$blnBindRelatedObjects)
+				$objObject->intCostureiraId = null;
 			return $objObject;
 		}
 
@@ -1255,6 +1392,8 @@
 	 * @property-read QQNode $Id
 	 * @property-read QQNode $Nome
 	 * @property-read QQNode $Senha
+	 * @property-read QQNode $CostureiraId
+	 * @property-read QQNodeCostureira $Costureira
 	 * @property-read QQNodeUsuarioMenu $Menu
 	 */
 	class QQNodeUsuario extends QQNode {
@@ -1269,6 +1408,10 @@
 					return new QQNode('nome', 'Nome', 'string', $this);
 				case 'Senha':
 					return new QQNode('senha', 'Senha', 'integer', $this);
+				case 'CostureiraId':
+					return new QQNode('costureira_id', 'CostureiraId', 'integer', $this);
+				case 'Costureira':
+					return new QQNodeCostureira('costureira_id', 'Costureira', 'integer', $this);
 				case 'Menu':
 					return new QQNodeUsuarioMenu($this);
 
@@ -1289,6 +1432,8 @@
 	 * @property-read QQNode $Id
 	 * @property-read QQNode $Nome
 	 * @property-read QQNode $Senha
+	 * @property-read QQNode $CostureiraId
+	 * @property-read QQNodeCostureira $Costureira
 	 * @property-read QQNodeUsuarioMenu $Menu
 	 * @property-read QQNode $_PrimaryKeyNode
 	 */
@@ -1304,6 +1449,10 @@
 					return new QQNode('nome', 'Nome', 'string', $this);
 				case 'Senha':
 					return new QQNode('senha', 'Senha', 'integer', $this);
+				case 'CostureiraId':
+					return new QQNode('costureira_id', 'CostureiraId', 'integer', $this);
+				case 'Costureira':
+					return new QQNodeCostureira('costureira_id', 'Costureira', 'integer', $this);
 				case 'Menu':
 					return new QQNodeUsuarioMenu($this);
 

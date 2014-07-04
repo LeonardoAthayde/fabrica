@@ -9,11 +9,11 @@
 
 		<?php $_CONTROL->lstReferencia->RenderWithName(); ?>
 
+		<?php $_CONTROL->lstCor->RenderWithName(); ?>
+
 		<?php $_CONTROL->lstFluxogramaAcoes->RenderWithName(); ?>
 
-		<?php $_CONTROL->lstMaquina->RenderWithName(); ?>
-
-		<?php $_CONTROL->txtTempo->RenderWithName(); ?>
+		<?php $_CONTROL->lstFluxogramaAcoesTempo->RenderWithName(); ?>
 
 		<?php $_CONTROL->txtProfundidade->RenderWithName(); ?>
 

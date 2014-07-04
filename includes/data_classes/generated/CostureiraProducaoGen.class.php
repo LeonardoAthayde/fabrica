@@ -27,6 +27,8 @@
 	 * @property BalancoAcoes $BalancoAcoes the value for the BalancoAcoes object referenced by intBalancoAcoesId (Not Null)
 	 * @property CostureiraTempo $_CostureiraTempo the value for the private _objCostureiraTempo (Read-Only) if set due to an expansion on the costureira_tempo.costureira_producao_id reverse relationship
 	 * @property CostureiraTempo[] $_CostureiraTempoArray the value for the private _objCostureiraTempoArray (Read-Only) if set due to an ExpandAsArray on the costureira_tempo.costureira_producao_id reverse relationship
+	 * @property CostureiraTempoEficiente $_CostureiraTempoEficiente the value for the private _objCostureiraTempoEficiente (Read-Only) if set due to an expansion on the costureira_tempo_eficiente.costureira_producao_id reverse relationship
+	 * @property CostureiraTempoEficiente[] $_CostureiraTempoEficienteArray the value for the private _objCostureiraTempoEficienteArray (Read-Only) if set due to an ExpandAsArray on the costureira_tempo_eficiente.costureira_producao_id reverse relationship
 	 * @property boolean $__Restored whether or not this object was restored from the database (as opposed to created new)
 	 */
 	class CostureiraProducaoGen extends QBaseClass {
@@ -114,6 +116,22 @@
 		 * @var CostureiraTempo[] _objCostureiraTempoArray;
 		 */
 		private $_objCostureiraTempoArray = array();
+
+		/**
+		 * Private member variable that stores a reference to a single CostureiraTempoEficiente object
+		 * (of type CostureiraTempoEficiente), if this CostureiraProducao object was restored with
+		 * an expansion on the costureira_tempo_eficiente association table.
+		 * @var CostureiraTempoEficiente _objCostureiraTempoEficiente;
+		 */
+		private $_objCostureiraTempoEficiente;
+
+		/**
+		 * Private member variable that stores a reference to an array of CostureiraTempoEficiente objects
+		 * (of type CostureiraTempoEficiente[]), if this CostureiraProducao object was restored with
+		 * an ExpandAsArray on the costureira_tempo_eficiente association table.
+		 * @var CostureiraTempoEficiente[] _objCostureiraTempoEficienteArray;
+		 */
+		private $_objCostureiraTempoEficienteArray = array();
 
 		/**
 		 * Protected array of virtual attributes for this object (e.g. extra/other calculated and/or non-object bound
@@ -527,6 +545,20 @@
 					$blnExpandedViaArray = true;
 				}
 
+				$strAlias = $strAliasPrefix . 'costureiratempoeficiente__id';
+				$strAliasName = array_key_exists($strAlias, $strColumnAliasArray) ? $strColumnAliasArray[$strAlias] : $strAlias;
+				if ((array_key_exists($strAlias, $strExpandAsArrayNodes)) &&
+					(!is_null($objDbRow->GetColumn($strAliasName)))) {
+					if ($intPreviousChildItemCount = count($objPreviousItem->_objCostureiraTempoEficienteArray)) {
+						$objPreviousChildItem = $objPreviousItem->_objCostureiraTempoEficienteArray[$intPreviousChildItemCount - 1];
+						$objChildItem = CostureiraTempoEficiente::InstantiateDbRow($objDbRow, $strAliasPrefix . 'costureiratempoeficiente__', $strExpandAsArrayNodes, $objPreviousChildItem, $strColumnAliasArray);
+						if ($objChildItem)
+							$objPreviousItem->_objCostureiraTempoEficienteArray[] = $objChildItem;
+					} else
+						$objPreviousItem->_objCostureiraTempoEficienteArray[] = CostureiraTempoEficiente::InstantiateDbRow($objDbRow, $strAliasPrefix . 'costureiratempoeficiente__', $strExpandAsArrayNodes, null, $strColumnAliasArray);
+					$blnExpandedViaArray = true;
+				}
+
 				// Either return false to signal array expansion, or check-to-reset the Alias prefix and move on
 				if ($blnExpandedViaArray)
 					return false;
@@ -590,6 +622,16 @@
 					$objToReturn->_objCostureiraTempoArray[] = CostureiraTempo::InstantiateDbRow($objDbRow, $strAliasPrefix . 'costureiratempo__', $strExpandAsArrayNodes, null, $strColumnAliasArray);
 				else
 					$objToReturn->_objCostureiraTempo = CostureiraTempo::InstantiateDbRow($objDbRow, $strAliasPrefix . 'costureiratempo__', $strExpandAsArrayNodes, null, $strColumnAliasArray);
+			}
+
+			// Check for CostureiraTempoEficiente Virtual Binding
+			$strAlias = $strAliasPrefix . 'costureiratempoeficiente__id';
+			$strAliasName = array_key_exists($strAlias, $strColumnAliasArray) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			if (!is_null($objDbRow->GetColumn($strAliasName))) {
+				if (($strExpandAsArrayNodes) && (array_key_exists($strAlias, $strExpandAsArrayNodes)))
+					$objToReturn->_objCostureiraTempoEficienteArray[] = CostureiraTempoEficiente::InstantiateDbRow($objDbRow, $strAliasPrefix . 'costureiratempoeficiente__', $strExpandAsArrayNodes, null, $strColumnAliasArray);
+				else
+					$objToReturn->_objCostureiraTempoEficiente = CostureiraTempoEficiente::InstantiateDbRow($objDbRow, $strAliasPrefix . 'costureiratempoeficiente__', $strExpandAsArrayNodes, null, $strColumnAliasArray);
 			}
 
 			return $objToReturn;
@@ -740,6 +782,48 @@
 			// Call CostureiraProducao::QueryCount to perform the CountByBalancoAcoesId query
 			return CostureiraProducao::QueryCount(
 				QQ::Equal(QQN::CostureiraProducao()->BalancoAcoesId, $intBalancoAcoesId)
+			, $objOptionalClauses
+			);
+		}
+			
+		/**
+		 * Load an array of CostureiraProducao objects,
+		 * by CostureiraId, Concluido Index(es)
+		 * @param integer $intCostureiraId
+		 * @param boolean $blnConcluido
+		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
+		 * @return CostureiraProducao[]
+		*/
+		public static function LoadArrayByCostureiraIdConcluido($intCostureiraId, $blnConcluido, $objOptionalClauses = null) {
+			// Call CostureiraProducao::QueryArray to perform the LoadArrayByCostureiraIdConcluido query
+			try {
+				return CostureiraProducao::QueryArray(
+					QQ::AndCondition(
+					QQ::Equal(QQN::CostureiraProducao()->CostureiraId, $intCostureiraId),
+					QQ::Equal(QQN::CostureiraProducao()->Concluido, $blnConcluido)
+					),
+					$objOptionalClauses
+					);
+			} catch (QCallerException $objExc) {
+				$objExc->IncrementOffset();
+				throw $objExc;
+			}
+		}
+
+		/**
+		 * Count CostureiraProducaos
+		 * by CostureiraId, Concluido Index(es)
+		 * @param integer $intCostureiraId
+		 * @param boolean $blnConcluido
+		 * @return int
+		*/
+		public static function CountByCostureiraIdConcluido($intCostureiraId, $blnConcluido, $objOptionalClauses = null) {
+			// Call CostureiraProducao::QueryCount to perform the CountByCostureiraIdConcluido query
+			return CostureiraProducao::QueryCount(
+				QQ::AndCondition(
+				QQ::Equal(QQN::CostureiraProducao()->CostureiraId, $intCostureiraId),
+				QQ::Equal(QQN::CostureiraProducao()->Concluido, $blnConcluido)
+				)
 			, $objOptionalClauses
 			);
 		}
@@ -1073,6 +1157,18 @@
 					// if set due to an ExpandAsArray on the costureira_tempo.costureira_producao_id reverse relationship
 					// @return CostureiraTempo[]
 					return (array) $this->_objCostureiraTempoArray;
+
+				case '_CostureiraTempoEficiente':
+					// Gets the value for the private _objCostureiraTempoEficiente (Read-Only)
+					// if set due to an expansion on the costureira_tempo_eficiente.costureira_producao_id reverse relationship
+					// @return CostureiraTempoEficiente
+					return $this->_objCostureiraTempoEficiente;
+
+				case '_CostureiraTempoEficienteArray':
+					// Gets the value for the private _objCostureiraTempoEficienteArray (Read-Only)
+					// if set due to an ExpandAsArray on the costureira_tempo_eficiente.costureira_producao_id reverse relationship
+					// @return CostureiraTempoEficiente[]
+					return (array) $this->_objCostureiraTempoEficienteArray;
 
 
 				case '__Restored':
@@ -1453,6 +1549,188 @@
 			');
 		}
 
+			
+		
+		// Related Objects' Methods for CostureiraTempoEficiente
+		//-------------------------------------------------------------------
+
+		/**
+		 * Gets all associated CostureiraTempoEficientes as an array of CostureiraTempoEficiente objects
+		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
+		 * @return CostureiraTempoEficiente[]
+		*/ 
+		public function GetCostureiraTempoEficienteArray($objOptionalClauses = null) {
+			if ((is_null($this->intId)))
+				return array();
+
+			try {
+				return CostureiraTempoEficiente::LoadArrayByCostureiraProducaoId($this->intId, $objOptionalClauses);
+			} catch (QCallerException $objExc) {
+				$objExc->IncrementOffset();
+				throw $objExc;
+			}
+		}
+
+		/**
+		 * Counts all associated CostureiraTempoEficientes
+		 * @return int
+		*/ 
+		public function CountCostureiraTempoEficientes() {
+			if ((is_null($this->intId)))
+				return 0;
+
+			return CostureiraTempoEficiente::CountByCostureiraProducaoId($this->intId);
+		}
+
+		/**
+		 * Associates a CostureiraTempoEficiente
+		 * @param CostureiraTempoEficiente $objCostureiraTempoEficiente
+		 * @return void
+		*/ 
+		public function AssociateCostureiraTempoEficiente(CostureiraTempoEficiente $objCostureiraTempoEficiente) {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociateCostureiraTempoEficiente on this unsaved CostureiraProducao.');
+			if ((is_null($objCostureiraTempoEficiente->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociateCostureiraTempoEficiente on this CostureiraProducao with an unsaved CostureiraTempoEficiente.');
+
+			// Get the Database Object for this Class
+			$objDatabase = CostureiraProducao::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`costureira_tempo_eficiente`
+				SET
+					`costureira_producao_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objCostureiraTempoEficiente->Id) . '
+			');
+
+			// Journaling (if applicable)
+			if ($objDatabase->JournalingDatabase) {
+				$objCostureiraTempoEficiente->CostureiraProducaoId = $this->intId;
+				$objCostureiraTempoEficiente->Journal('UPDATE');
+			}
+		}
+
+		/**
+		 * Unassociates a CostureiraTempoEficiente
+		 * @param CostureiraTempoEficiente $objCostureiraTempoEficiente
+		 * @return void
+		*/ 
+		public function UnassociateCostureiraTempoEficiente(CostureiraTempoEficiente $objCostureiraTempoEficiente) {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateCostureiraTempoEficiente on this unsaved CostureiraProducao.');
+			if ((is_null($objCostureiraTempoEficiente->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateCostureiraTempoEficiente on this CostureiraProducao with an unsaved CostureiraTempoEficiente.');
+
+			// Get the Database Object for this Class
+			$objDatabase = CostureiraProducao::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`costureira_tempo_eficiente`
+				SET
+					`costureira_producao_id` = null
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objCostureiraTempoEficiente->Id) . ' AND
+					`costureira_producao_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+
+			// Journaling
+			if ($objDatabase->JournalingDatabase) {
+				$objCostureiraTempoEficiente->CostureiraProducaoId = null;
+				$objCostureiraTempoEficiente->Journal('UPDATE');
+			}
+		}
+
+		/**
+		 * Unassociates all CostureiraTempoEficientes
+		 * @return void
+		*/ 
+		public function UnassociateAllCostureiraTempoEficientes() {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateCostureiraTempoEficiente on this unsaved CostureiraProducao.');
+
+			// Get the Database Object for this Class
+			$objDatabase = CostureiraProducao::GetDatabase();
+
+			// Journaling
+			if ($objDatabase->JournalingDatabase) {
+				foreach (CostureiraTempoEficiente::LoadArrayByCostureiraProducaoId($this->intId) as $objCostureiraTempoEficiente) {
+					$objCostureiraTempoEficiente->CostureiraProducaoId = null;
+					$objCostureiraTempoEficiente->Journal('UPDATE');
+				}
+			}
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`costureira_tempo_eficiente`
+				SET
+					`costureira_producao_id` = null
+				WHERE
+					`costureira_producao_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+		/**
+		 * Deletes an associated CostureiraTempoEficiente
+		 * @param CostureiraTempoEficiente $objCostureiraTempoEficiente
+		 * @return void
+		*/ 
+		public function DeleteAssociatedCostureiraTempoEficiente(CostureiraTempoEficiente $objCostureiraTempoEficiente) {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateCostureiraTempoEficiente on this unsaved CostureiraProducao.');
+			if ((is_null($objCostureiraTempoEficiente->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateCostureiraTempoEficiente on this CostureiraProducao with an unsaved CostureiraTempoEficiente.');
+
+			// Get the Database Object for this Class
+			$objDatabase = CostureiraProducao::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`costureira_tempo_eficiente`
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objCostureiraTempoEficiente->Id) . ' AND
+					`costureira_producao_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+
+			// Journaling
+			if ($objDatabase->JournalingDatabase) {
+				$objCostureiraTempoEficiente->Journal('DELETE');
+			}
+		}
+
+		/**
+		 * Deletes all associated CostureiraTempoEficientes
+		 * @return void
+		*/ 
+		public function DeleteAllCostureiraTempoEficientes() {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateCostureiraTempoEficiente on this unsaved CostureiraProducao.');
+
+			// Get the Database Object for this Class
+			$objDatabase = CostureiraProducao::GetDatabase();
+
+			// Journaling
+			if ($objDatabase->JournalingDatabase) {
+				foreach (CostureiraTempoEficiente::LoadArrayByCostureiraProducaoId($this->intId) as $objCostureiraTempoEficiente) {
+					$objCostureiraTempoEficiente->Journal('DELETE');
+				}
+			}
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`costureira_tempo_eficiente`
+				WHERE
+					`costureira_producao_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
 
 
 
@@ -1565,6 +1843,7 @@
 	 * @property-read QQNode $TempoPrevisto
 	 * @property-read QQNode $Concluido
 	 * @property-read QQReverseReferenceNodeCostureiraTempo $CostureiraTempo
+	 * @property-read QQReverseReferenceNodeCostureiraTempoEficiente $CostureiraTempoEficiente
 	 */
 	class QQNodeCostureiraProducao extends QQNode {
 		protected $strTableName = 'costureira_producao';
@@ -1594,6 +1873,8 @@
 					return new QQNode('concluido', 'Concluido', 'boolean', $this);
 				case 'CostureiraTempo':
 					return new QQReverseReferenceNodeCostureiraTempo($this, 'costureiratempo', 'reverse_reference', 'costureira_producao_id');
+				case 'CostureiraTempoEficiente':
+					return new QQReverseReferenceNodeCostureiraTempoEficiente($this, 'costureiratempoeficiente', 'reverse_reference', 'costureira_producao_id');
 
 				case '_PrimaryKeyNode':
 					return new QQNode('id', 'Id', 'integer', $this);
@@ -1620,6 +1901,7 @@
 	 * @property-read QQNode $TempoPrevisto
 	 * @property-read QQNode $Concluido
 	 * @property-read QQReverseReferenceNodeCostureiraTempo $CostureiraTempo
+	 * @property-read QQReverseReferenceNodeCostureiraTempoEficiente $CostureiraTempoEficiente
 	 * @property-read QQNode $_PrimaryKeyNode
 	 */
 	class QQReverseReferenceNodeCostureiraProducao extends QQReverseReferenceNode {
@@ -1650,6 +1932,8 @@
 					return new QQNode('concluido', 'Concluido', 'boolean', $this);
 				case 'CostureiraTempo':
 					return new QQReverseReferenceNodeCostureiraTempo($this, 'costureiratempo', 'reverse_reference', 'costureira_producao_id');
+				case 'CostureiraTempoEficiente':
+					return new QQReverseReferenceNodeCostureiraTempoEficiente($this, 'costureiratempoeficiente', 'reverse_reference', 'costureira_producao_id');
 
 				case '_PrimaryKeyNode':
 					return new QQNode('id', 'Id', 'integer', $this);

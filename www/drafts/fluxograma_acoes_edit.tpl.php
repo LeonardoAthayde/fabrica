@@ -22,6 +22,8 @@
 
 		<?php $this->txtNome->RenderWithName(); ?>
 
+		<?php $this->lstMaquina->RenderWithName(); ?>
+
 	</div>
 
 	<div id="formActions">

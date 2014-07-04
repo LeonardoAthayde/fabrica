@@ -20,8 +20,10 @@
 	 * property-read QLabel $IdLabel
 	 * property QTextBox $NomeControl
 	 * property-read QLabel $NomeLabel
-	 * property QIntegerTextBox $CodigoControl
+	 * property QTextBox $CodigoControl
 	 * property-read QLabel $CodigoLabel
+	 * property QFloatTextBox $MetroControl
+	 * property-read QLabel $MetroLabel
 	 * property-read string $TitleVerb a verb indicating whether or not this is being edited or created
 	 * property-read boolean $EditMode a boolean indicating whether or not this is being edited or created
 	 */
@@ -66,10 +68,16 @@
 		protected $txtNome;
 
         /**
-         * @var QIntegerTextBox txtCodigo;
+         * @var QTextBox txtCodigo;
          * @access protected
          */
 		protected $txtCodigo;
+
+        /**
+         * @var QFloatTextBox txtMetro;
+         * @access protected
+         */
+		protected $txtMetro;
 
 
 		// Controls that allow the viewing of Tecido's individual data fields
@@ -84,6 +92,12 @@
          * @access protected
          */
 		protected $lblCodigo;
+
+        /**
+         * @var QLabel lblMetro
+         * @access protected
+         */
+		protected $lblMetro;
 
 
 		// QListBox Controls (if applicable) to edit Unique ReverseReferences and ManyToMany References
@@ -207,6 +221,7 @@
 			$this->txtNome = new QTextBox($this->objParentObject, $strControlId);
 			$this->txtNome->Name = QApplication::Translate('Nome');
 			$this->txtNome->Text = $this->objTecido->Nome;
+			$this->txtNome->Required = true;
 			$this->txtNome->MaxLength = Tecido::NomeMaxLength;
 			return $this->txtNome;
 		}
@@ -220,35 +235,63 @@
 			$this->lblNome = new QLabel($this->objParentObject, $strControlId);
 			$this->lblNome->Name = QApplication::Translate('Nome');
 			$this->lblNome->Text = $this->objTecido->Nome;
+			$this->lblNome->Required = true;
 			return $this->lblNome;
 		}
 
 		/**
-		 * Create and setup QIntegerTextBox txtCodigo
+		 * Create and setup QTextBox txtCodigo
 		 * @param string $strControlId optional ControlId to use
-		 * @return QIntegerTextBox
+		 * @return QTextBox
 		 */
 		public function txtCodigo_Create($strControlId = null) {
-			$this->txtCodigo = new QIntegerTextBox($this->objParentObject, $strControlId);
+			$this->txtCodigo = new QTextBox($this->objParentObject, $strControlId);
 			$this->txtCodigo->Name = QApplication::Translate('Codigo');
 			$this->txtCodigo->Text = $this->objTecido->Codigo;
 			$this->txtCodigo->Required = true;
+			$this->txtCodigo->MaxLength = Tecido::CodigoMaxLength;
 			return $this->txtCodigo;
 		}
 
 		/**
 		 * Create and setup QLabel lblCodigo
 		 * @param string $strControlId optional ControlId to use
-		 * @param string $strFormat optional sprintf format to use
 		 * @return QLabel
 		 */
-		public function lblCodigo_Create($strControlId = null, $strFormat = null) {
+		public function lblCodigo_Create($strControlId = null) {
 			$this->lblCodigo = new QLabel($this->objParentObject, $strControlId);
 			$this->lblCodigo->Name = QApplication::Translate('Codigo');
 			$this->lblCodigo->Text = $this->objTecido->Codigo;
 			$this->lblCodigo->Required = true;
-			$this->lblCodigo->Format = $strFormat;
 			return $this->lblCodigo;
+		}
+
+		/**
+		 * Create and setup QFloatTextBox txtMetro
+		 * @param string $strControlId optional ControlId to use
+		 * @return QFloatTextBox
+		 */
+		public function txtMetro_Create($strControlId = null) {
+			$this->txtMetro = new QFloatTextBox($this->objParentObject, $strControlId);
+			$this->txtMetro->Name = QApplication::Translate('Metro');
+			$this->txtMetro->Text = $this->objTecido->Metro;
+			$this->txtMetro->Required = true;
+			return $this->txtMetro;
+		}
+
+		/**
+		 * Create and setup QLabel lblMetro
+		 * @param string $strControlId optional ControlId to use
+		 * @param string $strFormat optional sprintf format to use
+		 * @return QLabel
+		 */
+		public function lblMetro_Create($strControlId = null, $strFormat = null) {
+			$this->lblMetro = new QLabel($this->objParentObject, $strControlId);
+			$this->lblMetro->Name = QApplication::Translate('Metro');
+			$this->lblMetro->Text = $this->objTecido->Metro;
+			$this->lblMetro->Required = true;
+			$this->lblMetro->Format = $strFormat;
+			return $this->lblMetro;
 		}
 
 
@@ -269,6 +312,9 @@
 
 			if ($this->txtCodigo) $this->txtCodigo->Text = $this->objTecido->Codigo;
 			if ($this->lblCodigo) $this->lblCodigo->Text = $this->objTecido->Codigo;
+
+			if ($this->txtMetro) $this->txtMetro->Text = $this->objTecido->Metro;
+			if ($this->lblMetro) $this->lblMetro->Text = $this->objTecido->Metro;
 
 		}
 
@@ -295,6 +341,7 @@
 				// Update any fields for controls that have been created
 				if ($this->txtNome) $this->objTecido->Nome = $this->txtNome->Text;
 				if ($this->txtCodigo) $this->objTecido->Codigo = $this->txtCodigo->Text;
+				if ($this->txtMetro) $this->objTecido->Metro = $this->txtMetro->Text;
 
 				// Update any UniqueReverseReferences (if any) for controls that have been created for it
 
@@ -355,6 +402,12 @@
 				case 'CodigoLabel':
 					if (!$this->lblCodigo) return $this->lblCodigo_Create();
 					return $this->lblCodigo;
+				case 'MetroControl':
+					if (!$this->txtMetro) return $this->txtMetro_Create();
+					return $this->txtMetro;
+				case 'MetroLabel':
+					if (!$this->lblMetro) return $this->lblMetro_Create();
+					return $this->lblMetro;
 				default:
 					try {
 						return parent::__get($strName);
@@ -383,6 +436,8 @@
 						return ($this->txtNome = QType::Cast($mixValue, 'QControl'));
 					case 'CodigoControl':
 						return ($this->txtCodigo = QType::Cast($mixValue, 'QControl'));
+					case 'MetroControl':
+						return ($this->txtMetro = QType::Cast($mixValue, 'QControl'));
 					default:
 						return parent::__set($strName, $mixValue);
 				}

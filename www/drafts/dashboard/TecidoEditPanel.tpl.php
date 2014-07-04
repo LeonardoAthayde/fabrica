@@ -11,6 +11,8 @@
 
 		<?php $_CONTROL->txtCodigo->RenderWithName(); ?>
 
+		<?php $_CONTROL->txtMetro->RenderWithName(); ?>
+
 	</div>
 
 	<div id="formActions">

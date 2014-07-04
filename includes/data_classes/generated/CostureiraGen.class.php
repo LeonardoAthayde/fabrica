@@ -20,6 +20,8 @@
 	 * @property string $ImagemFla the value for strImagemFla 
 	 * @property CostureiraProducao $_CostureiraProducao the value for the private _objCostureiraProducao (Read-Only) if set due to an expansion on the costureira_producao.costureira_id reverse relationship
 	 * @property CostureiraProducao[] $_CostureiraProducaoArray the value for the private _objCostureiraProducaoArray (Read-Only) if set due to an ExpandAsArray on the costureira_producao.costureira_id reverse relationship
+	 * @property Usuario $_Usuario the value for the private _objUsuario (Read-Only) if set due to an expansion on the usuario.costureira_id reverse relationship
+	 * @property Usuario[] $_UsuarioArray the value for the private _objUsuarioArray (Read-Only) if set due to an ExpandAsArray on the usuario.costureira_id reverse relationship
 	 * @property boolean $__Restored whether or not this object was restored from the database (as opposed to created new)
 	 */
 	class CostureiraGen extends QBaseClass {
@@ -69,6 +71,22 @@
 		 * @var CostureiraProducao[] _objCostureiraProducaoArray;
 		 */
 		private $_objCostureiraProducaoArray = array();
+
+		/**
+		 * Private member variable that stores a reference to a single Usuario object
+		 * (of type Usuario), if this Costureira object was restored with
+		 * an expansion on the usuario association table.
+		 * @var Usuario _objUsuario;
+		 */
+		private $_objUsuario;
+
+		/**
+		 * Private member variable that stores a reference to an array of Usuario objects
+		 * (of type Usuario[]), if this Costureira object was restored with
+		 * an ExpandAsArray on the usuario association table.
+		 * @var Usuario[] _objUsuarioArray;
+		 */
+		private $_objUsuarioArray = array();
 
 		/**
 		 * Protected array of virtual attributes for this object (e.g. extra/other calculated and/or non-object bound
@@ -457,6 +475,20 @@
 					$blnExpandedViaArray = true;
 				}
 
+				$strAlias = $strAliasPrefix . 'usuario__id';
+				$strAliasName = array_key_exists($strAlias, $strColumnAliasArray) ? $strColumnAliasArray[$strAlias] : $strAlias;
+				if ((array_key_exists($strAlias, $strExpandAsArrayNodes)) &&
+					(!is_null($objDbRow->GetColumn($strAliasName)))) {
+					if ($intPreviousChildItemCount = count($objPreviousItem->_objUsuarioArray)) {
+						$objPreviousChildItem = $objPreviousItem->_objUsuarioArray[$intPreviousChildItemCount - 1];
+						$objChildItem = Usuario::InstantiateDbRow($objDbRow, $strAliasPrefix . 'usuario__', $strExpandAsArrayNodes, $objPreviousChildItem, $strColumnAliasArray);
+						if ($objChildItem)
+							$objPreviousItem->_objUsuarioArray[] = $objChildItem;
+					} else
+						$objPreviousItem->_objUsuarioArray[] = Usuario::InstantiateDbRow($objDbRow, $strAliasPrefix . 'usuario__', $strExpandAsArrayNodes, null, $strColumnAliasArray);
+					$blnExpandedViaArray = true;
+				}
+
 				// Either return false to signal array expansion, or check-to-reset the Alias prefix and move on
 				if ($blnExpandedViaArray)
 					return false;
@@ -498,6 +530,16 @@
 					$objToReturn->_objCostureiraProducaoArray[] = CostureiraProducao::InstantiateDbRow($objDbRow, $strAliasPrefix . 'costureiraproducao__', $strExpandAsArrayNodes, null, $strColumnAliasArray);
 				else
 					$objToReturn->_objCostureiraProducao = CostureiraProducao::InstantiateDbRow($objDbRow, $strAliasPrefix . 'costureiraproducao__', $strExpandAsArrayNodes, null, $strColumnAliasArray);
+			}
+
+			// Check for Usuario Virtual Binding
+			$strAlias = $strAliasPrefix . 'usuario__id';
+			$strAliasName = array_key_exists($strAlias, $strColumnAliasArray) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			if (!is_null($objDbRow->GetColumn($strAliasName))) {
+				if (($strExpandAsArrayNodes) && (array_key_exists($strAlias, $strExpandAsArrayNodes)))
+					$objToReturn->_objUsuarioArray[] = Usuario::InstantiateDbRow($objDbRow, $strAliasPrefix . 'usuario__', $strExpandAsArrayNodes, null, $strColumnAliasArray);
+				else
+					$objToReturn->_objUsuario = Usuario::InstantiateDbRow($objDbRow, $strAliasPrefix . 'usuario__', $strExpandAsArrayNodes, null, $strColumnAliasArray);
 			}
 
 			return $objToReturn;
@@ -848,6 +890,18 @@
 					// @return CostureiraProducao[]
 					return (array) $this->_objCostureiraProducaoArray;
 
+				case '_Usuario':
+					// Gets the value for the private _objUsuario (Read-Only)
+					// if set due to an expansion on the usuario.costureira_id reverse relationship
+					// @return Usuario
+					return $this->_objUsuario;
+
+				case '_UsuarioArray':
+					// Gets the value for the private _objUsuarioArray (Read-Only)
+					// if set due to an ExpandAsArray on the usuario.costureira_id reverse relationship
+					// @return Usuario[]
+					return (array) $this->_objUsuarioArray;
+
 
 				case '__Restored':
 					return $this->__blnRestored;
@@ -1110,6 +1164,188 @@
 			');
 		}
 
+			
+		
+		// Related Objects' Methods for Usuario
+		//-------------------------------------------------------------------
+
+		/**
+		 * Gets all associated Usuarios as an array of Usuario objects
+		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
+		 * @return Usuario[]
+		*/ 
+		public function GetUsuarioArray($objOptionalClauses = null) {
+			if ((is_null($this->intId)))
+				return array();
+
+			try {
+				return Usuario::LoadArrayByCostureiraId($this->intId, $objOptionalClauses);
+			} catch (QCallerException $objExc) {
+				$objExc->IncrementOffset();
+				throw $objExc;
+			}
+		}
+
+		/**
+		 * Counts all associated Usuarios
+		 * @return int
+		*/ 
+		public function CountUsuarios() {
+			if ((is_null($this->intId)))
+				return 0;
+
+			return Usuario::CountByCostureiraId($this->intId);
+		}
+
+		/**
+		 * Associates a Usuario
+		 * @param Usuario $objUsuario
+		 * @return void
+		*/ 
+		public function AssociateUsuario(Usuario $objUsuario) {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociateUsuario on this unsaved Costureira.');
+			if ((is_null($objUsuario->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociateUsuario on this Costureira with an unsaved Usuario.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Costureira::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`usuario`
+				SET
+					`costureira_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objUsuario->Id) . '
+			');
+
+			// Journaling (if applicable)
+			if ($objDatabase->JournalingDatabase) {
+				$objUsuario->CostureiraId = $this->intId;
+				$objUsuario->Journal('UPDATE');
+			}
+		}
+
+		/**
+		 * Unassociates a Usuario
+		 * @param Usuario $objUsuario
+		 * @return void
+		*/ 
+		public function UnassociateUsuario(Usuario $objUsuario) {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateUsuario on this unsaved Costureira.');
+			if ((is_null($objUsuario->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateUsuario on this Costureira with an unsaved Usuario.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Costureira::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`usuario`
+				SET
+					`costureira_id` = null
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objUsuario->Id) . ' AND
+					`costureira_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+
+			// Journaling
+			if ($objDatabase->JournalingDatabase) {
+				$objUsuario->CostureiraId = null;
+				$objUsuario->Journal('UPDATE');
+			}
+		}
+
+		/**
+		 * Unassociates all Usuarios
+		 * @return void
+		*/ 
+		public function UnassociateAllUsuarios() {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateUsuario on this unsaved Costureira.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Costureira::GetDatabase();
+
+			// Journaling
+			if ($objDatabase->JournalingDatabase) {
+				foreach (Usuario::LoadArrayByCostureiraId($this->intId) as $objUsuario) {
+					$objUsuario->CostureiraId = null;
+					$objUsuario->Journal('UPDATE');
+				}
+			}
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`usuario`
+				SET
+					`costureira_id` = null
+				WHERE
+					`costureira_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+		/**
+		 * Deletes an associated Usuario
+		 * @param Usuario $objUsuario
+		 * @return void
+		*/ 
+		public function DeleteAssociatedUsuario(Usuario $objUsuario) {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateUsuario on this unsaved Costureira.');
+			if ((is_null($objUsuario->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateUsuario on this Costureira with an unsaved Usuario.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Costureira::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`usuario`
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objUsuario->Id) . ' AND
+					`costureira_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+
+			// Journaling
+			if ($objDatabase->JournalingDatabase) {
+				$objUsuario->Journal('DELETE');
+			}
+		}
+
+		/**
+		 * Deletes all associated Usuarios
+		 * @return void
+		*/ 
+		public function DeleteAllUsuarios() {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateUsuario on this unsaved Costureira.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Costureira::GetDatabase();
+
+			// Journaling
+			if ($objDatabase->JournalingDatabase) {
+				foreach (Usuario::LoadArrayByCostureiraId($this->intId) as $objUsuario) {
+					$objUsuario->Journal('DELETE');
+				}
+			}
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`usuario`
+				WHERE
+					`costureira_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
 
 
 
@@ -1188,6 +1424,7 @@
 	 * @property-read QQNode $Nome
 	 * @property-read QQNode $ImagemFla
 	 * @property-read QQReverseReferenceNodeCostureiraProducao $CostureiraProducao
+	 * @property-read QQReverseReferenceNodeUsuario $Usuario
 	 */
 	class QQNodeCostureira extends QQNode {
 		protected $strTableName = 'costureira';
@@ -1203,6 +1440,8 @@
 					return new QQNode('imagem_fla', 'ImagemFla', 'string', $this);
 				case 'CostureiraProducao':
 					return new QQReverseReferenceNodeCostureiraProducao($this, 'costureiraproducao', 'reverse_reference', 'costureira_id');
+				case 'Usuario':
+					return new QQReverseReferenceNodeUsuario($this, 'usuario', 'reverse_reference', 'costureira_id');
 
 				case '_PrimaryKeyNode':
 					return new QQNode('id', 'Id', 'integer', $this);
@@ -1222,6 +1461,7 @@
 	 * @property-read QQNode $Nome
 	 * @property-read QQNode $ImagemFla
 	 * @property-read QQReverseReferenceNodeCostureiraProducao $CostureiraProducao
+	 * @property-read QQReverseReferenceNodeUsuario $Usuario
 	 * @property-read QQNode $_PrimaryKeyNode
 	 */
 	class QQReverseReferenceNodeCostureira extends QQReverseReferenceNode {
@@ -1238,6 +1478,8 @@
 					return new QQNode('imagem_fla', 'ImagemFla', 'string', $this);
 				case 'CostureiraProducao':
 					return new QQReverseReferenceNodeCostureiraProducao($this, 'costureiraproducao', 'reverse_reference', 'costureira_id');
+				case 'Usuario':
+					return new QQReverseReferenceNodeUsuario($this, 'usuario', 'reverse_reference', 'costureira_id');
 
 				case '_PrimaryKeyNode':
 					return new QQNode('id', 'Id', 'integer', $this);

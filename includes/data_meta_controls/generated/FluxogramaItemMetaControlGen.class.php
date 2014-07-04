@@ -20,12 +20,12 @@
 	 * property-read QLabel $IdLabel
 	 * property QListBox $ReferenciaIdControl
 	 * property-read QLabel $ReferenciaIdLabel
+	 * property QListBox $CorIdControl
+	 * property-read QLabel $CorIdLabel
 	 * property QListBox $FluxogramaAcoesIdControl
 	 * property-read QLabel $FluxogramaAcoesIdLabel
-	 * property QListBox $MaquinaIdControl
-	 * property-read QLabel $MaquinaIdLabel
-	 * property QIntegerTextBox $TempoControl
-	 * property-read QLabel $TempoLabel
+	 * property QListBox $FluxogramaAcoesTempoIdControl
+	 * property-read QLabel $FluxogramaAcoesTempoIdLabel
 	 * property QIntegerTextBox $ProfundidadeControl
 	 * property-read QLabel $ProfundidadeLabel
 	 * property QListBox $ParentFluxogramaItemAsFluxogramaDepedenciaControl
@@ -76,22 +76,22 @@
 		protected $lstReferencia;
 
         /**
+         * @var QListBox lstCor;
+         * @access protected
+         */
+		protected $lstCor;
+
+        /**
          * @var QListBox lstFluxogramaAcoes;
          * @access protected
          */
 		protected $lstFluxogramaAcoes;
 
         /**
-         * @var QListBox lstMaquina;
+         * @var QListBox lstFluxogramaAcoesTempo;
          * @access protected
          */
-		protected $lstMaquina;
-
-        /**
-         * @var QIntegerTextBox txtTempo;
-         * @access protected
-         */
-		protected $txtTempo;
+		protected $lstFluxogramaAcoesTempo;
 
         /**
          * @var QIntegerTextBox txtProfundidade;
@@ -108,22 +108,22 @@
 		protected $lblReferenciaId;
 
         /**
+         * @var QLabel lblCorId
+         * @access protected
+         */
+		protected $lblCorId;
+
+        /**
          * @var QLabel lblFluxogramaAcoesId
          * @access protected
          */
 		protected $lblFluxogramaAcoesId;
 
         /**
-         * @var QLabel lblMaquinaId
+         * @var QLabel lblFluxogramaAcoesTempoId
          * @access protected
          */
-		protected $lblMaquinaId;
-
-        /**
-         * @var QLabel lblTempo
-         * @access protected
-         */
-		protected $lblTempo;
+		protected $lblFluxogramaAcoesTempoId;
 
         /**
          * @var QLabel lblProfundidade
@@ -296,6 +296,46 @@
 		}
 
 		/**
+		 * Create and setup QListBox lstCor
+		 * @param string $strControlId optional ControlId to use
+		 * @param QQCondition $objConditions override the default condition of QQ::All() to the query, itself
+		 * @param QQClause[] $objOptionalClauses additional optional QQClause object or array of QQClause objects for the query
+		 * @return QListBox
+		 */
+		public function lstCor_Create($strControlId = null, QQCondition $objCondition = null, $objOptionalClauses = null) {
+			$this->lstCor = new QListBox($this->objParentObject, $strControlId);
+			$this->lstCor->Name = QApplication::Translate('Cor');
+			$this->lstCor->AddItem(QApplication::Translate('- Select One -'), null);
+
+			// Setup and perform the Query
+			if (is_null($objCondition)) $objCondition = QQ::All();
+			$objCorCursor = Cor::QueryCursor($objCondition, $objOptionalClauses);
+
+			// Iterate through the Cursor
+			while ($objCor = Cor::InstantiateCursor($objCorCursor)) {
+				$objListItem = new QListItem($objCor->__toString(), $objCor->Id);
+				if (($this->objFluxogramaItem->Cor) && ($this->objFluxogramaItem->Cor->Id == $objCor->Id))
+					$objListItem->Selected = true;
+				$this->lstCor->AddItem($objListItem);
+			}
+
+			// Return the QListBox
+			return $this->lstCor;
+		}
+
+		/**
+		 * Create and setup QLabel lblCorId
+		 * @param string $strControlId optional ControlId to use
+		 * @return QLabel
+		 */
+		public function lblCorId_Create($strControlId = null) {
+			$this->lblCorId = new QLabel($this->objParentObject, $strControlId);
+			$this->lblCorId->Name = QApplication::Translate('Cor');
+			$this->lblCorId->Text = ($this->objFluxogramaItem->Cor) ? $this->objFluxogramaItem->Cor->__toString() : null;
+			return $this->lblCorId;
+		}
+
+		/**
 		 * Create and setup QListBox lstFluxogramaAcoes
 		 * @param string $strControlId optional ControlId to use
 		 * @param QQCondition $objConditions override the default condition of QQ::All() to the query, itself
@@ -336,69 +376,43 @@
 		}
 
 		/**
-		 * Create and setup QListBox lstMaquina
+		 * Create and setup QListBox lstFluxogramaAcoesTempo
 		 * @param string $strControlId optional ControlId to use
 		 * @param QQCondition $objConditions override the default condition of QQ::All() to the query, itself
 		 * @param QQClause[] $objOptionalClauses additional optional QQClause object or array of QQClause objects for the query
 		 * @return QListBox
 		 */
-		public function lstMaquina_Create($strControlId = null, QQCondition $objCondition = null, $objOptionalClauses = null) {
-			$this->lstMaquina = new QListBox($this->objParentObject, $strControlId);
-			$this->lstMaquina->Name = QApplication::Translate('Maquina');
-			$this->lstMaquina->AddItem(QApplication::Translate('- Select One -'), null);
+		public function lstFluxogramaAcoesTempo_Create($strControlId = null, QQCondition $objCondition = null, $objOptionalClauses = null) {
+			$this->lstFluxogramaAcoesTempo = new QListBox($this->objParentObject, $strControlId);
+			$this->lstFluxogramaAcoesTempo->Name = QApplication::Translate('Fluxograma Acoes Tempo');
+			$this->lstFluxogramaAcoesTempo->AddItem(QApplication::Translate('- Select One -'), null);
 
 			// Setup and perform the Query
 			if (is_null($objCondition)) $objCondition = QQ::All();
-			$objMaquinaCursor = Maquina::QueryCursor($objCondition, $objOptionalClauses);
+			$objFluxogramaAcoesTempoCursor = FluxogramaAcoesTempo::QueryCursor($objCondition, $objOptionalClauses);
 
 			// Iterate through the Cursor
-			while ($objMaquina = Maquina::InstantiateCursor($objMaquinaCursor)) {
-				$objListItem = new QListItem($objMaquina->__toString(), $objMaquina->Id);
-				if (($this->objFluxogramaItem->Maquina) && ($this->objFluxogramaItem->Maquina->Id == $objMaquina->Id))
+			while ($objFluxogramaAcoesTempo = FluxogramaAcoesTempo::InstantiateCursor($objFluxogramaAcoesTempoCursor)) {
+				$objListItem = new QListItem($objFluxogramaAcoesTempo->__toString(), $objFluxogramaAcoesTempo->Id);
+				if (($this->objFluxogramaItem->FluxogramaAcoesTempo) && ($this->objFluxogramaItem->FluxogramaAcoesTempo->Id == $objFluxogramaAcoesTempo->Id))
 					$objListItem->Selected = true;
-				$this->lstMaquina->AddItem($objListItem);
+				$this->lstFluxogramaAcoesTempo->AddItem($objListItem);
 			}
 
 			// Return the QListBox
-			return $this->lstMaquina;
+			return $this->lstFluxogramaAcoesTempo;
 		}
 
 		/**
-		 * Create and setup QLabel lblMaquinaId
+		 * Create and setup QLabel lblFluxogramaAcoesTempoId
 		 * @param string $strControlId optional ControlId to use
 		 * @return QLabel
 		 */
-		public function lblMaquinaId_Create($strControlId = null) {
-			$this->lblMaquinaId = new QLabel($this->objParentObject, $strControlId);
-			$this->lblMaquinaId->Name = QApplication::Translate('Maquina');
-			$this->lblMaquinaId->Text = ($this->objFluxogramaItem->Maquina) ? $this->objFluxogramaItem->Maquina->__toString() : null;
-			return $this->lblMaquinaId;
-		}
-
-		/**
-		 * Create and setup QIntegerTextBox txtTempo
-		 * @param string $strControlId optional ControlId to use
-		 * @return QIntegerTextBox
-		 */
-		public function txtTempo_Create($strControlId = null) {
-			$this->txtTempo = new QIntegerTextBox($this->objParentObject, $strControlId);
-			$this->txtTempo->Name = QApplication::Translate('Tempo');
-			$this->txtTempo->Text = $this->objFluxogramaItem->Tempo;
-			return $this->txtTempo;
-		}
-
-		/**
-		 * Create and setup QLabel lblTempo
-		 * @param string $strControlId optional ControlId to use
-		 * @param string $strFormat optional sprintf format to use
-		 * @return QLabel
-		 */
-		public function lblTempo_Create($strControlId = null, $strFormat = null) {
-			$this->lblTempo = new QLabel($this->objParentObject, $strControlId);
-			$this->lblTempo->Name = QApplication::Translate('Tempo');
-			$this->lblTempo->Text = $this->objFluxogramaItem->Tempo;
-			$this->lblTempo->Format = $strFormat;
-			return $this->lblTempo;
+		public function lblFluxogramaAcoesTempoId_Create($strControlId = null) {
+			$this->lblFluxogramaAcoesTempoId = new QLabel($this->objParentObject, $strControlId);
+			$this->lblFluxogramaAcoesTempoId->Name = QApplication::Translate('Fluxograma Acoes Tempo');
+			$this->lblFluxogramaAcoesTempoId->Text = ($this->objFluxogramaItem->FluxogramaAcoesTempo) ? $this->objFluxogramaItem->FluxogramaAcoesTempo->__toString() : null;
+			return $this->lblFluxogramaAcoesTempoId;
 		}
 
 		/**
@@ -558,6 +572,19 @@
 			}
 			if ($this->lblReferenciaId) $this->lblReferenciaId->Text = ($this->objFluxogramaItem->Referencia) ? $this->objFluxogramaItem->Referencia->__toString() : null;
 
+			if ($this->lstCor) {
+					$this->lstCor->RemoveAllItems();
+				$this->lstCor->AddItem(QApplication::Translate('- Select One -'), null);
+				$objCorArray = Cor::LoadAll();
+				if ($objCorArray) foreach ($objCorArray as $objCor) {
+					$objListItem = new QListItem($objCor->__toString(), $objCor->Id);
+					if (($this->objFluxogramaItem->Cor) && ($this->objFluxogramaItem->Cor->Id == $objCor->Id))
+						$objListItem->Selected = true;
+					$this->lstCor->AddItem($objListItem);
+				}
+			}
+			if ($this->lblCorId) $this->lblCorId->Text = ($this->objFluxogramaItem->Cor) ? $this->objFluxogramaItem->Cor->__toString() : null;
+
 			if ($this->lstFluxogramaAcoes) {
 					$this->lstFluxogramaAcoes->RemoveAllItems();
 				$this->lstFluxogramaAcoes->AddItem(QApplication::Translate('- Select One -'), null);
@@ -571,21 +598,18 @@
 			}
 			if ($this->lblFluxogramaAcoesId) $this->lblFluxogramaAcoesId->Text = ($this->objFluxogramaItem->FluxogramaAcoes) ? $this->objFluxogramaItem->FluxogramaAcoes->__toString() : null;
 
-			if ($this->lstMaquina) {
-					$this->lstMaquina->RemoveAllItems();
-				$this->lstMaquina->AddItem(QApplication::Translate('- Select One -'), null);
-				$objMaquinaArray = Maquina::LoadAll();
-				if ($objMaquinaArray) foreach ($objMaquinaArray as $objMaquina) {
-					$objListItem = new QListItem($objMaquina->__toString(), $objMaquina->Id);
-					if (($this->objFluxogramaItem->Maquina) && ($this->objFluxogramaItem->Maquina->Id == $objMaquina->Id))
+			if ($this->lstFluxogramaAcoesTempo) {
+					$this->lstFluxogramaAcoesTempo->RemoveAllItems();
+				$this->lstFluxogramaAcoesTempo->AddItem(QApplication::Translate('- Select One -'), null);
+				$objFluxogramaAcoesTempoArray = FluxogramaAcoesTempo::LoadAll();
+				if ($objFluxogramaAcoesTempoArray) foreach ($objFluxogramaAcoesTempoArray as $objFluxogramaAcoesTempo) {
+					$objListItem = new QListItem($objFluxogramaAcoesTempo->__toString(), $objFluxogramaAcoesTempo->Id);
+					if (($this->objFluxogramaItem->FluxogramaAcoesTempo) && ($this->objFluxogramaItem->FluxogramaAcoesTempo->Id == $objFluxogramaAcoesTempo->Id))
 						$objListItem->Selected = true;
-					$this->lstMaquina->AddItem($objListItem);
+					$this->lstFluxogramaAcoesTempo->AddItem($objListItem);
 				}
 			}
-			if ($this->lblMaquinaId) $this->lblMaquinaId->Text = ($this->objFluxogramaItem->Maquina) ? $this->objFluxogramaItem->Maquina->__toString() : null;
-
-			if ($this->txtTempo) $this->txtTempo->Text = $this->objFluxogramaItem->Tempo;
-			if ($this->lblTempo) $this->lblTempo->Text = $this->objFluxogramaItem->Tempo;
+			if ($this->lblFluxogramaAcoesTempoId) $this->lblFluxogramaAcoesTempoId->Text = ($this->objFluxogramaItem->FluxogramaAcoesTempo) ? $this->objFluxogramaItem->FluxogramaAcoesTempo->__toString() : null;
 
 			if ($this->txtProfundidade) $this->txtProfundidade->Text = $this->objFluxogramaItem->Profundidade;
 			if ($this->lblProfundidade) $this->lblProfundidade->Text = $this->objFluxogramaItem->Profundidade;
@@ -676,9 +700,9 @@
 			try {
 				// Update any fields for controls that have been created
 				if ($this->lstReferencia) $this->objFluxogramaItem->ReferenciaId = $this->lstReferencia->SelectedValue;
+				if ($this->lstCor) $this->objFluxogramaItem->CorId = $this->lstCor->SelectedValue;
 				if ($this->lstFluxogramaAcoes) $this->objFluxogramaItem->FluxogramaAcoesId = $this->lstFluxogramaAcoes->SelectedValue;
-				if ($this->lstMaquina) $this->objFluxogramaItem->MaquinaId = $this->lstMaquina->SelectedValue;
-				if ($this->txtTempo) $this->objFluxogramaItem->Tempo = $this->txtTempo->Text;
+				if ($this->lstFluxogramaAcoesTempo) $this->objFluxogramaItem->FluxogramaAcoesTempoId = $this->lstFluxogramaAcoesTempo->SelectedValue;
 				if ($this->txtProfundidade) $this->objFluxogramaItem->Profundidade = $this->txtProfundidade->Text;
 
 				// Update any UniqueReverseReferences (if any) for controls that have been created for it
@@ -738,24 +762,24 @@
 				case 'ReferenciaIdLabel':
 					if (!$this->lblReferenciaId) return $this->lblReferenciaId_Create();
 					return $this->lblReferenciaId;
+				case 'CorIdControl':
+					if (!$this->lstCor) return $this->lstCor_Create();
+					return $this->lstCor;
+				case 'CorIdLabel':
+					if (!$this->lblCorId) return $this->lblCorId_Create();
+					return $this->lblCorId;
 				case 'FluxogramaAcoesIdControl':
 					if (!$this->lstFluxogramaAcoes) return $this->lstFluxogramaAcoes_Create();
 					return $this->lstFluxogramaAcoes;
 				case 'FluxogramaAcoesIdLabel':
 					if (!$this->lblFluxogramaAcoesId) return $this->lblFluxogramaAcoesId_Create();
 					return $this->lblFluxogramaAcoesId;
-				case 'MaquinaIdControl':
-					if (!$this->lstMaquina) return $this->lstMaquina_Create();
-					return $this->lstMaquina;
-				case 'MaquinaIdLabel':
-					if (!$this->lblMaquinaId) return $this->lblMaquinaId_Create();
-					return $this->lblMaquinaId;
-				case 'TempoControl':
-					if (!$this->txtTempo) return $this->txtTempo_Create();
-					return $this->txtTempo;
-				case 'TempoLabel':
-					if (!$this->lblTempo) return $this->lblTempo_Create();
-					return $this->lblTempo;
+				case 'FluxogramaAcoesTempoIdControl':
+					if (!$this->lstFluxogramaAcoesTempo) return $this->lstFluxogramaAcoesTempo_Create();
+					return $this->lstFluxogramaAcoesTempo;
+				case 'FluxogramaAcoesTempoIdLabel':
+					if (!$this->lblFluxogramaAcoesTempoId) return $this->lblFluxogramaAcoesTempoId_Create();
+					return $this->lblFluxogramaAcoesTempoId;
 				case 'ProfundidadeControl':
 					if (!$this->txtProfundidade) return $this->txtProfundidade_Create();
 					return $this->txtProfundidade;
@@ -800,12 +824,12 @@
 						return ($this->lblId = QType::Cast($mixValue, 'QControl'));
 					case 'ReferenciaIdControl':
 						return ($this->lstReferencia = QType::Cast($mixValue, 'QControl'));
+					case 'CorIdControl':
+						return ($this->lstCor = QType::Cast($mixValue, 'QControl'));
 					case 'FluxogramaAcoesIdControl':
 						return ($this->lstFluxogramaAcoes = QType::Cast($mixValue, 'QControl'));
-					case 'MaquinaIdControl':
-						return ($this->lstMaquina = QType::Cast($mixValue, 'QControl'));
-					case 'TempoControl':
-						return ($this->txtTempo = QType::Cast($mixValue, 'QControl'));
+					case 'FluxogramaAcoesTempoIdControl':
+						return ($this->lstFluxogramaAcoesTempo = QType::Cast($mixValue, 'QControl'));
 					case 'ProfundidadeControl':
 						return ($this->txtProfundidade = QType::Cast($mixValue, 'QControl'));
 					case 'ParentFluxogramaItemAsFluxogramaDepedenciaControl':

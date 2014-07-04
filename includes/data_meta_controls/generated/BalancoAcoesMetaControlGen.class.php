@@ -256,10 +256,10 @@
 
 			// Setup and perform the Query
 			if (is_null($objCondition)) $objCondition = QQ::All();
-			$objOrdemProducaoGradeCursor = OrdemProducaoGrade::QueryCursor($objCondition, $objOptionalClauses);
+			$objOrdemProducaoGradeCursor = ComandoRisco::QueryCursor($objCondition, $objOptionalClauses);
 
 			// Iterate through the Cursor
-			while ($objOrdemProducaoGrade = OrdemProducaoGrade::InstantiateCursor($objOrdemProducaoGradeCursor)) {
+			while ($objOrdemProducaoGrade = ComandoRisco::InstantiateCursor($objOrdemProducaoGradeCursor)) {
 				$objListItem = new QListItem($objOrdemProducaoGrade->__toString(), $objOrdemProducaoGrade->Id);
 				if (($this->objBalancoAcoes->OrdemProducaoGrade) && ($this->objBalancoAcoes->OrdemProducaoGrade->Id == $objOrdemProducaoGrade->Id))
 					$objListItem->Selected = true;
@@ -427,7 +427,7 @@
 					$this->lstOrdemProducaoGrade->RemoveAllItems();
 				if (!$this->blnEditMode)
 					$this->lstOrdemProducaoGrade->AddItem(QApplication::Translate('- Select One -'), null);
-				$objOrdemProducaoGradeArray = OrdemProducaoGrade::LoadAll();
+				$objOrdemProducaoGradeArray = ComandoRisco::LoadAll();
 				if ($objOrdemProducaoGradeArray) foreach ($objOrdemProducaoGradeArray as $objOrdemProducaoGrade) {
 					$objListItem = new QListItem($objOrdemProducaoGrade->__toString(), $objOrdemProducaoGrade->Id);
 					if (($this->objBalancoAcoes->OrdemProducaoGrade) && ($this->objBalancoAcoes->OrdemProducaoGrade->Id == $objOrdemProducaoGrade->Id))

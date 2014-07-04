@@ -345,7 +345,9 @@
 		public function lstTecido_Create($strControlId = null, QQCondition $objCondition = null, $objOptionalClauses = null) {
 			$this->lstTecido = new QListBox($this->objParentObject, $strControlId);
 			$this->lstTecido->Name = QApplication::Translate('Tecido');
-			$this->lstTecido->AddItem(QApplication::Translate('- Select One -'), null);
+			$this->lstTecido->Required = true;
+			if (!$this->blnEditMode)
+				$this->lstTecido->AddItem(QApplication::Translate('- Select One -'), null);
 
 			// Setup and perform the Query
 			if (is_null($objCondition)) $objCondition = QQ::All();
@@ -372,6 +374,7 @@
 			$this->lblTecidoId = new QLabel($this->objParentObject, $strControlId);
 			$this->lblTecidoId->Name = QApplication::Translate('Tecido');
 			$this->lblTecidoId->Text = ($this->objReferencia->Tecido) ? $this->objReferencia->Tecido->__toString() : null;
+			$this->lblTecidoId->Required = true;
 			return $this->lblTecidoId;
 		}
 
@@ -512,7 +515,8 @@
 
 			if ($this->lstTecido) {
 					$this->lstTecido->RemoveAllItems();
-				$this->lstTecido->AddItem(QApplication::Translate('- Select One -'), null);
+				if (!$this->blnEditMode)
+					$this->lstTecido->AddItem(QApplication::Translate('- Select One -'), null);
 				$objTecidoArray = Tecido::LoadAll();
 				if ($objTecidoArray) foreach ($objTecidoArray as $objTecido) {
 					$objListItem = new QListItem($objTecido->__toString(), $objTecido->Id);

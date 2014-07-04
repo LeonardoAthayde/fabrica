@@ -19,8 +19,8 @@
 	 * @property string $Valor the value for strValor (Unique)
 	 * @property Referencia $_Referencia the value for the private _objReferencia (Read-Only) if set due to an expansion on the referencia_tamanho_assn association table
 	 * @property Referencia[] $_ReferenciaArray the value for the private _objReferenciaArray (Read-Only) if set due to an ExpandAsArray on the referencia_tamanho_assn association table
-	 * @property OrdemProducaoGrade $_OrdemProducaoGrade the value for the private _objOrdemProducaoGrade (Read-Only) if set due to an expansion on the ordem_producao_grade.tamanho_id reverse relationship
-	 * @property OrdemProducaoGrade[] $_OrdemProducaoGradeArray the value for the private _objOrdemProducaoGradeArray (Read-Only) if set due to an ExpandAsArray on the ordem_producao_grade.tamanho_id reverse relationship
+	 * @property ComandoRisco $_ComandoRisco the value for the private _objComandoRisco (Read-Only) if set due to an expansion on the comando_risco.tamanho_id reverse relationship
+	 * @property ComandoRisco[] $_ComandoRiscoArray the value for the private _objComandoRiscoArray (Read-Only) if set due to an ExpandAsArray on the comando_risco.tamanho_id reverse relationship
 	 * @property boolean $__Restored whether or not this object was restored from the database (as opposed to created new)
 	 */
 	class TamanhoGen extends QBaseClass {
@@ -63,20 +63,20 @@
 		private $_objReferenciaArray = array();
 
 		/**
-		 * Private member variable that stores a reference to a single OrdemProducaoGrade object
-		 * (of type OrdemProducaoGrade), if this Tamanho object was restored with
-		 * an expansion on the ordem_producao_grade association table.
-		 * @var OrdemProducaoGrade _objOrdemProducaoGrade;
+		 * Private member variable that stores a reference to a single ComandoRisco object
+		 * (of type ComandoRisco), if this Tamanho object was restored with
+		 * an expansion on the comando_risco association table.
+		 * @var ComandoRisco _objComandoRisco;
 		 */
-		private $_objOrdemProducaoGrade;
+		private $_objComandoRisco;
 
 		/**
-		 * Private member variable that stores a reference to an array of OrdemProducaoGrade objects
-		 * (of type OrdemProducaoGrade[]), if this Tamanho object was restored with
-		 * an ExpandAsArray on the ordem_producao_grade association table.
-		 * @var OrdemProducaoGrade[] _objOrdemProducaoGradeArray;
+		 * Private member variable that stores a reference to an array of ComandoRisco objects
+		 * (of type ComandoRisco[]), if this Tamanho object was restored with
+		 * an ExpandAsArray on the comando_risco association table.
+		 * @var ComandoRisco[] _objComandoRiscoArray;
 		 */
-		private $_objOrdemProducaoGradeArray = array();
+		private $_objComandoRiscoArray = array();
 
 		/**
 		 * Protected array of virtual attributes for this object (e.g. extra/other calculated and/or non-object bound
@@ -464,17 +464,17 @@
 				}
 
 
-				$strAlias = $strAliasPrefix . 'ordemproducaograde__id';
+				$strAlias = $strAliasPrefix . 'comandorisco__id';
 				$strAliasName = array_key_exists($strAlias, $strColumnAliasArray) ? $strColumnAliasArray[$strAlias] : $strAlias;
 				if ((array_key_exists($strAlias, $strExpandAsArrayNodes)) &&
 					(!is_null($objDbRow->GetColumn($strAliasName)))) {
-					if ($intPreviousChildItemCount = count($objPreviousItem->_objOrdemProducaoGradeArray)) {
-						$objPreviousChildItem = $objPreviousItem->_objOrdemProducaoGradeArray[$intPreviousChildItemCount - 1];
-						$objChildItem = OrdemProducaoGrade::InstantiateDbRow($objDbRow, $strAliasPrefix . 'ordemproducaograde__', $strExpandAsArrayNodes, $objPreviousChildItem, $strColumnAliasArray);
+					if ($intPreviousChildItemCount = count($objPreviousItem->_objComandoRiscoArray)) {
+						$objPreviousChildItem = $objPreviousItem->_objComandoRiscoArray[$intPreviousChildItemCount - 1];
+						$objChildItem = ComandoRisco::InstantiateDbRow($objDbRow, $strAliasPrefix . 'comandorisco__', $strExpandAsArrayNodes, $objPreviousChildItem, $strColumnAliasArray);
 						if ($objChildItem)
-							$objPreviousItem->_objOrdemProducaoGradeArray[] = $objChildItem;
+							$objPreviousItem->_objComandoRiscoArray[] = $objChildItem;
 					} else
-						$objPreviousItem->_objOrdemProducaoGradeArray[] = OrdemProducaoGrade::InstantiateDbRow($objDbRow, $strAliasPrefix . 'ordemproducaograde__', $strExpandAsArrayNodes, null, $strColumnAliasArray);
+						$objPreviousItem->_objComandoRiscoArray[] = ComandoRisco::InstantiateDbRow($objDbRow, $strAliasPrefix . 'comandorisco__', $strExpandAsArrayNodes, null, $strColumnAliasArray);
 					$blnExpandedViaArray = true;
 				}
 
@@ -519,14 +519,14 @@
 			}
 
 
-			// Check for OrdemProducaoGrade Virtual Binding
-			$strAlias = $strAliasPrefix . 'ordemproducaograde__id';
+			// Check for ComandoRisco Virtual Binding
+			$strAlias = $strAliasPrefix . 'comandorisco__id';
 			$strAliasName = array_key_exists($strAlias, $strColumnAliasArray) ? $strColumnAliasArray[$strAlias] : $strAlias;
 			if (!is_null($objDbRow->GetColumn($strAliasName))) {
 				if (($strExpandAsArrayNodes) && (array_key_exists($strAlias, $strExpandAsArrayNodes)))
-					$objToReturn->_objOrdemProducaoGradeArray[] = OrdemProducaoGrade::InstantiateDbRow($objDbRow, $strAliasPrefix . 'ordemproducaograde__', $strExpandAsArrayNodes, null, $strColumnAliasArray);
+					$objToReturn->_objComandoRiscoArray[] = ComandoRisco::InstantiateDbRow($objDbRow, $strAliasPrefix . 'comandorisco__', $strExpandAsArrayNodes, null, $strColumnAliasArray);
 				else
-					$objToReturn->_objOrdemProducaoGrade = OrdemProducaoGrade::InstantiateDbRow($objDbRow, $strAliasPrefix . 'ordemproducaograde__', $strExpandAsArrayNodes, null, $strColumnAliasArray);
+					$objToReturn->_objComandoRisco = ComandoRisco::InstantiateDbRow($objDbRow, $strAliasPrefix . 'comandorisco__', $strExpandAsArrayNodes, null, $strColumnAliasArray);
 			}
 
 			return $objToReturn;
@@ -898,17 +898,17 @@
 					// @return Referencia[]
 					return (array) $this->_objReferenciaArray;
 
-				case '_OrdemProducaoGrade':
-					// Gets the value for the private _objOrdemProducaoGrade (Read-Only)
-					// if set due to an expansion on the ordem_producao_grade.tamanho_id reverse relationship
-					// @return OrdemProducaoGrade
-					return $this->_objOrdemProducaoGrade;
+				case '_ComandoRisco':
+					// Gets the value for the private _objComandoRisco (Read-Only)
+					// if set due to an expansion on the comando_risco.tamanho_id reverse relationship
+					// @return ComandoRisco
+					return $this->_objComandoRisco;
 
-				case '_OrdemProducaoGradeArray':
-					// Gets the value for the private _objOrdemProducaoGradeArray (Read-Only)
-					// if set due to an ExpandAsArray on the ordem_producao_grade.tamanho_id reverse relationship
-					// @return OrdemProducaoGrade[]
-					return (array) $this->_objOrdemProducaoGradeArray;
+				case '_ComandoRiscoArray':
+					// Gets the value for the private _objComandoRiscoArray (Read-Only)
+					// if set due to an ExpandAsArray on the comando_risco.tamanho_id reverse relationship
+					// @return ComandoRisco[]
+					return (array) $this->_objComandoRiscoArray;
 
 
 				case '__Restored':
@@ -981,20 +981,20 @@
 
 			
 		
-		// Related Objects' Methods for OrdemProducaoGrade
+		// Related Objects' Methods for ComandoRisco
 		//-------------------------------------------------------------------
 
 		/**
-		 * Gets all associated OrdemProducaoGrades as an array of OrdemProducaoGrade objects
+		 * Gets all associated ComandoRiscos as an array of ComandoRisco objects
 		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
-		 * @return OrdemProducaoGrade[]
+		 * @return ComandoRisco[]
 		*/ 
-		public function GetOrdemProducaoGradeArray($objOptionalClauses = null) {
+		public function GetComandoRiscoArray($objOptionalClauses = null) {
 			if ((is_null($this->intId)))
 				return array();
 
 			try {
-				return OrdemProducaoGrade::LoadArrayByTamanhoId($this->intId, $objOptionalClauses);
+				return ComandoRisco::LoadArrayByTamanhoId($this->intId, $objOptionalClauses);
 			} catch (QCallerException $objExc) {
 				$objExc->IncrementOffset();
 				throw $objExc;
@@ -1002,26 +1002,26 @@
 		}
 
 		/**
-		 * Counts all associated OrdemProducaoGrades
+		 * Counts all associated ComandoRiscos
 		 * @return int
 		*/ 
-		public function CountOrdemProducaoGrades() {
+		public function CountComandoRiscos() {
 			if ((is_null($this->intId)))
 				return 0;
 
-			return OrdemProducaoGrade::CountByTamanhoId($this->intId);
+			return ComandoRisco::CountByTamanhoId($this->intId);
 		}
 
 		/**
-		 * Associates a OrdemProducaoGrade
-		 * @param OrdemProducaoGrade $objOrdemProducaoGrade
+		 * Associates a ComandoRisco
+		 * @param ComandoRisco $objComandoRisco
 		 * @return void
 		*/ 
-		public function AssociateOrdemProducaoGrade(OrdemProducaoGrade $objOrdemProducaoGrade) {
+		public function AssociateComandoRisco(ComandoRisco $objComandoRisco) {
 			if ((is_null($this->intId)))
-				throw new QUndefinedPrimaryKeyException('Unable to call AssociateOrdemProducaoGrade on this unsaved Tamanho.');
-			if ((is_null($objOrdemProducaoGrade->Id)))
-				throw new QUndefinedPrimaryKeyException('Unable to call AssociateOrdemProducaoGrade on this Tamanho with an unsaved OrdemProducaoGrade.');
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociateComandoRisco on this unsaved Tamanho.');
+			if ((is_null($objComandoRisco->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociateComandoRisco on this Tamanho with an unsaved ComandoRisco.');
 
 			// Get the Database Object for this Class
 			$objDatabase = Tamanho::GetDatabase();
@@ -1029,30 +1029,30 @@
 			// Perform the SQL Query
 			$objDatabase->NonQuery('
 				UPDATE
-					`ordem_producao_grade`
+					`comando_risco`
 				SET
 					`tamanho_id` = ' . $objDatabase->SqlVariable($this->intId) . '
 				WHERE
-					`id` = ' . $objDatabase->SqlVariable($objOrdemProducaoGrade->Id) . '
+					`id` = ' . $objDatabase->SqlVariable($objComandoRisco->Id) . '
 			');
 
 			// Journaling (if applicable)
 			if ($objDatabase->JournalingDatabase) {
-				$objOrdemProducaoGrade->TamanhoId = $this->intId;
-				$objOrdemProducaoGrade->Journal('UPDATE');
+				$objComandoRisco->TamanhoId = $this->intId;
+				$objComandoRisco->Journal('UPDATE');
 			}
 		}
 
 		/**
-		 * Unassociates a OrdemProducaoGrade
-		 * @param OrdemProducaoGrade $objOrdemProducaoGrade
+		 * Unassociates a ComandoRisco
+		 * @param ComandoRisco $objComandoRisco
 		 * @return void
 		*/ 
-		public function UnassociateOrdemProducaoGrade(OrdemProducaoGrade $objOrdemProducaoGrade) {
+		public function UnassociateComandoRisco(ComandoRisco $objComandoRisco) {
 			if ((is_null($this->intId)))
-				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateOrdemProducaoGrade on this unsaved Tamanho.');
-			if ((is_null($objOrdemProducaoGrade->Id)))
-				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateOrdemProducaoGrade on this Tamanho with an unsaved OrdemProducaoGrade.');
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateComandoRisco on this unsaved Tamanho.');
+			if ((is_null($objComandoRisco->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateComandoRisco on this Tamanho with an unsaved ComandoRisco.');
 
 			// Get the Database Object for this Class
 			$objDatabase = Tamanho::GetDatabase();
@@ -1060,44 +1060,44 @@
 			// Perform the SQL Query
 			$objDatabase->NonQuery('
 				UPDATE
-					`ordem_producao_grade`
+					`comando_risco`
 				SET
 					`tamanho_id` = null
 				WHERE
-					`id` = ' . $objDatabase->SqlVariable($objOrdemProducaoGrade->Id) . ' AND
+					`id` = ' . $objDatabase->SqlVariable($objComandoRisco->Id) . ' AND
 					`tamanho_id` = ' . $objDatabase->SqlVariable($this->intId) . '
 			');
 
 			// Journaling
 			if ($objDatabase->JournalingDatabase) {
-				$objOrdemProducaoGrade->TamanhoId = null;
-				$objOrdemProducaoGrade->Journal('UPDATE');
+				$objComandoRisco->TamanhoId = null;
+				$objComandoRisco->Journal('UPDATE');
 			}
 		}
 
 		/**
-		 * Unassociates all OrdemProducaoGrades
+		 * Unassociates all ComandoRiscos
 		 * @return void
 		*/ 
-		public function UnassociateAllOrdemProducaoGrades() {
+		public function UnassociateAllComandoRiscos() {
 			if ((is_null($this->intId)))
-				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateOrdemProducaoGrade on this unsaved Tamanho.');
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateComandoRisco on this unsaved Tamanho.');
 
 			// Get the Database Object for this Class
 			$objDatabase = Tamanho::GetDatabase();
 
 			// Journaling
 			if ($objDatabase->JournalingDatabase) {
-				foreach (OrdemProducaoGrade::LoadArrayByTamanhoId($this->intId) as $objOrdemProducaoGrade) {
-					$objOrdemProducaoGrade->TamanhoId = null;
-					$objOrdemProducaoGrade->Journal('UPDATE');
+				foreach (ComandoRisco::LoadArrayByTamanhoId($this->intId) as $objComandoRisco) {
+					$objComandoRisco->TamanhoId = null;
+					$objComandoRisco->Journal('UPDATE');
 				}
 			}
 
 			// Perform the SQL Query
 			$objDatabase->NonQuery('
 				UPDATE
-					`ordem_producao_grade`
+					`comando_risco`
 				SET
 					`tamanho_id` = null
 				WHERE
@@ -1106,15 +1106,15 @@
 		}
 
 		/**
-		 * Deletes an associated OrdemProducaoGrade
-		 * @param OrdemProducaoGrade $objOrdemProducaoGrade
+		 * Deletes an associated ComandoRisco
+		 * @param ComandoRisco $objComandoRisco
 		 * @return void
 		*/ 
-		public function DeleteAssociatedOrdemProducaoGrade(OrdemProducaoGrade $objOrdemProducaoGrade) {
+		public function DeleteAssociatedComandoRisco(ComandoRisco $objComandoRisco) {
 			if ((is_null($this->intId)))
-				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateOrdemProducaoGrade on this unsaved Tamanho.');
-			if ((is_null($objOrdemProducaoGrade->Id)))
-				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateOrdemProducaoGrade on this Tamanho with an unsaved OrdemProducaoGrade.');
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateComandoRisco on this unsaved Tamanho.');
+			if ((is_null($objComandoRisco->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateComandoRisco on this Tamanho with an unsaved ComandoRisco.');
 
 			// Get the Database Object for this Class
 			$objDatabase = Tamanho::GetDatabase();
@@ -1122,40 +1122,40 @@
 			// Perform the SQL Query
 			$objDatabase->NonQuery('
 				DELETE FROM
-					`ordem_producao_grade`
+					`comando_risco`
 				WHERE
-					`id` = ' . $objDatabase->SqlVariable($objOrdemProducaoGrade->Id) . ' AND
+					`id` = ' . $objDatabase->SqlVariable($objComandoRisco->Id) . ' AND
 					`tamanho_id` = ' . $objDatabase->SqlVariable($this->intId) . '
 			');
 
 			// Journaling
 			if ($objDatabase->JournalingDatabase) {
-				$objOrdemProducaoGrade->Journal('DELETE');
+				$objComandoRisco->Journal('DELETE');
 			}
 		}
 
 		/**
-		 * Deletes all associated OrdemProducaoGrades
+		 * Deletes all associated ComandoRiscos
 		 * @return void
 		*/ 
-		public function DeleteAllOrdemProducaoGrades() {
+		public function DeleteAllComandoRiscos() {
 			if ((is_null($this->intId)))
-				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateOrdemProducaoGrade on this unsaved Tamanho.');
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateComandoRisco on this unsaved Tamanho.');
 
 			// Get the Database Object for this Class
 			$objDatabase = Tamanho::GetDatabase();
 
 			// Journaling
 			if ($objDatabase->JournalingDatabase) {
-				foreach (OrdemProducaoGrade::LoadArrayByTamanhoId($this->intId) as $objOrdemProducaoGrade) {
-					$objOrdemProducaoGrade->Journal('DELETE');
+				foreach (ComandoRisco::LoadArrayByTamanhoId($this->intId) as $objComandoRisco) {
+					$objComandoRisco->Journal('DELETE');
 				}
 			}
 
 			// Perform the SQL Query
 			$objDatabase->NonQuery('
 				DELETE FROM
-					`ordem_producao_grade`
+					`comando_risco`
 				WHERE
 					`tamanho_id` = ' . $objDatabase->SqlVariable($this->intId) . '
 			');
@@ -1450,7 +1450,7 @@
 	 * @property-read QQNode $Id
 	 * @property-read QQNode $Valor
 	 * @property-read QQNodeTamanhoReferencia $Referencia
-	 * @property-read QQReverseReferenceNodeOrdemProducaoGrade $OrdemProducaoGrade
+	 * @property-read QQReverseReferenceNodeComandoRisco $ComandoRisco
 	 */
 	class QQNodeTamanho extends QQNode {
 		protected $strTableName = 'tamanho';
@@ -1464,8 +1464,8 @@
 					return new QQNode('valor', 'Valor', 'string', $this);
 				case 'Referencia':
 					return new QQNodeTamanhoReferencia($this);
-				case 'OrdemProducaoGrade':
-					return new QQReverseReferenceNodeOrdemProducaoGrade($this, 'ordemproducaograde', 'reverse_reference', 'tamanho_id');
+				case 'ComandoRisco':
+					return new QQReverseReferenceNodeComandoRisco($this, 'comandorisco', 'reverse_reference', 'tamanho_id');
 
 				case '_PrimaryKeyNode':
 					return new QQNode('id', 'Id', 'integer', $this);
@@ -1484,7 +1484,7 @@
 	 * @property-read QQNode $Id
 	 * @property-read QQNode $Valor
 	 * @property-read QQNodeTamanhoReferencia $Referencia
-	 * @property-read QQReverseReferenceNodeOrdemProducaoGrade $OrdemProducaoGrade
+	 * @property-read QQReverseReferenceNodeComandoRisco $ComandoRisco
 	 * @property-read QQNode $_PrimaryKeyNode
 	 */
 	class QQReverseReferenceNodeTamanho extends QQReverseReferenceNode {
@@ -1499,8 +1499,8 @@
 					return new QQNode('valor', 'Valor', 'string', $this);
 				case 'Referencia':
 					return new QQNodeTamanhoReferencia($this);
-				case 'OrdemProducaoGrade':
-					return new QQReverseReferenceNodeOrdemProducaoGrade($this, 'ordemproducaograde', 'reverse_reference', 'tamanho_id');
+				case 'ComandoRisco':
+					return new QQReverseReferenceNodeComandoRisco($this, 'comandorisco', 'reverse_reference', 'tamanho_id');
 
 				case '_PrimaryKeyNode':
 					return new QQNode('id', 'Id', 'integer', $this);

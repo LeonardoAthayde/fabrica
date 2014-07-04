@@ -20,7 +20,7 @@
 	 * @property integer $Balanco the value for intBalanco (Not Null)
 	 * @property integer $QuantidadeProduzida the value for intQuantidadeProduzida (Not Null)
 	 * @property boolean $Concluido the value for blnConcluido (Not Null)
-	 * @property OrdemProducaoGrade $OrdemProducaoGrade the value for the OrdemProducaoGrade object referenced by intOrdemProducaoGradeId (Unique)
+	 * @property ComandoRisco $OrdemProducaoGrade the value for the ComandoRisco object referenced by intOrdemProducaoGradeId (Unique)
 	 * @property boolean $__Restored whether or not this object was restored from the database (as opposed to created new)
 	 */
 	class BalancoPecasGen extends QBaseClass {
@@ -95,9 +95,9 @@
 		 * Protected member variable that contains the object pointed by the reference
 		 * in the database column balanco_pecas.ordem_producao_grade_id.
 		 *
-		 * NOTE: Always use the OrdemProducaoGrade property getter to correctly retrieve this OrdemProducaoGrade object.
+		 * NOTE: Always use the OrdemProducaoGrade property getter to correctly retrieve this ComandoRisco object.
 		 * (Because this class implements late binding, this variable reference MAY be null.)
-		 * @var OrdemProducaoGrade objOrdemProducaoGrade
+		 * @var ComandoRisco objOrdemProducaoGrade
 		 */
 		protected $objOrdemProducaoGrade;
 
@@ -474,7 +474,7 @@
 			$strAlias = $strAliasPrefix . 'ordem_producao_grade_id__id';
 			$strAliasName = array_key_exists($strAlias, $strColumnAliasArray) ? $strColumnAliasArray[$strAlias] : $strAlias;
 			if (!is_null($objDbRow->GetColumn($strAliasName)))
-				$objToReturn->objOrdemProducaoGrade = OrdemProducaoGrade::InstantiateDbRow($objDbRow, $strAliasPrefix . 'ordem_producao_grade_id__', $strExpandAsArrayNodes, null, $strColumnAliasArray);
+				$objToReturn->objOrdemProducaoGrade = ComandoRisco::InstantiateDbRow($objDbRow, $strAliasPrefix . 'ordem_producao_grade_id__', $strExpandAsArrayNodes, null, $strColumnAliasArray);
 
 
 
@@ -832,11 +832,11 @@
 				// Member Objects
 				///////////////////
 				case 'OrdemProducaoGrade':
-					// Gets the value for the OrdemProducaoGrade object referenced by intOrdemProducaoGradeId (Unique)
-					// @return OrdemProducaoGrade
+					// Gets the value for the ComandoRisco object referenced by intOrdemProducaoGradeId (Unique)
+					// @return ComandoRisco
 					try {
 						if ((!$this->objOrdemProducaoGrade) && (!is_null($this->intOrdemProducaoGradeId)))
-							$this->objOrdemProducaoGrade = OrdemProducaoGrade::Load($this->intOrdemProducaoGradeId);
+							$this->objOrdemProducaoGrade = ComandoRisco::Load($this->intOrdemProducaoGradeId);
 						return $this->objOrdemProducaoGrade;
 					} catch (QCallerException $objExc) {
 						$objExc->IncrementOffset();
@@ -926,23 +926,23 @@
 				// Member Objects
 				///////////////////
 				case 'OrdemProducaoGrade':
-					// Sets the value for the OrdemProducaoGrade object referenced by intOrdemProducaoGradeId (Unique)
-					// @param OrdemProducaoGrade $mixValue
-					// @return OrdemProducaoGrade
+					// Sets the value for the ComandoRisco object referenced by intOrdemProducaoGradeId (Unique)
+					// @param ComandoRisco $mixValue
+					// @return ComandoRisco
 					if (is_null($mixValue)) {
 						$this->intOrdemProducaoGradeId = null;
 						$this->objOrdemProducaoGrade = null;
 						return null;
 					} else {
-						// Make sure $mixValue actually is a OrdemProducaoGrade object
+						// Make sure $mixValue actually is a ComandoRisco object
 						try {
-							$mixValue = QType::Cast($mixValue, 'OrdemProducaoGrade');
+							$mixValue = QType::Cast($mixValue, 'ComandoRisco');
 						} catch (QInvalidCastException $objExc) {
 							$objExc->IncrementOffset();
 							throw $objExc;
 						} 
 
-						// Make sure $mixValue is a SAVED OrdemProducaoGrade object
+						// Make sure $mixValue is a SAVED ComandoRisco object
 						if (is_null($mixValue->Id))
 							throw new QCallerException('Unable to set an unsaved OrdemProducaoGrade for this BalancoPecas');
 
@@ -993,7 +993,7 @@
 		public static function GetSoapComplexTypeXml() {
 			$strToReturn = '<complexType name="BalancoPecas"><sequence>';
 			$strToReturn .= '<element name="Id" type="xsd:int"/>';
-			$strToReturn .= '<element name="OrdemProducaoGrade" type="xsd1:OrdemProducaoGrade"/>';
+			$strToReturn .= '<element name="OrdemProducaoGrade" type="xsd1:ComandoRisco"/>';
 			$strToReturn .= '<element name="Balanco" type="xsd:int"/>';
 			$strToReturn .= '<element name="QuantidadeProduzida" type="xsd:int"/>';
 			$strToReturn .= '<element name="Concluido" type="xsd:boolean"/>';
@@ -1005,7 +1005,7 @@
 		public static function AlterSoapComplexTypeArray(&$strComplexTypeArray) {
 			if (!array_key_exists('BalancoPecas', $strComplexTypeArray)) {
 				$strComplexTypeArray['BalancoPecas'] = BalancoPecas::GetSoapComplexTypeXml();
-				OrdemProducaoGrade::AlterSoapComplexTypeArray($strComplexTypeArray);
+				ComandoRisco::AlterSoapComplexTypeArray($strComplexTypeArray);
 			}
 		}
 
@@ -1024,7 +1024,7 @@
 				$objToReturn->intId = $objSoapObject->Id;
 			if ((property_exists($objSoapObject, 'OrdemProducaoGrade')) &&
 				($objSoapObject->OrdemProducaoGrade))
-				$objToReturn->OrdemProducaoGrade = OrdemProducaoGrade::GetObjectFromSoapObject($objSoapObject->OrdemProducaoGrade);
+				$objToReturn->OrdemProducaoGrade = ComandoRisco::GetObjectFromSoapObject($objSoapObject->OrdemProducaoGrade);
 			if (property_exists($objSoapObject, 'Balanco'))
 				$objToReturn->intBalanco = $objSoapObject->Balanco;
 			if (property_exists($objSoapObject, 'QuantidadeProduzida'))
@@ -1050,7 +1050,7 @@
 
 		public static function GetSoapObjectFromObject($objObject, $blnBindRelatedObjects) {
 			if ($objObject->objOrdemProducaoGrade)
-				$objObject->objOrdemProducaoGrade = OrdemProducaoGrade::GetSoapObjectFromObject($objObject->objOrdemProducaoGrade, false);
+				$objObject->objOrdemProducaoGrade = ComandoRisco::GetSoapObjectFromObject($objObject->objOrdemProducaoGrade, false);
 			else if (!$blnBindRelatedObjects)
 				$objObject->intOrdemProducaoGradeId = null;
 			return $objObject;
@@ -1070,7 +1070,7 @@
 	/**
 	 * @property-read QQNode $Id
 	 * @property-read QQNode $OrdemProducaoGradeId
-	 * @property-read QQNodeOrdemProducaoGrade $OrdemProducaoGrade
+	 * @property-read QQNodeComandoRisco $OrdemProducaoGrade
 	 * @property-read QQNode $Balanco
 	 * @property-read QQNode $QuantidadeProduzida
 	 * @property-read QQNode $Concluido
@@ -1086,7 +1086,7 @@
 				case 'OrdemProducaoGradeId':
 					return new QQNode('ordem_producao_grade_id', 'OrdemProducaoGradeId', 'integer', $this);
 				case 'OrdemProducaoGrade':
-					return new QQNodeOrdemProducaoGrade('ordem_producao_grade_id', 'OrdemProducaoGrade', 'integer', $this);
+					return new QQNodeComandoRisco('ordem_producao_grade_id', 'OrdemProducaoGrade', 'integer', $this);
 				case 'Balanco':
 					return new QQNode('balanco', 'Balanco', 'integer', $this);
 				case 'QuantidadeProduzida':
@@ -1110,7 +1110,7 @@
 	/**
 	 * @property-read QQNode $Id
 	 * @property-read QQNode $OrdemProducaoGradeId
-	 * @property-read QQNodeOrdemProducaoGrade $OrdemProducaoGrade
+	 * @property-read QQNodeComandoRisco $OrdemProducaoGrade
 	 * @property-read QQNode $Balanco
 	 * @property-read QQNode $QuantidadeProduzida
 	 * @property-read QQNode $Concluido
@@ -1127,7 +1127,7 @@
 				case 'OrdemProducaoGradeId':
 					return new QQNode('ordem_producao_grade_id', 'OrdemProducaoGradeId', 'integer', $this);
 				case 'OrdemProducaoGrade':
-					return new QQNodeOrdemProducaoGrade('ordem_producao_grade_id', 'OrdemProducaoGrade', 'integer', $this);
+					return new QQNodeComandoRisco('ordem_producao_grade_id', 'OrdemProducaoGrade', 'integer', $this);
 				case 'Balanco':
 					return new QQNode('balanco', 'Balanco', 'integer', $this);
 				case 'QuantidadeProduzida':

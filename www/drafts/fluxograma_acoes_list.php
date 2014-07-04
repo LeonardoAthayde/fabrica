@@ -75,6 +75,7 @@
 			// can traverse down QQN::fluxograma_acoes() to display fields that are down the hierarchy)
 			$this->dtgFluxogramaAcoeses->MetaAddColumn('Id');
 			$this->dtgFluxogramaAcoeses->MetaAddColumn('Nome');
+			$this->dtgFluxogramaAcoeses->MetaAddColumn(QQN::FluxogramaAcoes()->Maquina);
 		}
 	}
 

@@ -19,8 +19,10 @@
 	 * @property string $Nome the value for strNome (Unique)
 	 * @property Referencia $_Referencia the value for the private _objReferencia (Read-Only) if set due to an expansion on the referencia_cor_assn association table
 	 * @property Referencia[] $_ReferenciaArray the value for the private _objReferenciaArray (Read-Only) if set due to an ExpandAsArray on the referencia_cor_assn association table
-	 * @property OrdemProducaoGrade $_OrdemProducaoGrade the value for the private _objOrdemProducaoGrade (Read-Only) if set due to an expansion on the ordem_producao_grade.cor_id reverse relationship
-	 * @property OrdemProducaoGrade[] $_OrdemProducaoGradeArray the value for the private _objOrdemProducaoGradeArray (Read-Only) if set due to an ExpandAsArray on the ordem_producao_grade.cor_id reverse relationship
+	 * @property ComandoPeca $_ComandoPeca the value for the private _objComandoPeca (Read-Only) if set due to an expansion on the comando_peca.cor_id reverse relationship
+	 * @property ComandoPeca[] $_ComandoPecaArray the value for the private _objComandoPecaArray (Read-Only) if set due to an ExpandAsArray on the comando_peca.cor_id reverse relationship
+	 * @property FluxogramaItem $_FluxogramaItem the value for the private _objFluxogramaItem (Read-Only) if set due to an expansion on the fluxograma_item.cor_id reverse relationship
+	 * @property FluxogramaItem[] $_FluxogramaItemArray the value for the private _objFluxogramaItemArray (Read-Only) if set due to an ExpandAsArray on the fluxograma_item.cor_id reverse relationship
 	 * @property boolean $__Restored whether or not this object was restored from the database (as opposed to created new)
 	 */
 	class CorGen extends QBaseClass {
@@ -63,20 +65,36 @@
 		private $_objReferenciaArray = array();
 
 		/**
-		 * Private member variable that stores a reference to a single OrdemProducaoGrade object
-		 * (of type OrdemProducaoGrade), if this Cor object was restored with
-		 * an expansion on the ordem_producao_grade association table.
-		 * @var OrdemProducaoGrade _objOrdemProducaoGrade;
+		 * Private member variable that stores a reference to a single ComandoPeca object
+		 * (of type ComandoPeca), if this Cor object was restored with
+		 * an expansion on the comando_peca association table.
+		 * @var ComandoPeca _objComandoPeca;
 		 */
-		private $_objOrdemProducaoGrade;
+		private $_objComandoPeca;
 
 		/**
-		 * Private member variable that stores a reference to an array of OrdemProducaoGrade objects
-		 * (of type OrdemProducaoGrade[]), if this Cor object was restored with
-		 * an ExpandAsArray on the ordem_producao_grade association table.
-		 * @var OrdemProducaoGrade[] _objOrdemProducaoGradeArray;
+		 * Private member variable that stores a reference to an array of ComandoPeca objects
+		 * (of type ComandoPeca[]), if this Cor object was restored with
+		 * an ExpandAsArray on the comando_peca association table.
+		 * @var ComandoPeca[] _objComandoPecaArray;
 		 */
-		private $_objOrdemProducaoGradeArray = array();
+		private $_objComandoPecaArray = array();
+
+		/**
+		 * Private member variable that stores a reference to a single FluxogramaItem object
+		 * (of type FluxogramaItem), if this Cor object was restored with
+		 * an expansion on the fluxograma_item association table.
+		 * @var FluxogramaItem _objFluxogramaItem;
+		 */
+		private $_objFluxogramaItem;
+
+		/**
+		 * Private member variable that stores a reference to an array of FluxogramaItem objects
+		 * (of type FluxogramaItem[]), if this Cor object was restored with
+		 * an ExpandAsArray on the fluxograma_item association table.
+		 * @var FluxogramaItem[] _objFluxogramaItemArray;
+		 */
+		private $_objFluxogramaItemArray = array();
 
 		/**
 		 * Protected array of virtual attributes for this object (e.g. extra/other calculated and/or non-object bound
@@ -464,17 +482,31 @@
 				}
 
 
-				$strAlias = $strAliasPrefix . 'ordemproducaograde__id';
+				$strAlias = $strAliasPrefix . 'comandopeca__id';
 				$strAliasName = array_key_exists($strAlias, $strColumnAliasArray) ? $strColumnAliasArray[$strAlias] : $strAlias;
 				if ((array_key_exists($strAlias, $strExpandAsArrayNodes)) &&
 					(!is_null($objDbRow->GetColumn($strAliasName)))) {
-					if ($intPreviousChildItemCount = count($objPreviousItem->_objOrdemProducaoGradeArray)) {
-						$objPreviousChildItem = $objPreviousItem->_objOrdemProducaoGradeArray[$intPreviousChildItemCount - 1];
-						$objChildItem = OrdemProducaoGrade::InstantiateDbRow($objDbRow, $strAliasPrefix . 'ordemproducaograde__', $strExpandAsArrayNodes, $objPreviousChildItem, $strColumnAliasArray);
+					if ($intPreviousChildItemCount = count($objPreviousItem->_objComandoPecaArray)) {
+						$objPreviousChildItem = $objPreviousItem->_objComandoPecaArray[$intPreviousChildItemCount - 1];
+						$objChildItem = ComandoPeca::InstantiateDbRow($objDbRow, $strAliasPrefix . 'comandopeca__', $strExpandAsArrayNodes, $objPreviousChildItem, $strColumnAliasArray);
 						if ($objChildItem)
-							$objPreviousItem->_objOrdemProducaoGradeArray[] = $objChildItem;
+							$objPreviousItem->_objComandoPecaArray[] = $objChildItem;
 					} else
-						$objPreviousItem->_objOrdemProducaoGradeArray[] = OrdemProducaoGrade::InstantiateDbRow($objDbRow, $strAliasPrefix . 'ordemproducaograde__', $strExpandAsArrayNodes, null, $strColumnAliasArray);
+						$objPreviousItem->_objComandoPecaArray[] = ComandoPeca::InstantiateDbRow($objDbRow, $strAliasPrefix . 'comandopeca__', $strExpandAsArrayNodes, null, $strColumnAliasArray);
+					$blnExpandedViaArray = true;
+				}
+
+				$strAlias = $strAliasPrefix . 'fluxogramaitem__id';
+				$strAliasName = array_key_exists($strAlias, $strColumnAliasArray) ? $strColumnAliasArray[$strAlias] : $strAlias;
+				if ((array_key_exists($strAlias, $strExpandAsArrayNodes)) &&
+					(!is_null($objDbRow->GetColumn($strAliasName)))) {
+					if ($intPreviousChildItemCount = count($objPreviousItem->_objFluxogramaItemArray)) {
+						$objPreviousChildItem = $objPreviousItem->_objFluxogramaItemArray[$intPreviousChildItemCount - 1];
+						$objChildItem = FluxogramaItem::InstantiateDbRow($objDbRow, $strAliasPrefix . 'fluxogramaitem__', $strExpandAsArrayNodes, $objPreviousChildItem, $strColumnAliasArray);
+						if ($objChildItem)
+							$objPreviousItem->_objFluxogramaItemArray[] = $objChildItem;
+					} else
+						$objPreviousItem->_objFluxogramaItemArray[] = FluxogramaItem::InstantiateDbRow($objDbRow, $strAliasPrefix . 'fluxogramaitem__', $strExpandAsArrayNodes, null, $strColumnAliasArray);
 					$blnExpandedViaArray = true;
 				}
 
@@ -519,14 +551,24 @@
 			}
 
 
-			// Check for OrdemProducaoGrade Virtual Binding
-			$strAlias = $strAliasPrefix . 'ordemproducaograde__id';
+			// Check for ComandoPeca Virtual Binding
+			$strAlias = $strAliasPrefix . 'comandopeca__id';
 			$strAliasName = array_key_exists($strAlias, $strColumnAliasArray) ? $strColumnAliasArray[$strAlias] : $strAlias;
 			if (!is_null($objDbRow->GetColumn($strAliasName))) {
 				if (($strExpandAsArrayNodes) && (array_key_exists($strAlias, $strExpandAsArrayNodes)))
-					$objToReturn->_objOrdemProducaoGradeArray[] = OrdemProducaoGrade::InstantiateDbRow($objDbRow, $strAliasPrefix . 'ordemproducaograde__', $strExpandAsArrayNodes, null, $strColumnAliasArray);
+					$objToReturn->_objComandoPecaArray[] = ComandoPeca::InstantiateDbRow($objDbRow, $strAliasPrefix . 'comandopeca__', $strExpandAsArrayNodes, null, $strColumnAliasArray);
 				else
-					$objToReturn->_objOrdemProducaoGrade = OrdemProducaoGrade::InstantiateDbRow($objDbRow, $strAliasPrefix . 'ordemproducaograde__', $strExpandAsArrayNodes, null, $strColumnAliasArray);
+					$objToReturn->_objComandoPeca = ComandoPeca::InstantiateDbRow($objDbRow, $strAliasPrefix . 'comandopeca__', $strExpandAsArrayNodes, null, $strColumnAliasArray);
+			}
+
+			// Check for FluxogramaItem Virtual Binding
+			$strAlias = $strAliasPrefix . 'fluxogramaitem__id';
+			$strAliasName = array_key_exists($strAlias, $strColumnAliasArray) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			if (!is_null($objDbRow->GetColumn($strAliasName))) {
+				if (($strExpandAsArrayNodes) && (array_key_exists($strAlias, $strExpandAsArrayNodes)))
+					$objToReturn->_objFluxogramaItemArray[] = FluxogramaItem::InstantiateDbRow($objDbRow, $strAliasPrefix . 'fluxogramaitem__', $strExpandAsArrayNodes, null, $strColumnAliasArray);
+				else
+					$objToReturn->_objFluxogramaItem = FluxogramaItem::InstantiateDbRow($objDbRow, $strAliasPrefix . 'fluxogramaitem__', $strExpandAsArrayNodes, null, $strColumnAliasArray);
 			}
 
 			return $objToReturn;
@@ -898,17 +940,29 @@
 					// @return Referencia[]
 					return (array) $this->_objReferenciaArray;
 
-				case '_OrdemProducaoGrade':
-					// Gets the value for the private _objOrdemProducaoGrade (Read-Only)
-					// if set due to an expansion on the ordem_producao_grade.cor_id reverse relationship
-					// @return OrdemProducaoGrade
-					return $this->_objOrdemProducaoGrade;
+				case '_ComandoPeca':
+					// Gets the value for the private _objComandoPeca (Read-Only)
+					// if set due to an expansion on the comando_peca.cor_id reverse relationship
+					// @return ComandoPeca
+					return $this->_objComandoPeca;
 
-				case '_OrdemProducaoGradeArray':
-					// Gets the value for the private _objOrdemProducaoGradeArray (Read-Only)
-					// if set due to an ExpandAsArray on the ordem_producao_grade.cor_id reverse relationship
-					// @return OrdemProducaoGrade[]
-					return (array) $this->_objOrdemProducaoGradeArray;
+				case '_ComandoPecaArray':
+					// Gets the value for the private _objComandoPecaArray (Read-Only)
+					// if set due to an ExpandAsArray on the comando_peca.cor_id reverse relationship
+					// @return ComandoPeca[]
+					return (array) $this->_objComandoPecaArray;
+
+				case '_FluxogramaItem':
+					// Gets the value for the private _objFluxogramaItem (Read-Only)
+					// if set due to an expansion on the fluxograma_item.cor_id reverse relationship
+					// @return FluxogramaItem
+					return $this->_objFluxogramaItem;
+
+				case '_FluxogramaItemArray':
+					// Gets the value for the private _objFluxogramaItemArray (Read-Only)
+					// if set due to an ExpandAsArray on the fluxograma_item.cor_id reverse relationship
+					// @return FluxogramaItem[]
+					return (array) $this->_objFluxogramaItemArray;
 
 
 				case '__Restored':
@@ -981,20 +1035,20 @@
 
 			
 		
-		// Related Objects' Methods for OrdemProducaoGrade
+		// Related Objects' Methods for ComandoPeca
 		//-------------------------------------------------------------------
 
 		/**
-		 * Gets all associated OrdemProducaoGrades as an array of OrdemProducaoGrade objects
+		 * Gets all associated ComandoPecas as an array of ComandoPeca objects
 		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
-		 * @return OrdemProducaoGrade[]
+		 * @return ComandoPeca[]
 		*/ 
-		public function GetOrdemProducaoGradeArray($objOptionalClauses = null) {
+		public function GetComandoPecaArray($objOptionalClauses = null) {
 			if ((is_null($this->intId)))
 				return array();
 
 			try {
-				return OrdemProducaoGrade::LoadArrayByCorId($this->intId, $objOptionalClauses);
+				return ComandoPeca::LoadArrayByCorId($this->intId, $objOptionalClauses);
 			} catch (QCallerException $objExc) {
 				$objExc->IncrementOffset();
 				throw $objExc;
@@ -1002,26 +1056,26 @@
 		}
 
 		/**
-		 * Counts all associated OrdemProducaoGrades
+		 * Counts all associated ComandoPecas
 		 * @return int
 		*/ 
-		public function CountOrdemProducaoGrades() {
+		public function CountComandoPecas() {
 			if ((is_null($this->intId)))
 				return 0;
 
-			return OrdemProducaoGrade::CountByCorId($this->intId);
+			return ComandoPeca::CountByCorId($this->intId);
 		}
 
 		/**
-		 * Associates a OrdemProducaoGrade
-		 * @param OrdemProducaoGrade $objOrdemProducaoGrade
+		 * Associates a ComandoPeca
+		 * @param ComandoPeca $objComandoPeca
 		 * @return void
 		*/ 
-		public function AssociateOrdemProducaoGrade(OrdemProducaoGrade $objOrdemProducaoGrade) {
+		public function AssociateComandoPeca(ComandoPeca $objComandoPeca) {
 			if ((is_null($this->intId)))
-				throw new QUndefinedPrimaryKeyException('Unable to call AssociateOrdemProducaoGrade on this unsaved Cor.');
-			if ((is_null($objOrdemProducaoGrade->Id)))
-				throw new QUndefinedPrimaryKeyException('Unable to call AssociateOrdemProducaoGrade on this Cor with an unsaved OrdemProducaoGrade.');
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociateComandoPeca on this unsaved Cor.');
+			if ((is_null($objComandoPeca->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociateComandoPeca on this Cor with an unsaved ComandoPeca.');
 
 			// Get the Database Object for this Class
 			$objDatabase = Cor::GetDatabase();
@@ -1029,30 +1083,30 @@
 			// Perform the SQL Query
 			$objDatabase->NonQuery('
 				UPDATE
-					`ordem_producao_grade`
+					`comando_peca`
 				SET
 					`cor_id` = ' . $objDatabase->SqlVariable($this->intId) . '
 				WHERE
-					`id` = ' . $objDatabase->SqlVariable($objOrdemProducaoGrade->Id) . '
+					`id` = ' . $objDatabase->SqlVariable($objComandoPeca->Id) . '
 			');
 
 			// Journaling (if applicable)
 			if ($objDatabase->JournalingDatabase) {
-				$objOrdemProducaoGrade->CorId = $this->intId;
-				$objOrdemProducaoGrade->Journal('UPDATE');
+				$objComandoPeca->CorId = $this->intId;
+				$objComandoPeca->Journal('UPDATE');
 			}
 		}
 
 		/**
-		 * Unassociates a OrdemProducaoGrade
-		 * @param OrdemProducaoGrade $objOrdemProducaoGrade
+		 * Unassociates a ComandoPeca
+		 * @param ComandoPeca $objComandoPeca
 		 * @return void
 		*/ 
-		public function UnassociateOrdemProducaoGrade(OrdemProducaoGrade $objOrdemProducaoGrade) {
+		public function UnassociateComandoPeca(ComandoPeca $objComandoPeca) {
 			if ((is_null($this->intId)))
-				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateOrdemProducaoGrade on this unsaved Cor.');
-			if ((is_null($objOrdemProducaoGrade->Id)))
-				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateOrdemProducaoGrade on this Cor with an unsaved OrdemProducaoGrade.');
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateComandoPeca on this unsaved Cor.');
+			if ((is_null($objComandoPeca->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateComandoPeca on this Cor with an unsaved ComandoPeca.');
 
 			// Get the Database Object for this Class
 			$objDatabase = Cor::GetDatabase();
@@ -1060,44 +1114,44 @@
 			// Perform the SQL Query
 			$objDatabase->NonQuery('
 				UPDATE
-					`ordem_producao_grade`
+					`comando_peca`
 				SET
 					`cor_id` = null
 				WHERE
-					`id` = ' . $objDatabase->SqlVariable($objOrdemProducaoGrade->Id) . ' AND
+					`id` = ' . $objDatabase->SqlVariable($objComandoPeca->Id) . ' AND
 					`cor_id` = ' . $objDatabase->SqlVariable($this->intId) . '
 			');
 
 			// Journaling
 			if ($objDatabase->JournalingDatabase) {
-				$objOrdemProducaoGrade->CorId = null;
-				$objOrdemProducaoGrade->Journal('UPDATE');
+				$objComandoPeca->CorId = null;
+				$objComandoPeca->Journal('UPDATE');
 			}
 		}
 
 		/**
-		 * Unassociates all OrdemProducaoGrades
+		 * Unassociates all ComandoPecas
 		 * @return void
 		*/ 
-		public function UnassociateAllOrdemProducaoGrades() {
+		public function UnassociateAllComandoPecas() {
 			if ((is_null($this->intId)))
-				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateOrdemProducaoGrade on this unsaved Cor.');
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateComandoPeca on this unsaved Cor.');
 
 			// Get the Database Object for this Class
 			$objDatabase = Cor::GetDatabase();
 
 			// Journaling
 			if ($objDatabase->JournalingDatabase) {
-				foreach (OrdemProducaoGrade::LoadArrayByCorId($this->intId) as $objOrdemProducaoGrade) {
-					$objOrdemProducaoGrade->CorId = null;
-					$objOrdemProducaoGrade->Journal('UPDATE');
+				foreach (ComandoPeca::LoadArrayByCorId($this->intId) as $objComandoPeca) {
+					$objComandoPeca->CorId = null;
+					$objComandoPeca->Journal('UPDATE');
 				}
 			}
 
 			// Perform the SQL Query
 			$objDatabase->NonQuery('
 				UPDATE
-					`ordem_producao_grade`
+					`comando_peca`
 				SET
 					`cor_id` = null
 				WHERE
@@ -1106,15 +1160,15 @@
 		}
 
 		/**
-		 * Deletes an associated OrdemProducaoGrade
-		 * @param OrdemProducaoGrade $objOrdemProducaoGrade
+		 * Deletes an associated ComandoPeca
+		 * @param ComandoPeca $objComandoPeca
 		 * @return void
 		*/ 
-		public function DeleteAssociatedOrdemProducaoGrade(OrdemProducaoGrade $objOrdemProducaoGrade) {
+		public function DeleteAssociatedComandoPeca(ComandoPeca $objComandoPeca) {
 			if ((is_null($this->intId)))
-				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateOrdemProducaoGrade on this unsaved Cor.');
-			if ((is_null($objOrdemProducaoGrade->Id)))
-				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateOrdemProducaoGrade on this Cor with an unsaved OrdemProducaoGrade.');
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateComandoPeca on this unsaved Cor.');
+			if ((is_null($objComandoPeca->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateComandoPeca on this Cor with an unsaved ComandoPeca.');
 
 			// Get the Database Object for this Class
 			$objDatabase = Cor::GetDatabase();
@@ -1122,40 +1176,222 @@
 			// Perform the SQL Query
 			$objDatabase->NonQuery('
 				DELETE FROM
-					`ordem_producao_grade`
+					`comando_peca`
 				WHERE
-					`id` = ' . $objDatabase->SqlVariable($objOrdemProducaoGrade->Id) . ' AND
+					`id` = ' . $objDatabase->SqlVariable($objComandoPeca->Id) . ' AND
 					`cor_id` = ' . $objDatabase->SqlVariable($this->intId) . '
 			');
 
 			// Journaling
 			if ($objDatabase->JournalingDatabase) {
-				$objOrdemProducaoGrade->Journal('DELETE');
+				$objComandoPeca->Journal('DELETE');
 			}
 		}
 
 		/**
-		 * Deletes all associated OrdemProducaoGrades
+		 * Deletes all associated ComandoPecas
 		 * @return void
 		*/ 
-		public function DeleteAllOrdemProducaoGrades() {
+		public function DeleteAllComandoPecas() {
 			if ((is_null($this->intId)))
-				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateOrdemProducaoGrade on this unsaved Cor.');
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateComandoPeca on this unsaved Cor.');
 
 			// Get the Database Object for this Class
 			$objDatabase = Cor::GetDatabase();
 
 			// Journaling
 			if ($objDatabase->JournalingDatabase) {
-				foreach (OrdemProducaoGrade::LoadArrayByCorId($this->intId) as $objOrdemProducaoGrade) {
-					$objOrdemProducaoGrade->Journal('DELETE');
+				foreach (ComandoPeca::LoadArrayByCorId($this->intId) as $objComandoPeca) {
+					$objComandoPeca->Journal('DELETE');
 				}
 			}
 
 			// Perform the SQL Query
 			$objDatabase->NonQuery('
 				DELETE FROM
-					`ordem_producao_grade`
+					`comando_peca`
+				WHERE
+					`cor_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+			
+		
+		// Related Objects' Methods for FluxogramaItem
+		//-------------------------------------------------------------------
+
+		/**
+		 * Gets all associated FluxogramaItems as an array of FluxogramaItem objects
+		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
+		 * @return FluxogramaItem[]
+		*/ 
+		public function GetFluxogramaItemArray($objOptionalClauses = null) {
+			if ((is_null($this->intId)))
+				return array();
+
+			try {
+				return FluxogramaItem::LoadArrayByCorId($this->intId, $objOptionalClauses);
+			} catch (QCallerException $objExc) {
+				$objExc->IncrementOffset();
+				throw $objExc;
+			}
+		}
+
+		/**
+		 * Counts all associated FluxogramaItems
+		 * @return int
+		*/ 
+		public function CountFluxogramaItems() {
+			if ((is_null($this->intId)))
+				return 0;
+
+			return FluxogramaItem::CountByCorId($this->intId);
+		}
+
+		/**
+		 * Associates a FluxogramaItem
+		 * @param FluxogramaItem $objFluxogramaItem
+		 * @return void
+		*/ 
+		public function AssociateFluxogramaItem(FluxogramaItem $objFluxogramaItem) {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociateFluxogramaItem on this unsaved Cor.');
+			if ((is_null($objFluxogramaItem->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociateFluxogramaItem on this Cor with an unsaved FluxogramaItem.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Cor::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`fluxograma_item`
+				SET
+					`cor_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objFluxogramaItem->Id) . '
+			');
+
+			// Journaling (if applicable)
+			if ($objDatabase->JournalingDatabase) {
+				$objFluxogramaItem->CorId = $this->intId;
+				$objFluxogramaItem->Journal('UPDATE');
+			}
+		}
+
+		/**
+		 * Unassociates a FluxogramaItem
+		 * @param FluxogramaItem $objFluxogramaItem
+		 * @return void
+		*/ 
+		public function UnassociateFluxogramaItem(FluxogramaItem $objFluxogramaItem) {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateFluxogramaItem on this unsaved Cor.');
+			if ((is_null($objFluxogramaItem->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateFluxogramaItem on this Cor with an unsaved FluxogramaItem.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Cor::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`fluxograma_item`
+				SET
+					`cor_id` = null
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objFluxogramaItem->Id) . ' AND
+					`cor_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+
+			// Journaling
+			if ($objDatabase->JournalingDatabase) {
+				$objFluxogramaItem->CorId = null;
+				$objFluxogramaItem->Journal('UPDATE');
+			}
+		}
+
+		/**
+		 * Unassociates all FluxogramaItems
+		 * @return void
+		*/ 
+		public function UnassociateAllFluxogramaItems() {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateFluxogramaItem on this unsaved Cor.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Cor::GetDatabase();
+
+			// Journaling
+			if ($objDatabase->JournalingDatabase) {
+				foreach (FluxogramaItem::LoadArrayByCorId($this->intId) as $objFluxogramaItem) {
+					$objFluxogramaItem->CorId = null;
+					$objFluxogramaItem->Journal('UPDATE');
+				}
+			}
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`fluxograma_item`
+				SET
+					`cor_id` = null
+				WHERE
+					`cor_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+		/**
+		 * Deletes an associated FluxogramaItem
+		 * @param FluxogramaItem $objFluxogramaItem
+		 * @return void
+		*/ 
+		public function DeleteAssociatedFluxogramaItem(FluxogramaItem $objFluxogramaItem) {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateFluxogramaItem on this unsaved Cor.');
+			if ((is_null($objFluxogramaItem->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateFluxogramaItem on this Cor with an unsaved FluxogramaItem.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Cor::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`fluxograma_item`
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objFluxogramaItem->Id) . ' AND
+					`cor_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+
+			// Journaling
+			if ($objDatabase->JournalingDatabase) {
+				$objFluxogramaItem->Journal('DELETE');
+			}
+		}
+
+		/**
+		 * Deletes all associated FluxogramaItems
+		 * @return void
+		*/ 
+		public function DeleteAllFluxogramaItems() {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateFluxogramaItem on this unsaved Cor.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Cor::GetDatabase();
+
+			// Journaling
+			if ($objDatabase->JournalingDatabase) {
+				foreach (FluxogramaItem::LoadArrayByCorId($this->intId) as $objFluxogramaItem) {
+					$objFluxogramaItem->Journal('DELETE');
+				}
+			}
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`fluxograma_item`
 				WHERE
 					`cor_id` = ' . $objDatabase->SqlVariable($this->intId) . '
 			');
@@ -1450,7 +1686,8 @@
 	 * @property-read QQNode $Id
 	 * @property-read QQNode $Nome
 	 * @property-read QQNodeCorReferencia $Referencia
-	 * @property-read QQReverseReferenceNodeOrdemProducaoGrade $OrdemProducaoGrade
+	 * @property-read QQReverseReferenceNodeComandoPeca $ComandoPeca
+	 * @property-read QQReverseReferenceNodeFluxogramaItem $FluxogramaItem
 	 */
 	class QQNodeCor extends QQNode {
 		protected $strTableName = 'cor';
@@ -1464,8 +1701,10 @@
 					return new QQNode('nome', 'Nome', 'string', $this);
 				case 'Referencia':
 					return new QQNodeCorReferencia($this);
-				case 'OrdemProducaoGrade':
-					return new QQReverseReferenceNodeOrdemProducaoGrade($this, 'ordemproducaograde', 'reverse_reference', 'cor_id');
+				case 'ComandoPeca':
+					return new QQReverseReferenceNodeComandoPeca($this, 'comandopeca', 'reverse_reference', 'cor_id');
+				case 'FluxogramaItem':
+					return new QQReverseReferenceNodeFluxogramaItem($this, 'fluxogramaitem', 'reverse_reference', 'cor_id');
 
 				case '_PrimaryKeyNode':
 					return new QQNode('id', 'Id', 'integer', $this);
@@ -1484,7 +1723,8 @@
 	 * @property-read QQNode $Id
 	 * @property-read QQNode $Nome
 	 * @property-read QQNodeCorReferencia $Referencia
-	 * @property-read QQReverseReferenceNodeOrdemProducaoGrade $OrdemProducaoGrade
+	 * @property-read QQReverseReferenceNodeComandoPeca $ComandoPeca
+	 * @property-read QQReverseReferenceNodeFluxogramaItem $FluxogramaItem
 	 * @property-read QQNode $_PrimaryKeyNode
 	 */
 	class QQReverseReferenceNodeCor extends QQReverseReferenceNode {
@@ -1499,8 +1739,10 @@
 					return new QQNode('nome', 'Nome', 'string', $this);
 				case 'Referencia':
 					return new QQNodeCorReferencia($this);
-				case 'OrdemProducaoGrade':
-					return new QQReverseReferenceNodeOrdemProducaoGrade($this, 'ordemproducaograde', 'reverse_reference', 'cor_id');
+				case 'ComandoPeca':
+					return new QQReverseReferenceNodeComandoPeca($this, 'comandopeca', 'reverse_reference', 'cor_id');
+				case 'FluxogramaItem':
+					return new QQReverseReferenceNodeFluxogramaItem($this, 'fluxogramaitem', 'reverse_reference', 'cor_id');
 
 				case '_PrimaryKeyNode':
 					return new QQNode('id', 'Id', 'integer', $this);

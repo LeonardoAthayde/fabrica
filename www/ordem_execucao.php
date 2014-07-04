@@ -19,7 +19,7 @@
 			$this->pxyConfirm_Create();
 			$this->lblSelected_Create();
 			QApplication::ExecuteJavaScript("SelectedListGroup();");
-			$this->SetPollingProcessor('OrdemExecucaoForm_Poling', $this, 1000 * 60);
+			$this->SetPollingProcessor('OrdemExecucaoForm_Poling', $this, 1000 * 5);
 		}
 		
 		protected function OrdemExecucaoForm_Poling(){
@@ -126,6 +126,7 @@
 						$objCostureiraProducao->QuantidadeRealizada = 0;
 						$objCostureiraProducao->QuantidadeEstocado = 0;
 						$objCostureiraProducao->Concluido = false;
+						$objCostureiraProducao->TempoPrevisto = $objBalancoAcoes->FluxogramaItemReal->TempoExecucao*$lstControl->SelectedValue;
 						$objCostureiraProducao->Save();
 						
 						$objBalancoAcoes->QuantidadeDisponivel-= $lstControl->SelectedValue;

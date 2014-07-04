@@ -29,6 +29,7 @@
 		protected $lblId;
 		protected $txtNome;
 		protected $txtSenha;
+		protected $lstCostureira;
 
 		// Other ListBoxes (if applicable) via Unique ReverseReferences and ManyToMany References
 		protected $lstMenus;
@@ -74,6 +75,7 @@
 			$this->lblId = $this->mctUsuario->lblId_Create();
 			$this->txtNome = $this->mctUsuario->txtNome_Create();
 			$this->txtSenha = $this->mctUsuario->txtSenha_Create();
+			$this->lstCostureira = $this->mctUsuario->lstCostureira_Create();
 			$this->lstMenus = $this->mctUsuario->lstMenus_Create();
 
 			// Create Buttons and Actions on this Form

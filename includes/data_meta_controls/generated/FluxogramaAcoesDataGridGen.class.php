@@ -295,6 +295,8 @@
 			} else if (is_string($mixContent)) switch ($mixContent) {
 				case 'Id': return QQN::FluxogramaAcoes()->Id;
 				case 'Nome': return QQN::FluxogramaAcoes()->Nome;
+				case 'MaquinaId': return QQN::FluxogramaAcoes()->MaquinaId;
+				case 'Maquina': return QQN::FluxogramaAcoes()->Maquina;
 				default: throw new QCallerException('Simple Property not found in FluxogramaAcoesDataGrid content: ' . $mixContent);
 			} else if ($mixContent instanceof QQAssociationNode)
 				throw new QCallerException('Content QQNode cannot go through any "To Many" association nodes.');

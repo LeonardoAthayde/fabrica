@@ -22,11 +22,11 @@
 
 		<?php $this->lstReferencia->RenderWithName(); ?>
 
+		<?php $this->lstCor->RenderWithName(); ?>
+
 		<?php $this->lstFluxogramaAcoes->RenderWithName(); ?>
 
-		<?php $this->lstMaquina->RenderWithName(); ?>
-
-		<?php $this->txtTempo->RenderWithName(); ?>
+		<?php $this->lstFluxogramaAcoesTempo->RenderWithName(); ?>
 
 		<?php $this->txtProfundidade->RenderWithName(); ?>
 

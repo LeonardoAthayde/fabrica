@@ -17,9 +17,14 @@
 	 * @subpackage GeneratedDataObjects
 	 * @property integer $Id the value for intId (Read-Only PK)
 	 * @property string $Nome the value for strNome (Unique)
-	 * @property integer $Codigo the value for intCodigo (Not Null)
+	 * @property string $Codigo the value for strCodigo (Not Null)
+	 * @property double $Metro the value for fltMetro (Not Null)
+	 * @property ComandoPeca $_ComandoPeca the value for the private _objComandoPeca (Read-Only) if set due to an expansion on the comando_peca.tecido_id reverse relationship
+	 * @property ComandoPeca[] $_ComandoPecaArray the value for the private _objComandoPecaArray (Read-Only) if set due to an ExpandAsArray on the comando_peca.tecido_id reverse relationship
 	 * @property Referencia $_Referencia the value for the private _objReferencia (Read-Only) if set due to an expansion on the referencia.tecido_id reverse relationship
 	 * @property Referencia[] $_ReferenciaArray the value for the private _objReferenciaArray (Read-Only) if set due to an ExpandAsArray on the referencia.tecido_id reverse relationship
+	 * @property ReferenciaRendimento $_ReferenciaRendimento the value for the private _objReferenciaRendimento (Read-Only) if set due to an expansion on the referencia_rendimento.tecido_id reverse relationship
+	 * @property ReferenciaRendimento[] $_ReferenciaRendimentoArray the value for the private _objReferenciaRendimentoArray (Read-Only) if set due to an ExpandAsArray on the referencia_rendimento.tecido_id reverse relationship
 	 * @property boolean $__Restored whether or not this object was restored from the database (as opposed to created new)
 	 */
 	class TecidoGen extends QBaseClass {
@@ -47,11 +52,36 @@
 
 		/**
 		 * Protected member variable that maps to the database column tecido.codigo
-		 * @var integer intCodigo
+		 * @var string strCodigo
 		 */
-		protected $intCodigo;
+		protected $strCodigo;
+		const CodigoMaxLength = 2;
 		const CodigoDefault = null;
 
+
+		/**
+		 * Protected member variable that maps to the database column tecido.metro
+		 * @var double fltMetro
+		 */
+		protected $fltMetro;
+		const MetroDefault = null;
+
+
+		/**
+		 * Private member variable that stores a reference to a single ComandoPeca object
+		 * (of type ComandoPeca), if this Tecido object was restored with
+		 * an expansion on the comando_peca association table.
+		 * @var ComandoPeca _objComandoPeca;
+		 */
+		private $_objComandoPeca;
+
+		/**
+		 * Private member variable that stores a reference to an array of ComandoPeca objects
+		 * (of type ComandoPeca[]), if this Tecido object was restored with
+		 * an ExpandAsArray on the comando_peca association table.
+		 * @var ComandoPeca[] _objComandoPecaArray;
+		 */
+		private $_objComandoPecaArray = array();
 
 		/**
 		 * Private member variable that stores a reference to a single Referencia object
@@ -68,6 +98,22 @@
 		 * @var Referencia[] _objReferenciaArray;
 		 */
 		private $_objReferenciaArray = array();
+
+		/**
+		 * Private member variable that stores a reference to a single ReferenciaRendimento object
+		 * (of type ReferenciaRendimento), if this Tecido object was restored with
+		 * an expansion on the referencia_rendimento association table.
+		 * @var ReferenciaRendimento _objReferenciaRendimento;
+		 */
+		private $_objReferenciaRendimento;
+
+		/**
+		 * Private member variable that stores a reference to an array of ReferenciaRendimento objects
+		 * (of type ReferenciaRendimento[]), if this Tecido object was restored with
+		 * an ExpandAsArray on the referencia_rendimento association table.
+		 * @var ReferenciaRendimento[] _objReferenciaRendimentoArray;
+		 */
+		private $_objReferenciaRendimentoArray = array();
 
 		/**
 		 * Protected array of virtual attributes for this object (e.g. extra/other calculated and/or non-object bound
@@ -404,6 +450,7 @@
 			$objBuilder->AddSelectItem($strTableName, 'id', $strAliasPrefix . 'id');
 			$objBuilder->AddSelectItem($strTableName, 'nome', $strAliasPrefix . 'nome');
 			$objBuilder->AddSelectItem($strTableName, 'codigo', $strAliasPrefix . 'codigo');
+			$objBuilder->AddSelectItem($strTableName, 'metro', $strAliasPrefix . 'metro');
 		}
 
 
@@ -442,6 +489,20 @@
 					$strAliasPrefix = 'tecido__';
 
 
+				$strAlias = $strAliasPrefix . 'comandopeca__id';
+				$strAliasName = array_key_exists($strAlias, $strColumnAliasArray) ? $strColumnAliasArray[$strAlias] : $strAlias;
+				if ((array_key_exists($strAlias, $strExpandAsArrayNodes)) &&
+					(!is_null($objDbRow->GetColumn($strAliasName)))) {
+					if ($intPreviousChildItemCount = count($objPreviousItem->_objComandoPecaArray)) {
+						$objPreviousChildItem = $objPreviousItem->_objComandoPecaArray[$intPreviousChildItemCount - 1];
+						$objChildItem = ComandoPeca::InstantiateDbRow($objDbRow, $strAliasPrefix . 'comandopeca__', $strExpandAsArrayNodes, $objPreviousChildItem, $strColumnAliasArray);
+						if ($objChildItem)
+							$objPreviousItem->_objComandoPecaArray[] = $objChildItem;
+					} else
+						$objPreviousItem->_objComandoPecaArray[] = ComandoPeca::InstantiateDbRow($objDbRow, $strAliasPrefix . 'comandopeca__', $strExpandAsArrayNodes, null, $strColumnAliasArray);
+					$blnExpandedViaArray = true;
+				}
+
 				$strAlias = $strAliasPrefix . 'referencia__id';
 				$strAliasName = array_key_exists($strAlias, $strColumnAliasArray) ? $strColumnAliasArray[$strAlias] : $strAlias;
 				if ((array_key_exists($strAlias, $strExpandAsArrayNodes)) &&
@@ -453,6 +514,20 @@
 							$objPreviousItem->_objReferenciaArray[] = $objChildItem;
 					} else
 						$objPreviousItem->_objReferenciaArray[] = Referencia::InstantiateDbRow($objDbRow, $strAliasPrefix . 'referencia__', $strExpandAsArrayNodes, null, $strColumnAliasArray);
+					$blnExpandedViaArray = true;
+				}
+
+				$strAlias = $strAliasPrefix . 'referenciarendimento__id';
+				$strAliasName = array_key_exists($strAlias, $strColumnAliasArray) ? $strColumnAliasArray[$strAlias] : $strAlias;
+				if ((array_key_exists($strAlias, $strExpandAsArrayNodes)) &&
+					(!is_null($objDbRow->GetColumn($strAliasName)))) {
+					if ($intPreviousChildItemCount = count($objPreviousItem->_objReferenciaRendimentoArray)) {
+						$objPreviousChildItem = $objPreviousItem->_objReferenciaRendimentoArray[$intPreviousChildItemCount - 1];
+						$objChildItem = ReferenciaRendimento::InstantiateDbRow($objDbRow, $strAliasPrefix . 'referenciarendimento__', $strExpandAsArrayNodes, $objPreviousChildItem, $strColumnAliasArray);
+						if ($objChildItem)
+							$objPreviousItem->_objReferenciaRendimentoArray[] = $objChildItem;
+					} else
+						$objPreviousItem->_objReferenciaRendimentoArray[] = ReferenciaRendimento::InstantiateDbRow($objDbRow, $strAliasPrefix . 'referenciarendimento__', $strExpandAsArrayNodes, null, $strColumnAliasArray);
 					$blnExpandedViaArray = true;
 				}
 
@@ -472,7 +547,9 @@
 			$strAliasName = array_key_exists($strAliasPrefix . 'nome', $strColumnAliasArray) ? $strColumnAliasArray[$strAliasPrefix . 'nome'] : $strAliasPrefix . 'nome';
 			$objToReturn->strNome = $objDbRow->GetColumn($strAliasName, 'VarChar');
 			$strAliasName = array_key_exists($strAliasPrefix . 'codigo', $strColumnAliasArray) ? $strColumnAliasArray[$strAliasPrefix . 'codigo'] : $strAliasPrefix . 'codigo';
-			$objToReturn->intCodigo = $objDbRow->GetColumn($strAliasName, 'Integer');
+			$objToReturn->strCodigo = $objDbRow->GetColumn($strAliasName, 'VarChar');
+			$strAliasName = array_key_exists($strAliasPrefix . 'metro', $strColumnAliasArray) ? $strColumnAliasArray[$strAliasPrefix . 'metro'] : $strAliasPrefix . 'metro';
+			$objToReturn->fltMetro = $objDbRow->GetColumn($strAliasName, 'Float');
 
 			// Instantiate Virtual Attributes
 			foreach ($objDbRow->GetColumnNameArray() as $strColumnName => $mixValue) {
@@ -489,6 +566,16 @@
 
 
 
+			// Check for ComandoPeca Virtual Binding
+			$strAlias = $strAliasPrefix . 'comandopeca__id';
+			$strAliasName = array_key_exists($strAlias, $strColumnAliasArray) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			if (!is_null($objDbRow->GetColumn($strAliasName))) {
+				if (($strExpandAsArrayNodes) && (array_key_exists($strAlias, $strExpandAsArrayNodes)))
+					$objToReturn->_objComandoPecaArray[] = ComandoPeca::InstantiateDbRow($objDbRow, $strAliasPrefix . 'comandopeca__', $strExpandAsArrayNodes, null, $strColumnAliasArray);
+				else
+					$objToReturn->_objComandoPeca = ComandoPeca::InstantiateDbRow($objDbRow, $strAliasPrefix . 'comandopeca__', $strExpandAsArrayNodes, null, $strColumnAliasArray);
+			}
+
 			// Check for Referencia Virtual Binding
 			$strAlias = $strAliasPrefix . 'referencia__id';
 			$strAliasName = array_key_exists($strAlias, $strColumnAliasArray) ? $strColumnAliasArray[$strAlias] : $strAlias;
@@ -497,6 +584,16 @@
 					$objToReturn->_objReferenciaArray[] = Referencia::InstantiateDbRow($objDbRow, $strAliasPrefix . 'referencia__', $strExpandAsArrayNodes, null, $strColumnAliasArray);
 				else
 					$objToReturn->_objReferencia = Referencia::InstantiateDbRow($objDbRow, $strAliasPrefix . 'referencia__', $strExpandAsArrayNodes, null, $strColumnAliasArray);
+			}
+
+			// Check for ReferenciaRendimento Virtual Binding
+			$strAlias = $strAliasPrefix . 'referenciarendimento__id';
+			$strAliasName = array_key_exists($strAlias, $strColumnAliasArray) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			if (!is_null($objDbRow->GetColumn($strAliasName))) {
+				if (($strExpandAsArrayNodes) && (array_key_exists($strAlias, $strExpandAsArrayNodes)))
+					$objToReturn->_objReferenciaRendimentoArray[] = ReferenciaRendimento::InstantiateDbRow($objDbRow, $strAliasPrefix . 'referenciarendimento__', $strExpandAsArrayNodes, null, $strColumnAliasArray);
+				else
+					$objToReturn->_objReferenciaRendimento = ReferenciaRendimento::InstantiateDbRow($objDbRow, $strAliasPrefix . 'referenciarendimento__', $strExpandAsArrayNodes, null, $strColumnAliasArray);
 			}
 
 			return $objToReturn;
@@ -627,10 +724,12 @@
 					$objDatabase->NonQuery('
 						INSERT INTO `tecido` (
 							`nome`,
-							`codigo`
+							`codigo`,
+							`metro`
 						) VALUES (
 							' . $objDatabase->SqlVariable($this->strNome) . ',
-							' . $objDatabase->SqlVariable($this->intCodigo) . '
+							' . $objDatabase->SqlVariable($this->strCodigo) . ',
+							' . $objDatabase->SqlVariable($this->fltMetro) . '
 						)
 					');
 
@@ -651,7 +750,8 @@
 							`tecido`
 						SET
 							`nome` = ' . $objDatabase->SqlVariable($this->strNome) . ',
-							`codigo` = ' . $objDatabase->SqlVariable($this->intCodigo) . '
+							`codigo` = ' . $objDatabase->SqlVariable($this->strCodigo) . ',
+							`metro` = ' . $objDatabase->SqlVariable($this->fltMetro) . '
 						WHERE
 							`id` = ' . $objDatabase->SqlVariable($this->intId) . '
 					');
@@ -737,7 +837,8 @@
 
 			// Update $this's local variables to match
 			$this->strNome = $objReloaded->strNome;
-			$this->intCodigo = $objReloaded->intCodigo;
+			$this->strCodigo = $objReloaded->strCodigo;
+			$this->fltMetro = $objReloaded->fltMetro;
 		}
 
 		/**
@@ -753,13 +854,15 @@
 					`id`,
 					`nome`,
 					`codigo`,
+					`metro`,
 					__sys_login_id,
 					__sys_action,
 					__sys_date
 				) VALUES (
 					' . $objDatabase->SqlVariable($this->intId) . ',
 					' . $objDatabase->SqlVariable($this->strNome) . ',
-					' . $objDatabase->SqlVariable($this->intCodigo) . ',
+					' . $objDatabase->SqlVariable($this->strCodigo) . ',
+					' . $objDatabase->SqlVariable($this->fltMetro) . ',
 					' . (($objDatabase->JournaledById) ? $objDatabase->JournaledById : 'NULL') . ',
 					' . $objDatabase->SqlVariable($strJournalCommand) . ',
 					NOW()
@@ -821,9 +924,14 @@
 					return $this->strNome;
 
 				case 'Codigo':
-					// Gets the value for intCodigo (Not Null)
-					// @return integer
-					return $this->intCodigo;
+					// Gets the value for strCodigo (Not Null)
+					// @return string
+					return $this->strCodigo;
+
+				case 'Metro':
+					// Gets the value for fltMetro (Not Null)
+					// @return double
+					return $this->fltMetro;
 
 
 				///////////////////
@@ -834,6 +942,18 @@
 				// Virtual Object References (Many to Many and Reverse References)
 				// (If restored via a "Many-to" expansion)
 				////////////////////////////
+
+				case '_ComandoPeca':
+					// Gets the value for the private _objComandoPeca (Read-Only)
+					// if set due to an expansion on the comando_peca.tecido_id reverse relationship
+					// @return ComandoPeca
+					return $this->_objComandoPeca;
+
+				case '_ComandoPecaArray':
+					// Gets the value for the private _objComandoPecaArray (Read-Only)
+					// if set due to an ExpandAsArray on the comando_peca.tecido_id reverse relationship
+					// @return ComandoPeca[]
+					return (array) $this->_objComandoPecaArray;
 
 				case '_Referencia':
 					// Gets the value for the private _objReferencia (Read-Only)
@@ -846,6 +966,18 @@
 					// if set due to an ExpandAsArray on the referencia.tecido_id reverse relationship
 					// @return Referencia[]
 					return (array) $this->_objReferenciaArray;
+
+				case '_ReferenciaRendimento':
+					// Gets the value for the private _objReferenciaRendimento (Read-Only)
+					// if set due to an expansion on the referencia_rendimento.tecido_id reverse relationship
+					// @return ReferenciaRendimento
+					return $this->_objReferenciaRendimento;
+
+				case '_ReferenciaRendimentoArray':
+					// Gets the value for the private _objReferenciaRendimentoArray (Read-Only)
+					// if set due to an ExpandAsArray on the referencia_rendimento.tecido_id reverse relationship
+					// @return ReferenciaRendimento[]
+					return (array) $this->_objReferenciaRendimentoArray;
 
 
 				case '__Restored':
@@ -886,11 +1018,22 @@
 					}
 
 				case 'Codigo':
-					// Sets the value for intCodigo (Not Null)
-					// @param integer $mixValue
-					// @return integer
+					// Sets the value for strCodigo (Not Null)
+					// @param string $mixValue
+					// @return string
 					try {
-						return ($this->intCodigo = QType::Cast($mixValue, QType::Integer));
+						return ($this->strCodigo = QType::Cast($mixValue, QType::String));
+					} catch (QCallerException $objExc) {
+						$objExc->IncrementOffset();
+						throw $objExc;
+					}
+
+				case 'Metro':
+					// Sets the value for fltMetro (Not Null)
+					// @param double $mixValue
+					// @return double
+					try {
+						return ($this->fltMetro = QType::Cast($mixValue, QType::Float));
 					} catch (QCallerException $objExc) {
 						$objExc->IncrementOffset();
 						throw $objExc;
@@ -926,6 +1069,188 @@
 		///////////////////////////////
 		// ASSOCIATED OBJECTS' METHODS
 		///////////////////////////////
+
+			
+		
+		// Related Objects' Methods for ComandoPeca
+		//-------------------------------------------------------------------
+
+		/**
+		 * Gets all associated ComandoPecas as an array of ComandoPeca objects
+		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
+		 * @return ComandoPeca[]
+		*/ 
+		public function GetComandoPecaArray($objOptionalClauses = null) {
+			if ((is_null($this->intId)))
+				return array();
+
+			try {
+				return ComandoPeca::LoadArrayByTecidoId($this->intId, $objOptionalClauses);
+			} catch (QCallerException $objExc) {
+				$objExc->IncrementOffset();
+				throw $objExc;
+			}
+		}
+
+		/**
+		 * Counts all associated ComandoPecas
+		 * @return int
+		*/ 
+		public function CountComandoPecas() {
+			if ((is_null($this->intId)))
+				return 0;
+
+			return ComandoPeca::CountByTecidoId($this->intId);
+		}
+
+		/**
+		 * Associates a ComandoPeca
+		 * @param ComandoPeca $objComandoPeca
+		 * @return void
+		*/ 
+		public function AssociateComandoPeca(ComandoPeca $objComandoPeca) {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociateComandoPeca on this unsaved Tecido.');
+			if ((is_null($objComandoPeca->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociateComandoPeca on this Tecido with an unsaved ComandoPeca.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Tecido::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`comando_peca`
+				SET
+					`tecido_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objComandoPeca->Id) . '
+			');
+
+			// Journaling (if applicable)
+			if ($objDatabase->JournalingDatabase) {
+				$objComandoPeca->TecidoId = $this->intId;
+				$objComandoPeca->Journal('UPDATE');
+			}
+		}
+
+		/**
+		 * Unassociates a ComandoPeca
+		 * @param ComandoPeca $objComandoPeca
+		 * @return void
+		*/ 
+		public function UnassociateComandoPeca(ComandoPeca $objComandoPeca) {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateComandoPeca on this unsaved Tecido.');
+			if ((is_null($objComandoPeca->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateComandoPeca on this Tecido with an unsaved ComandoPeca.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Tecido::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`comando_peca`
+				SET
+					`tecido_id` = null
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objComandoPeca->Id) . ' AND
+					`tecido_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+
+			// Journaling
+			if ($objDatabase->JournalingDatabase) {
+				$objComandoPeca->TecidoId = null;
+				$objComandoPeca->Journal('UPDATE');
+			}
+		}
+
+		/**
+		 * Unassociates all ComandoPecas
+		 * @return void
+		*/ 
+		public function UnassociateAllComandoPecas() {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateComandoPeca on this unsaved Tecido.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Tecido::GetDatabase();
+
+			// Journaling
+			if ($objDatabase->JournalingDatabase) {
+				foreach (ComandoPeca::LoadArrayByTecidoId($this->intId) as $objComandoPeca) {
+					$objComandoPeca->TecidoId = null;
+					$objComandoPeca->Journal('UPDATE');
+				}
+			}
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`comando_peca`
+				SET
+					`tecido_id` = null
+				WHERE
+					`tecido_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+		/**
+		 * Deletes an associated ComandoPeca
+		 * @param ComandoPeca $objComandoPeca
+		 * @return void
+		*/ 
+		public function DeleteAssociatedComandoPeca(ComandoPeca $objComandoPeca) {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateComandoPeca on this unsaved Tecido.');
+			if ((is_null($objComandoPeca->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateComandoPeca on this Tecido with an unsaved ComandoPeca.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Tecido::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`comando_peca`
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objComandoPeca->Id) . ' AND
+					`tecido_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+
+			// Journaling
+			if ($objDatabase->JournalingDatabase) {
+				$objComandoPeca->Journal('DELETE');
+			}
+		}
+
+		/**
+		 * Deletes all associated ComandoPecas
+		 * @return void
+		*/ 
+		public function DeleteAllComandoPecas() {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateComandoPeca on this unsaved Tecido.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Tecido::GetDatabase();
+
+			// Journaling
+			if ($objDatabase->JournalingDatabase) {
+				foreach (ComandoPeca::LoadArrayByTecidoId($this->intId) as $objComandoPeca) {
+					$objComandoPeca->Journal('DELETE');
+				}
+			}
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`comando_peca`
+				WHERE
+					`tecido_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
 
 			
 		
@@ -1109,6 +1434,188 @@
 			');
 		}
 
+			
+		
+		// Related Objects' Methods for ReferenciaRendimento
+		//-------------------------------------------------------------------
+
+		/**
+		 * Gets all associated ReferenciaRendimentos as an array of ReferenciaRendimento objects
+		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
+		 * @return ReferenciaRendimento[]
+		*/ 
+		public function GetReferenciaRendimentoArray($objOptionalClauses = null) {
+			if ((is_null($this->intId)))
+				return array();
+
+			try {
+				return ReferenciaRendimento::LoadArrayByTecidoId($this->intId, $objOptionalClauses);
+			} catch (QCallerException $objExc) {
+				$objExc->IncrementOffset();
+				throw $objExc;
+			}
+		}
+
+		/**
+		 * Counts all associated ReferenciaRendimentos
+		 * @return int
+		*/ 
+		public function CountReferenciaRendimentos() {
+			if ((is_null($this->intId)))
+				return 0;
+
+			return ReferenciaRendimento::CountByTecidoId($this->intId);
+		}
+
+		/**
+		 * Associates a ReferenciaRendimento
+		 * @param ReferenciaRendimento $objReferenciaRendimento
+		 * @return void
+		*/ 
+		public function AssociateReferenciaRendimento(ReferenciaRendimento $objReferenciaRendimento) {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociateReferenciaRendimento on this unsaved Tecido.');
+			if ((is_null($objReferenciaRendimento->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociateReferenciaRendimento on this Tecido with an unsaved ReferenciaRendimento.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Tecido::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`referencia_rendimento`
+				SET
+					`tecido_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objReferenciaRendimento->Id) . '
+			');
+
+			// Journaling (if applicable)
+			if ($objDatabase->JournalingDatabase) {
+				$objReferenciaRendimento->TecidoId = $this->intId;
+				$objReferenciaRendimento->Journal('UPDATE');
+			}
+		}
+
+		/**
+		 * Unassociates a ReferenciaRendimento
+		 * @param ReferenciaRendimento $objReferenciaRendimento
+		 * @return void
+		*/ 
+		public function UnassociateReferenciaRendimento(ReferenciaRendimento $objReferenciaRendimento) {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateReferenciaRendimento on this unsaved Tecido.');
+			if ((is_null($objReferenciaRendimento->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateReferenciaRendimento on this Tecido with an unsaved ReferenciaRendimento.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Tecido::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`referencia_rendimento`
+				SET
+					`tecido_id` = null
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objReferenciaRendimento->Id) . ' AND
+					`tecido_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+
+			// Journaling
+			if ($objDatabase->JournalingDatabase) {
+				$objReferenciaRendimento->TecidoId = null;
+				$objReferenciaRendimento->Journal('UPDATE');
+			}
+		}
+
+		/**
+		 * Unassociates all ReferenciaRendimentos
+		 * @return void
+		*/ 
+		public function UnassociateAllReferenciaRendimentos() {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateReferenciaRendimento on this unsaved Tecido.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Tecido::GetDatabase();
+
+			// Journaling
+			if ($objDatabase->JournalingDatabase) {
+				foreach (ReferenciaRendimento::LoadArrayByTecidoId($this->intId) as $objReferenciaRendimento) {
+					$objReferenciaRendimento->TecidoId = null;
+					$objReferenciaRendimento->Journal('UPDATE');
+				}
+			}
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`referencia_rendimento`
+				SET
+					`tecido_id` = null
+				WHERE
+					`tecido_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+		/**
+		 * Deletes an associated ReferenciaRendimento
+		 * @param ReferenciaRendimento $objReferenciaRendimento
+		 * @return void
+		*/ 
+		public function DeleteAssociatedReferenciaRendimento(ReferenciaRendimento $objReferenciaRendimento) {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateReferenciaRendimento on this unsaved Tecido.');
+			if ((is_null($objReferenciaRendimento->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateReferenciaRendimento on this Tecido with an unsaved ReferenciaRendimento.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Tecido::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`referencia_rendimento`
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objReferenciaRendimento->Id) . ' AND
+					`tecido_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+
+			// Journaling
+			if ($objDatabase->JournalingDatabase) {
+				$objReferenciaRendimento->Journal('DELETE');
+			}
+		}
+
+		/**
+		 * Deletes all associated ReferenciaRendimentos
+		 * @return void
+		*/ 
+		public function DeleteAllReferenciaRendimentos() {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateReferenciaRendimento on this unsaved Tecido.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Tecido::GetDatabase();
+
+			// Journaling
+			if ($objDatabase->JournalingDatabase) {
+				foreach (ReferenciaRendimento::LoadArrayByTecidoId($this->intId) as $objReferenciaRendimento) {
+					$objReferenciaRendimento->Journal('DELETE');
+				}
+			}
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`referencia_rendimento`
+				WHERE
+					`tecido_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
 
 
 
@@ -1121,7 +1628,8 @@
 			$strToReturn = '<complexType name="Tecido"><sequence>';
 			$strToReturn .= '<element name="Id" type="xsd:int"/>';
 			$strToReturn .= '<element name="Nome" type="xsd:string"/>';
-			$strToReturn .= '<element name="Codigo" type="xsd:int"/>';
+			$strToReturn .= '<element name="Codigo" type="xsd:string"/>';
+			$strToReturn .= '<element name="Metro" type="xsd:float"/>';
 			$strToReturn .= '<element name="__blnRestored" type="xsd:boolean"/>';
 			$strToReturn .= '</sequence></complexType>';
 			return $strToReturn;
@@ -1149,7 +1657,9 @@
 			if (property_exists($objSoapObject, 'Nome'))
 				$objToReturn->strNome = $objSoapObject->Nome;
 			if (property_exists($objSoapObject, 'Codigo'))
-				$objToReturn->intCodigo = $objSoapObject->Codigo;
+				$objToReturn->strCodigo = $objSoapObject->Codigo;
+			if (property_exists($objSoapObject, 'Metro'))
+				$objToReturn->fltMetro = $objSoapObject->Metro;
 			if (property_exists($objSoapObject, '__blnRestored'))
 				$objToReturn->__blnRestored = $objSoapObject->__blnRestored;
 			return $objToReturn;
@@ -1186,7 +1696,10 @@
 	 * @property-read QQNode $Id
 	 * @property-read QQNode $Nome
 	 * @property-read QQNode $Codigo
+	 * @property-read QQNode $Metro
+	 * @property-read QQReverseReferenceNodeComandoPeca $ComandoPeca
 	 * @property-read QQReverseReferenceNodeReferencia $Referencia
+	 * @property-read QQReverseReferenceNodeReferenciaRendimento $ReferenciaRendimento
 	 */
 	class QQNodeTecido extends QQNode {
 		protected $strTableName = 'tecido';
@@ -1199,9 +1712,15 @@
 				case 'Nome':
 					return new QQNode('nome', 'Nome', 'string', $this);
 				case 'Codigo':
-					return new QQNode('codigo', 'Codigo', 'integer', $this);
+					return new QQNode('codigo', 'Codigo', 'string', $this);
+				case 'Metro':
+					return new QQNode('metro', 'Metro', 'double', $this);
+				case 'ComandoPeca':
+					return new QQReverseReferenceNodeComandoPeca($this, 'comandopeca', 'reverse_reference', 'tecido_id');
 				case 'Referencia':
 					return new QQReverseReferenceNodeReferencia($this, 'referencia', 'reverse_reference', 'tecido_id');
+				case 'ReferenciaRendimento':
+					return new QQReverseReferenceNodeReferenciaRendimento($this, 'referenciarendimento', 'reverse_reference', 'tecido_id');
 
 				case '_PrimaryKeyNode':
 					return new QQNode('id', 'Id', 'integer', $this);
@@ -1220,7 +1739,10 @@
 	 * @property-read QQNode $Id
 	 * @property-read QQNode $Nome
 	 * @property-read QQNode $Codigo
+	 * @property-read QQNode $Metro
+	 * @property-read QQReverseReferenceNodeComandoPeca $ComandoPeca
 	 * @property-read QQReverseReferenceNodeReferencia $Referencia
+	 * @property-read QQReverseReferenceNodeReferenciaRendimento $ReferenciaRendimento
 	 * @property-read QQNode $_PrimaryKeyNode
 	 */
 	class QQReverseReferenceNodeTecido extends QQReverseReferenceNode {
@@ -1234,9 +1756,15 @@
 				case 'Nome':
 					return new QQNode('nome', 'Nome', 'string', $this);
 				case 'Codigo':
-					return new QQNode('codigo', 'Codigo', 'integer', $this);
+					return new QQNode('codigo', 'Codigo', 'string', $this);
+				case 'Metro':
+					return new QQNode('metro', 'Metro', 'double', $this);
+				case 'ComandoPeca':
+					return new QQReverseReferenceNodeComandoPeca($this, 'comandopeca', 'reverse_reference', 'tecido_id');
 				case 'Referencia':
 					return new QQReverseReferenceNodeReferencia($this, 'referencia', 'reverse_reference', 'tecido_id');
+				case 'ReferenciaRendimento':
+					return new QQReverseReferenceNodeReferenciaRendimento($this, 'referenciarendimento', 'reverse_reference', 'tecido_id');
 
 				case '_PrimaryKeyNode':
 					return new QQNode('id', 'Id', 'integer', $this);

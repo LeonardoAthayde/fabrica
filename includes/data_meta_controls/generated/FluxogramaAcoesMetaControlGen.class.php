@@ -20,6 +20,8 @@
 	 * property-read QLabel $IdLabel
 	 * property QTextBox $NomeControl
 	 * property-read QLabel $NomeLabel
+	 * property QListBox $MaquinaIdControl
+	 * property-read QLabel $MaquinaIdLabel
 	 * property-read string $TitleVerb a verb indicating whether or not this is being edited or created
 	 * property-read boolean $EditMode a boolean indicating whether or not this is being edited or created
 	 */
@@ -63,6 +65,12 @@
          */
 		protected $txtNome;
 
+        /**
+         * @var QListBox lstMaquina;
+         * @access protected
+         */
+		protected $lstMaquina;
+
 
 		// Controls that allow the viewing of FluxogramaAcoes's individual data fields
         /**
@@ -70,6 +78,12 @@
          * @access protected
          */
 		protected $lblNome;
+
+        /**
+         * @var QLabel lblMaquinaId
+         * @access protected
+         */
+		protected $lblMaquinaId;
 
 
 		// QListBox Controls (if applicable) to edit Unique ReverseReferences and ManyToMany References
@@ -211,6 +225,46 @@
 			return $this->lblNome;
 		}
 
+		/**
+		 * Create and setup QListBox lstMaquina
+		 * @param string $strControlId optional ControlId to use
+		 * @param QQCondition $objConditions override the default condition of QQ::All() to the query, itself
+		 * @param QQClause[] $objOptionalClauses additional optional QQClause object or array of QQClause objects for the query
+		 * @return QListBox
+		 */
+		public function lstMaquina_Create($strControlId = null, QQCondition $objCondition = null, $objOptionalClauses = null) {
+			$this->lstMaquina = new QListBox($this->objParentObject, $strControlId);
+			$this->lstMaquina->Name = QApplication::Translate('Maquina');
+			$this->lstMaquina->AddItem(QApplication::Translate('- Select One -'), null);
+
+			// Setup and perform the Query
+			if (is_null($objCondition)) $objCondition = QQ::All();
+			$objMaquinaCursor = Maquina::QueryCursor($objCondition, $objOptionalClauses);
+
+			// Iterate through the Cursor
+			while ($objMaquina = Maquina::InstantiateCursor($objMaquinaCursor)) {
+				$objListItem = new QListItem($objMaquina->__toString(), $objMaquina->Id);
+				if (($this->objFluxogramaAcoes->Maquina) && ($this->objFluxogramaAcoes->Maquina->Id == $objMaquina->Id))
+					$objListItem->Selected = true;
+				$this->lstMaquina->AddItem($objListItem);
+			}
+
+			// Return the QListBox
+			return $this->lstMaquina;
+		}
+
+		/**
+		 * Create and setup QLabel lblMaquinaId
+		 * @param string $strControlId optional ControlId to use
+		 * @return QLabel
+		 */
+		public function lblMaquinaId_Create($strControlId = null) {
+			$this->lblMaquinaId = new QLabel($this->objParentObject, $strControlId);
+			$this->lblMaquinaId->Name = QApplication::Translate('Maquina');
+			$this->lblMaquinaId->Text = ($this->objFluxogramaAcoes->Maquina) ? $this->objFluxogramaAcoes->Maquina->__toString() : null;
+			return $this->lblMaquinaId;
+		}
+
 
 
 		/**
@@ -226,6 +280,19 @@
 
 			if ($this->txtNome) $this->txtNome->Text = $this->objFluxogramaAcoes->Nome;
 			if ($this->lblNome) $this->lblNome->Text = $this->objFluxogramaAcoes->Nome;
+
+			if ($this->lstMaquina) {
+					$this->lstMaquina->RemoveAllItems();
+				$this->lstMaquina->AddItem(QApplication::Translate('- Select One -'), null);
+				$objMaquinaArray = Maquina::LoadAll();
+				if ($objMaquinaArray) foreach ($objMaquinaArray as $objMaquina) {
+					$objListItem = new QListItem($objMaquina->__toString(), $objMaquina->Id);
+					if (($this->objFluxogramaAcoes->Maquina) && ($this->objFluxogramaAcoes->Maquina->Id == $objMaquina->Id))
+						$objListItem->Selected = true;
+					$this->lstMaquina->AddItem($objListItem);
+				}
+			}
+			if ($this->lblMaquinaId) $this->lblMaquinaId->Text = ($this->objFluxogramaAcoes->Maquina) ? $this->objFluxogramaAcoes->Maquina->__toString() : null;
 
 		}
 
@@ -251,6 +318,7 @@
 			try {
 				// Update any fields for controls that have been created
 				if ($this->txtNome) $this->objFluxogramaAcoes->Nome = $this->txtNome->Text;
+				if ($this->lstMaquina) $this->objFluxogramaAcoes->MaquinaId = $this->lstMaquina->SelectedValue;
 
 				// Update any UniqueReverseReferences (if any) for controls that have been created for it
 
@@ -305,6 +373,12 @@
 				case 'NomeLabel':
 					if (!$this->lblNome) return $this->lblNome_Create();
 					return $this->lblNome;
+				case 'MaquinaIdControl':
+					if (!$this->lstMaquina) return $this->lstMaquina_Create();
+					return $this->lstMaquina;
+				case 'MaquinaIdLabel':
+					if (!$this->lblMaquinaId) return $this->lblMaquinaId_Create();
+					return $this->lblMaquinaId;
 				default:
 					try {
 						return parent::__get($strName);
@@ -331,6 +405,8 @@
 						return ($this->lblId = QType::Cast($mixValue, 'QControl'));
 					case 'NomeControl':
 						return ($this->txtNome = QType::Cast($mixValue, 'QControl'));
+					case 'MaquinaIdControl':
+						return ($this->lstMaquina = QType::Cast($mixValue, 'QControl'));
 					default:
 						return parent::__set($strName, $mixValue);
 				}

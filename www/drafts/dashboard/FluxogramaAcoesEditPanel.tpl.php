@@ -9,6 +9,8 @@
 
 		<?php $_CONTROL->txtNome->RenderWithName(); ?>
 
+		<?php $_CONTROL->lstMaquina->RenderWithName(); ?>
+
 	</div>
 
 	<div id="formActions">

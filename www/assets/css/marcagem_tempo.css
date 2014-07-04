@@ -1,0 +1,10 @@
+.panel-title{text-transform: uppercase;}
+
+.dropdown-menu li a{font-size: 18px; padding-top: 7px; padding-bottom: 7px}
+
+.progress{height: 30px;}
+.progress-bar{line-height: 30px; font-size: 18px;}
+
+.ajax-barra{position: absolute; height: 20px; width: 100%; top: -65px; left: 0px;}
+
+.navbar-fixed-bottom{height: 30px;}

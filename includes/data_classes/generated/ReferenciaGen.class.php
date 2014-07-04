@@ -19,17 +19,17 @@
 	 * @property string $Nome the value for strNome (Unique)
 	 * @property integer $ReferenciaCategoriaId the value for intReferenciaCategoriaId (Not Null)
 	 * @property string $Modelo the value for strModelo (Not Null)
-	 * @property integer $TecidoId the value for intTecidoId 
+	 * @property integer $TecidoId the value for intTecidoId (Not Null)
 	 * @property ReferenciaCategoria $ReferenciaCategoria the value for the ReferenciaCategoria object referenced by intReferenciaCategoriaId (Not Null)
-	 * @property Tecido $Tecido the value for the Tecido object referenced by intTecidoId 
+	 * @property Tecido $Tecido the value for the Tecido object referenced by intTecidoId (Not Null)
 	 * @property Cor $_Cor the value for the private _objCor (Read-Only) if set due to an expansion on the referencia_cor_assn association table
 	 * @property Cor[] $_CorArray the value for the private _objCorArray (Read-Only) if set due to an ExpandAsArray on the referencia_cor_assn association table
 	 * @property Tamanho $_Tamanho the value for the private _objTamanho (Read-Only) if set due to an expansion on the referencia_tamanho_assn association table
 	 * @property Tamanho[] $_TamanhoArray the value for the private _objTamanhoArray (Read-Only) if set due to an ExpandAsArray on the referencia_tamanho_assn association table
 	 * @property FluxogramaItem $_FluxogramaItem the value for the private _objFluxogramaItem (Read-Only) if set due to an expansion on the fluxograma_item.referencia_id reverse relationship
 	 * @property FluxogramaItem[] $_FluxogramaItemArray the value for the private _objFluxogramaItemArray (Read-Only) if set due to an ExpandAsArray on the fluxograma_item.referencia_id reverse relationship
-	 * @property OrdemProducao $_OrdemProducao the value for the private _objOrdemProducao (Read-Only) if set due to an expansion on the ordem_producao.referencia_id reverse relationship
-	 * @property OrdemProducao[] $_OrdemProducaoArray the value for the private _objOrdemProducaoArray (Read-Only) if set due to an ExpandAsArray on the ordem_producao.referencia_id reverse relationship
+	 * @property ReferenciaRendimento $_ReferenciaRendimento the value for the private _objReferenciaRendimento (Read-Only) if set due to an expansion on the referencia_rendimento.referencia_id reverse relationship
+	 * @property ReferenciaRendimento[] $_ReferenciaRendimentoArray the value for the private _objReferenciaRendimentoArray (Read-Only) if set due to an ExpandAsArray on the referencia_rendimento.referencia_id reverse relationship
 	 * @property boolean $__Restored whether or not this object was restored from the database (as opposed to created new)
 	 */
 	class ReferenciaGen extends QBaseClass {
@@ -129,20 +129,20 @@
 		private $_objFluxogramaItemArray = array();
 
 		/**
-		 * Private member variable that stores a reference to a single OrdemProducao object
-		 * (of type OrdemProducao), if this Referencia object was restored with
-		 * an expansion on the ordem_producao association table.
-		 * @var OrdemProducao _objOrdemProducao;
+		 * Private member variable that stores a reference to a single ReferenciaRendimento object
+		 * (of type ReferenciaRendimento), if this Referencia object was restored with
+		 * an expansion on the referencia_rendimento association table.
+		 * @var ReferenciaRendimento _objReferenciaRendimento;
 		 */
-		private $_objOrdemProducao;
+		private $_objReferenciaRendimento;
 
 		/**
-		 * Private member variable that stores a reference to an array of OrdemProducao objects
-		 * (of type OrdemProducao[]), if this Referencia object was restored with
-		 * an ExpandAsArray on the ordem_producao association table.
-		 * @var OrdemProducao[] _objOrdemProducaoArray;
+		 * Private member variable that stores a reference to an array of ReferenciaRendimento objects
+		 * (of type ReferenciaRendimento[]), if this Referencia object was restored with
+		 * an ExpandAsArray on the referencia_rendimento association table.
+		 * @var ReferenciaRendimento[] _objReferenciaRendimentoArray;
 		 */
-		private $_objOrdemProducaoArray = array();
+		private $_objReferenciaRendimentoArray = array();
 
 		/**
 		 * Protected array of virtual attributes for this object (e.g. extra/other calculated and/or non-object bound
@@ -581,17 +581,17 @@
 					$blnExpandedViaArray = true;
 				}
 
-				$strAlias = $strAliasPrefix . 'ordemproducao__id';
+				$strAlias = $strAliasPrefix . 'referenciarendimento__id';
 				$strAliasName = array_key_exists($strAlias, $strColumnAliasArray) ? $strColumnAliasArray[$strAlias] : $strAlias;
 				if ((array_key_exists($strAlias, $strExpandAsArrayNodes)) &&
 					(!is_null($objDbRow->GetColumn($strAliasName)))) {
-					if ($intPreviousChildItemCount = count($objPreviousItem->_objOrdemProducaoArray)) {
-						$objPreviousChildItem = $objPreviousItem->_objOrdemProducaoArray[$intPreviousChildItemCount - 1];
-						$objChildItem = OrdemProducao::InstantiateDbRow($objDbRow, $strAliasPrefix . 'ordemproducao__', $strExpandAsArrayNodes, $objPreviousChildItem, $strColumnAliasArray);
+					if ($intPreviousChildItemCount = count($objPreviousItem->_objReferenciaRendimentoArray)) {
+						$objPreviousChildItem = $objPreviousItem->_objReferenciaRendimentoArray[$intPreviousChildItemCount - 1];
+						$objChildItem = ReferenciaRendimento::InstantiateDbRow($objDbRow, $strAliasPrefix . 'referenciarendimento__', $strExpandAsArrayNodes, $objPreviousChildItem, $strColumnAliasArray);
 						if ($objChildItem)
-							$objPreviousItem->_objOrdemProducaoArray[] = $objChildItem;
+							$objPreviousItem->_objReferenciaRendimentoArray[] = $objChildItem;
 					} else
-						$objPreviousItem->_objOrdemProducaoArray[] = OrdemProducao::InstantiateDbRow($objDbRow, $strAliasPrefix . 'ordemproducao__', $strExpandAsArrayNodes, null, $strColumnAliasArray);
+						$objPreviousItem->_objReferenciaRendimentoArray[] = ReferenciaRendimento::InstantiateDbRow($objDbRow, $strAliasPrefix . 'referenciarendimento__', $strExpandAsArrayNodes, null, $strColumnAliasArray);
 					$blnExpandedViaArray = true;
 				}
 
@@ -674,14 +674,14 @@
 					$objToReturn->_objFluxogramaItem = FluxogramaItem::InstantiateDbRow($objDbRow, $strAliasPrefix . 'fluxogramaitem__', $strExpandAsArrayNodes, null, $strColumnAliasArray);
 			}
 
-			// Check for OrdemProducao Virtual Binding
-			$strAlias = $strAliasPrefix . 'ordemproducao__id';
+			// Check for ReferenciaRendimento Virtual Binding
+			$strAlias = $strAliasPrefix . 'referenciarendimento__id';
 			$strAliasName = array_key_exists($strAlias, $strColumnAliasArray) ? $strColumnAliasArray[$strAlias] : $strAlias;
 			if (!is_null($objDbRow->GetColumn($strAliasName))) {
 				if (($strExpandAsArrayNodes) && (array_key_exists($strAlias, $strExpandAsArrayNodes)))
-					$objToReturn->_objOrdemProducaoArray[] = OrdemProducao::InstantiateDbRow($objDbRow, $strAliasPrefix . 'ordemproducao__', $strExpandAsArrayNodes, null, $strColumnAliasArray);
+					$objToReturn->_objReferenciaRendimentoArray[] = ReferenciaRendimento::InstantiateDbRow($objDbRow, $strAliasPrefix . 'referenciarendimento__', $strExpandAsArrayNodes, null, $strColumnAliasArray);
 				else
-					$objToReturn->_objOrdemProducao = OrdemProducao::InstantiateDbRow($objDbRow, $strAliasPrefix . 'ordemproducao__', $strExpandAsArrayNodes, null, $strColumnAliasArray);
+					$objToReturn->_objReferenciaRendimento = ReferenciaRendimento::InstantiateDbRow($objDbRow, $strAliasPrefix . 'referenciarendimento__', $strExpandAsArrayNodes, null, $strColumnAliasArray);
 			}
 
 			return $objToReturn;
@@ -1202,7 +1202,7 @@
 					return $this->strModelo;
 
 				case 'TecidoId':
-					// Gets the value for intTecidoId 
+					// Gets the value for intTecidoId (Not Null)
 					// @return integer
 					return $this->intTecidoId;
 
@@ -1223,7 +1223,7 @@
 					}
 
 				case 'Tecido':
-					// Gets the value for the Tecido object referenced by intTecidoId 
+					// Gets the value for the Tecido object referenced by intTecidoId (Not Null)
 					// @return Tecido
 					try {
 						if ((!$this->objTecido) && (!is_null($this->intTecidoId)))
@@ -1276,17 +1276,17 @@
 					// @return FluxogramaItem[]
 					return (array) $this->_objFluxogramaItemArray;
 
-				case '_OrdemProducao':
-					// Gets the value for the private _objOrdemProducao (Read-Only)
-					// if set due to an expansion on the ordem_producao.referencia_id reverse relationship
-					// @return OrdemProducao
-					return $this->_objOrdemProducao;
+				case '_ReferenciaRendimento':
+					// Gets the value for the private _objReferenciaRendimento (Read-Only)
+					// if set due to an expansion on the referencia_rendimento.referencia_id reverse relationship
+					// @return ReferenciaRendimento
+					return $this->_objReferenciaRendimento;
 
-				case '_OrdemProducaoArray':
-					// Gets the value for the private _objOrdemProducaoArray (Read-Only)
-					// if set due to an ExpandAsArray on the ordem_producao.referencia_id reverse relationship
-					// @return OrdemProducao[]
-					return (array) $this->_objOrdemProducaoArray;
+				case '_ReferenciaRendimentoArray':
+					// Gets the value for the private _objReferenciaRendimentoArray (Read-Only)
+					// if set due to an ExpandAsArray on the referencia_rendimento.referencia_id reverse relationship
+					// @return ReferenciaRendimento[]
+					return (array) $this->_objReferenciaRendimentoArray;
 
 
 				case '__Restored':
@@ -1350,7 +1350,7 @@
 					}
 
 				case 'TecidoId':
-					// Sets the value for intTecidoId 
+					// Sets the value for intTecidoId (Not Null)
 					// @param integer $mixValue
 					// @return integer
 					try {
@@ -1396,7 +1396,7 @@
 					break;
 
 				case 'Tecido':
-					// Sets the value for the Tecido object referenced by intTecidoId 
+					// Sets the value for the Tecido object referenced by intTecidoId (Not Null)
 					// @param Tecido $mixValue
 					// @return Tecido
 					if (is_null($mixValue)) {
@@ -1636,20 +1636,20 @@
 
 			
 		
-		// Related Objects' Methods for OrdemProducao
+		// Related Objects' Methods for ReferenciaRendimento
 		//-------------------------------------------------------------------
 
 		/**
-		 * Gets all associated OrdemProducaos as an array of OrdemProducao objects
+		 * Gets all associated ReferenciaRendimentos as an array of ReferenciaRendimento objects
 		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
-		 * @return OrdemProducao[]
+		 * @return ReferenciaRendimento[]
 		*/ 
-		public function GetOrdemProducaoArray($objOptionalClauses = null) {
+		public function GetReferenciaRendimentoArray($objOptionalClauses = null) {
 			if ((is_null($this->intId)))
 				return array();
 
 			try {
-				return OrdemProducao::LoadArrayByReferenciaId($this->intId, $objOptionalClauses);
+				return ReferenciaRendimento::LoadArrayByReferenciaId($this->intId, $objOptionalClauses);
 			} catch (QCallerException $objExc) {
 				$objExc->IncrementOffset();
 				throw $objExc;
@@ -1657,26 +1657,26 @@
 		}
 
 		/**
-		 * Counts all associated OrdemProducaos
+		 * Counts all associated ReferenciaRendimentos
 		 * @return int
 		*/ 
-		public function CountOrdemProducaos() {
+		public function CountReferenciaRendimentos() {
 			if ((is_null($this->intId)))
 				return 0;
 
-			return OrdemProducao::CountByReferenciaId($this->intId);
+			return ReferenciaRendimento::CountByReferenciaId($this->intId);
 		}
 
 		/**
-		 * Associates a OrdemProducao
-		 * @param OrdemProducao $objOrdemProducao
+		 * Associates a ReferenciaRendimento
+		 * @param ReferenciaRendimento $objReferenciaRendimento
 		 * @return void
 		*/ 
-		public function AssociateOrdemProducao(OrdemProducao $objOrdemProducao) {
+		public function AssociateReferenciaRendimento(ReferenciaRendimento $objReferenciaRendimento) {
 			if ((is_null($this->intId)))
-				throw new QUndefinedPrimaryKeyException('Unable to call AssociateOrdemProducao on this unsaved Referencia.');
-			if ((is_null($objOrdemProducao->Id)))
-				throw new QUndefinedPrimaryKeyException('Unable to call AssociateOrdemProducao on this Referencia with an unsaved OrdemProducao.');
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociateReferenciaRendimento on this unsaved Referencia.');
+			if ((is_null($objReferenciaRendimento->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociateReferenciaRendimento on this Referencia with an unsaved ReferenciaRendimento.');
 
 			// Get the Database Object for this Class
 			$objDatabase = Referencia::GetDatabase();
@@ -1684,30 +1684,30 @@
 			// Perform the SQL Query
 			$objDatabase->NonQuery('
 				UPDATE
-					`ordem_producao`
+					`referencia_rendimento`
 				SET
 					`referencia_id` = ' . $objDatabase->SqlVariable($this->intId) . '
 				WHERE
-					`id` = ' . $objDatabase->SqlVariable($objOrdemProducao->Id) . '
+					`id` = ' . $objDatabase->SqlVariable($objReferenciaRendimento->Id) . '
 			');
 
 			// Journaling (if applicable)
 			if ($objDatabase->JournalingDatabase) {
-				$objOrdemProducao->ReferenciaId = $this->intId;
-				$objOrdemProducao->Journal('UPDATE');
+				$objReferenciaRendimento->ReferenciaId = $this->intId;
+				$objReferenciaRendimento->Journal('UPDATE');
 			}
 		}
 
 		/**
-		 * Unassociates a OrdemProducao
-		 * @param OrdemProducao $objOrdemProducao
+		 * Unassociates a ReferenciaRendimento
+		 * @param ReferenciaRendimento $objReferenciaRendimento
 		 * @return void
 		*/ 
-		public function UnassociateOrdemProducao(OrdemProducao $objOrdemProducao) {
+		public function UnassociateReferenciaRendimento(ReferenciaRendimento $objReferenciaRendimento) {
 			if ((is_null($this->intId)))
-				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateOrdemProducao on this unsaved Referencia.');
-			if ((is_null($objOrdemProducao->Id)))
-				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateOrdemProducao on this Referencia with an unsaved OrdemProducao.');
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateReferenciaRendimento on this unsaved Referencia.');
+			if ((is_null($objReferenciaRendimento->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateReferenciaRendimento on this Referencia with an unsaved ReferenciaRendimento.');
 
 			// Get the Database Object for this Class
 			$objDatabase = Referencia::GetDatabase();
@@ -1715,44 +1715,44 @@
 			// Perform the SQL Query
 			$objDatabase->NonQuery('
 				UPDATE
-					`ordem_producao`
+					`referencia_rendimento`
 				SET
 					`referencia_id` = null
 				WHERE
-					`id` = ' . $objDatabase->SqlVariable($objOrdemProducao->Id) . ' AND
+					`id` = ' . $objDatabase->SqlVariable($objReferenciaRendimento->Id) . ' AND
 					`referencia_id` = ' . $objDatabase->SqlVariable($this->intId) . '
 			');
 
 			// Journaling
 			if ($objDatabase->JournalingDatabase) {
-				$objOrdemProducao->ReferenciaId = null;
-				$objOrdemProducao->Journal('UPDATE');
+				$objReferenciaRendimento->ReferenciaId = null;
+				$objReferenciaRendimento->Journal('UPDATE');
 			}
 		}
 
 		/**
-		 * Unassociates all OrdemProducaos
+		 * Unassociates all ReferenciaRendimentos
 		 * @return void
 		*/ 
-		public function UnassociateAllOrdemProducaos() {
+		public function UnassociateAllReferenciaRendimentos() {
 			if ((is_null($this->intId)))
-				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateOrdemProducao on this unsaved Referencia.');
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateReferenciaRendimento on this unsaved Referencia.');
 
 			// Get the Database Object for this Class
 			$objDatabase = Referencia::GetDatabase();
 
 			// Journaling
 			if ($objDatabase->JournalingDatabase) {
-				foreach (OrdemProducao::LoadArrayByReferenciaId($this->intId) as $objOrdemProducao) {
-					$objOrdemProducao->ReferenciaId = null;
-					$objOrdemProducao->Journal('UPDATE');
+				foreach (ReferenciaRendimento::LoadArrayByReferenciaId($this->intId) as $objReferenciaRendimento) {
+					$objReferenciaRendimento->ReferenciaId = null;
+					$objReferenciaRendimento->Journal('UPDATE');
 				}
 			}
 
 			// Perform the SQL Query
 			$objDatabase->NonQuery('
 				UPDATE
-					`ordem_producao`
+					`referencia_rendimento`
 				SET
 					`referencia_id` = null
 				WHERE
@@ -1761,15 +1761,15 @@
 		}
 
 		/**
-		 * Deletes an associated OrdemProducao
-		 * @param OrdemProducao $objOrdemProducao
+		 * Deletes an associated ReferenciaRendimento
+		 * @param ReferenciaRendimento $objReferenciaRendimento
 		 * @return void
 		*/ 
-		public function DeleteAssociatedOrdemProducao(OrdemProducao $objOrdemProducao) {
+		public function DeleteAssociatedReferenciaRendimento(ReferenciaRendimento $objReferenciaRendimento) {
 			if ((is_null($this->intId)))
-				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateOrdemProducao on this unsaved Referencia.');
-			if ((is_null($objOrdemProducao->Id)))
-				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateOrdemProducao on this Referencia with an unsaved OrdemProducao.');
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateReferenciaRendimento on this unsaved Referencia.');
+			if ((is_null($objReferenciaRendimento->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateReferenciaRendimento on this Referencia with an unsaved ReferenciaRendimento.');
 
 			// Get the Database Object for this Class
 			$objDatabase = Referencia::GetDatabase();
@@ -1777,40 +1777,40 @@
 			// Perform the SQL Query
 			$objDatabase->NonQuery('
 				DELETE FROM
-					`ordem_producao`
+					`referencia_rendimento`
 				WHERE
-					`id` = ' . $objDatabase->SqlVariable($objOrdemProducao->Id) . ' AND
+					`id` = ' . $objDatabase->SqlVariable($objReferenciaRendimento->Id) . ' AND
 					`referencia_id` = ' . $objDatabase->SqlVariable($this->intId) . '
 			');
 
 			// Journaling
 			if ($objDatabase->JournalingDatabase) {
-				$objOrdemProducao->Journal('DELETE');
+				$objReferenciaRendimento->Journal('DELETE');
 			}
 		}
 
 		/**
-		 * Deletes all associated OrdemProducaos
+		 * Deletes all associated ReferenciaRendimentos
 		 * @return void
 		*/ 
-		public function DeleteAllOrdemProducaos() {
+		public function DeleteAllReferenciaRendimentos() {
 			if ((is_null($this->intId)))
-				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateOrdemProducao on this unsaved Referencia.');
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateReferenciaRendimento on this unsaved Referencia.');
 
 			// Get the Database Object for this Class
 			$objDatabase = Referencia::GetDatabase();
 
 			// Journaling
 			if ($objDatabase->JournalingDatabase) {
-				foreach (OrdemProducao::LoadArrayByReferenciaId($this->intId) as $objOrdemProducao) {
-					$objOrdemProducao->Journal('DELETE');
+				foreach (ReferenciaRendimento::LoadArrayByReferenciaId($this->intId) as $objReferenciaRendimento) {
+					$objReferenciaRendimento->Journal('DELETE');
 				}
 			}
 
 			// Perform the SQL Query
 			$objDatabase->NonQuery('
 				DELETE FROM
-					`ordem_producao`
+					`referencia_rendimento`
 				WHERE
 					`referencia_id` = ' . $objDatabase->SqlVariable($this->intId) . '
 			');
@@ -2348,7 +2348,7 @@
 	 * @property-read QQNodeReferenciaCor $Cor
 	 * @property-read QQNodeReferenciaTamanho $Tamanho
 	 * @property-read QQReverseReferenceNodeFluxogramaItem $FluxogramaItem
-	 * @property-read QQReverseReferenceNodeOrdemProducao $OrdemProducao
+	 * @property-read QQReverseReferenceNodeReferenciaRendimento $ReferenciaRendimento
 	 */
 	class QQNodeReferencia extends QQNode {
 		protected $strTableName = 'referencia';
@@ -2376,8 +2376,8 @@
 					return new QQNodeReferenciaTamanho($this);
 				case 'FluxogramaItem':
 					return new QQReverseReferenceNodeFluxogramaItem($this, 'fluxogramaitem', 'reverse_reference', 'referencia_id');
-				case 'OrdemProducao':
-					return new QQReverseReferenceNodeOrdemProducao($this, 'ordemproducao', 'reverse_reference', 'referencia_id');
+				case 'ReferenciaRendimento':
+					return new QQReverseReferenceNodeReferenciaRendimento($this, 'referenciarendimento', 'reverse_reference', 'referencia_id');
 
 				case '_PrimaryKeyNode':
 					return new QQNode('id', 'Id', 'integer', $this);
@@ -2403,7 +2403,7 @@
 	 * @property-read QQNodeReferenciaCor $Cor
 	 * @property-read QQNodeReferenciaTamanho $Tamanho
 	 * @property-read QQReverseReferenceNodeFluxogramaItem $FluxogramaItem
-	 * @property-read QQReverseReferenceNodeOrdemProducao $OrdemProducao
+	 * @property-read QQReverseReferenceNodeReferenciaRendimento $ReferenciaRendimento
 	 * @property-read QQNode $_PrimaryKeyNode
 	 */
 	class QQReverseReferenceNodeReferencia extends QQReverseReferenceNode {
@@ -2432,8 +2432,8 @@
 					return new QQNodeReferenciaTamanho($this);
 				case 'FluxogramaItem':
 					return new QQReverseReferenceNodeFluxogramaItem($this, 'fluxogramaitem', 'reverse_reference', 'referencia_id');
-				case 'OrdemProducao':
-					return new QQReverseReferenceNodeOrdemProducao($this, 'ordemproducao', 'reverse_reference', 'referencia_id');
+				case 'ReferenciaRendimento':
+					return new QQReverseReferenceNodeReferenciaRendimento($this, 'referenciarendimento', 'reverse_reference', 'referencia_id');
 
 				case '_PrimaryKeyNode':
 					return new QQNode('id', 'Id', 'integer', $this);

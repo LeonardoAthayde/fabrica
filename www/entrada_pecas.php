@@ -205,6 +205,13 @@
 		protected function btnAdd_Click($strFormId, $strControlId, $strParameter){
 			$objOrdemProducao = OrdemProducao::Load($this->lstProductionOrder->SelectedValue);
 			if(!$objOrdemProducao){
+				
+				$objOrdemProducao = OrdemProducao::LoadByNumero($this->txtProductionOrder->Text);
+				if($objOrdemProducao){
+					QApplication::DisplayAlert('Está ordem de produção já existe, tente outra');
+					return;
+				}
+				
 				$objOrdemProducao = new OrdemProducao();
 				$objOrdemProducao->Numero = $this->txtProductionOrder->Text;
 				$objOrdemProducao->ReferenciaId = $this->objReferencia->Id;

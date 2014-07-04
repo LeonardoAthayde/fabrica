@@ -104,16 +104,15 @@
 			
 			$objArrayFluxogramaItemRoot = FluxogramaItem::QueryArray(QQ::AndCondition(
 						QQ::Equal(QQN::FluxogramaItem()->ParentFluxogramaItemAsFluxogramaDepedencia->FluxogramaItem->Id, null),
-						QQ::Equal(QQN::FluxogramaItem()->ReferenciaId, $objOrdemProducaoGrade->OrdemProducao->ReferenciaId)));
+						QQ::Equal(QQN::FluxogramaItem()->ReferenciaId, $objOrdemProducaoGrade->OrdemProducao->ReferenciaId),
+						QQ::Equal(QQN::FluxogramaItem()->CorId, $objOrdemProducaoGrade->CorId)));
 						
-			//$objArrayFluxogramaItemFinal = FluxogramaItem::QueryArray(QQ::AndCondition(
-			//			QQ::Equal(QQN::FluxogramaItem()->FluxogramaItemAsFluxogramaDepedencia->Filho, null),
-			//			QQ::Equal(QQN::FluxogramaItem()->ReferenciaId, $objOrdemProducaoGrade->OrdemProducao->ReferenciaId)));
 			
 			
 			$objArrayFluxogramaItemFinal = FluxogramaItem::QueryArray(QQ::AndCondition(
 						QQ::Equal(QQN::FluxogramaItem()->FluxogramaItemAsFluxogramaDepedencia->Pai, null),
-						QQ::Equal(QQN::FluxogramaItem()->ReferenciaId, $objOrdemProducaoGrade->OrdemProducao->ReferenciaId)));	
+						QQ::Equal(QQN::FluxogramaItem()->ReferenciaId, $objOrdemProducaoGrade->OrdemProducao->ReferenciaId),
+						QQ::Equal(QQN::FluxogramaItem()->CorId, $objOrdemProducaoGrade->CorId)));	
 			
 			
 			if(count($objArrayFluxogramaItemFinal) > 1) {
@@ -127,12 +126,13 @@
 			
 			if(count($objOrdemProducaoGrade->GetBalancoAcoesArray()) == 0) {
 				
-				foreach (FluxogramaItem::LoadArrayByReferenciaId($objOrdemProducaoGrade->OrdemProducao->ReferenciaId) as $objFluxogramaItem){
+				foreach (FluxogramaItem::LoadArrayByReferenciaIdCorId($objOrdemProducaoGrade->OrdemProducao->ReferenciaId, $objOrdemProducaoGrade->CorId) as $objFluxogramaItem){
 					$objFluxogramaItemReal = new FluxogramaItemReal();
 					$objFluxogramaItemReal->Referencia = $objFluxogramaItem->Referencia->Nome;
 					$objFluxogramaItemReal->Acao = ($objFluxogramaItem->FluxogramaAcoes)?$objFluxogramaItem->FluxogramaAcoes->Nome:null;
-					$objFluxogramaItemReal->Maquina = ($objFluxogramaItem->Maquina)?$objFluxogramaItem->Maquina->Nome:null;
-					$objFluxogramaItemReal->Tempo = $objFluxogramaItem->Tempo;
+					$objFluxogramaItemReal->Maquina = ($objFluxogramaItem->FluxogramaAcoes->Maquina)?$objFluxogramaItem->FluxogramaAcoes->Maquina->Nome:null;
+					$objFluxogramaItemReal->Tempo = ($objFluxogramaItem->FluxogramaAcoesTempo)?$objFluxogramaItem->FluxogramaAcoesTempo->Tempo:null;
+					$objFluxogramaItemReal->TempoExecucao = ($objFluxogramaItem->FluxogramaAcoesTempo)?$objFluxogramaItem->FluxogramaAcoesTempo->TempoExecucao:null;
 					$objFluxogramaItemReal->Profundidade = $objFluxogramaItem->Profundidade;
 					$objFluxogramaItemReal->FluxogramaItemModeloId = $objFluxogramaItem->Id;
 					$objFluxogramaItemReal->Save();
