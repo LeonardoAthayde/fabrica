@@ -185,7 +185,7 @@
 			 */
 			define('DB_CONNECTION_1', serialize(array(
 				'adapter' => 'MySqli5',
-				'server' => 'mysql.kinghost.com.br',
+				'server' => 'mysql.cila.com.br',
 				'port' => null,
 				'database' => 'cila11',
 				'username' => 'cila11',
