@@ -25,27 +25,27 @@
 			if ($strStyle)
 				$strStyle = sprintf(' style="%s"', $strStyle);
 
-			$strToReturn = sprintf('<span id="%s" %s%s>', $this->strControlId, $strStyle, $this->GetAttributes(true, false));
+			$strToReturn = sprintf('<ul id="%s" %s%s>', $this->strControlId, $strStyle, $this->GetAttributes(true, false));
 
 			if ($this->intPageNumber <= 1)
-				$strToReturn .= sprintf('<span class="arrow">%s</span>', $this->strLabelForPrevious);
+				$strToReturn .= sprintf('<li class="arrow disabled"><a href="#">%s</a></li>', $this->strLabelForPrevious);
 			else {
 				$this->strActionParameter = $this->intPageNumber - 1;
-				$strToReturn .= sprintf('<span class="arrow"><a href="" %s>%s</a></span>',
+				$strToReturn .= sprintf('<li class="arrow"><a href="" %s>%s</a></li>',
 					$this->GetActionAttributes(), $this->strLabelForPrevious);
 			}
 
-			$strToReturn .= '<span class="break">|</span>';
+			//$strToReturn .= '<li class="break">|</li>';
 			
 			if ($this->PageCount <= $this->intIndexCount) {
 				// We have less pages than total indexcount -- so let's go ahead
 				// and just display all page indexes
 				for ($intIndex = 1; $intIndex <= $this->PageCount; $intIndex++) {
 					if ($this->intPageNumber == $intIndex) {
-						$strToReturn .= sprintf('<span class="selected">%s</span>', $intIndex);
+						$strToReturn .= sprintf('<li class="page active"><a href="#">%s</a></li>', $intIndex);
 					} else {
 						$this->strActionParameter = $intIndex;
-						$strToReturn .= sprintf('<span class="page"><a href="" %s>%s</a></span>',
+						$strToReturn .= sprintf('<li class="page"><a href="" %s>%s</a></li>',
 							$this->GetActionAttributes(), $intIndex);
 					}
 				}
@@ -148,17 +148,17 @@
 			}
 				
 	
-			$strToReturn .= '<span class="break">|</span>';
+			//$strToReturn .= '<li class="break">|</li>';
 	
 			if ($this->intPageNumber >= $this->PageCount)
-				$strToReturn .= sprintf('<span class="arrow">%s</span>', $this->strLabelForNext);
+				$strToReturn .= sprintf('<li class="arrow disabled"><a href="#">%s</a></li>', $this->strLabelForNext);
 			else {
 				$this->strActionParameter = $this->intPageNumber + 1;
-				$strToReturn .= sprintf('<span class="arrow"><a href="" %s>%s</a></span>',
+				$strToReturn .= sprintf('<li class="arrow"><a href="" %s>%s</a></li>',
 					$this->GetActionAttributes(), $this->strLabelForNext);
 			}
 
-			$strToReturn .= '</span>';
+			$strToReturn .= '</ul>';
 
 			return $strToReturn;
 		}

@@ -25,6 +25,9 @@
 
 			// Add Pagination (if desired)
 			$this->dtgReferencias->Paginator = new QPaginator($this->dtgReferencias);
+			$o = new QPaginator($this->dtgReferencias);
+			$this->dtgReferencias->Paginator->CssClass = 'pagination';
+			
 			$this->dtgReferencias->ItemsPerPage = 20;
 
 			// Use the MetaDataGrid functionality to add Columns for this datagrid
@@ -117,7 +120,7 @@
 		
 		protected function RenderBegin($blnDisplayOutput = true) {
 			parent::RenderBegin($blnDisplayOutput);
-			//print(sprintf('<link rel="stylesheet" href="%s%s/%s">', __VIRTUAL_DIRECTORY__,__CSS_ASSETS__, 'comando.css'));
+			print(sprintf('<link rel="stylesheet" href="%s%s/%s">', __VIRTUAL_DIRECTORY__,__CSS_ASSETS__, 'referencia_list.css'));
 			//print(sprintf('<script src="%s/%s"></script>', __VIRTUAL_DIRECTORY__ . __JS_ASSETS__, 'comandojs'));
 			print(sprintf('<script src="%s/%s"></script>', __VIRTUAL_DIRECTORY__ . __JS_ASSETS__, 'jquery.autocomplete.min.js'));
 		}		

@@ -24,7 +24,8 @@
 			// Add Pagination (if desired)
 			$this->dtgTecidos->Paginator = new QPaginator($this->dtgTecidos);
 			$this->dtgTecidos->ItemsPerPage = 20;
-
+			$this->dtgTecidos->Paginator->CssClass = 'pagination';
+			
 			// Use the MetaDataGrid functionality to add Columns for this datagrid
 
 			// Create an Edit Column
@@ -100,7 +101,7 @@
 		
 		protected function RenderBegin($blnDisplayOutput = true) {
 			parent::RenderBegin($blnDisplayOutput);
-			//print(sprintf('<link rel="stylesheet" href="%s%s/%s">', __VIRTUAL_DIRECTORY__,__CSS_ASSETS__, 'comando.css'));
+			print(sprintf('<link rel="stylesheet" href="%s%s/%s">', __VIRTUAL_DIRECTORY__,__CSS_ASSETS__, 'tecido_list.css'));
 			//print(sprintf('<script src="%s/%s"></script>', __VIRTUAL_DIRECTORY__ . __JS_ASSETS__, 'comandojs'));
 			print(sprintf('<script src="%s/%s"></script>', __VIRTUAL_DIRECTORY__ . __JS_ASSETS__, 'jquery.autocomplete.min.js'));
 		}		
