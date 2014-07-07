@@ -48,7 +48,10 @@
 		}
 		
 		protected function dtgReferencias_Bind(){
-			$this->dtgReferencias->MetaDataBinder(QQ::Like(QQN::Referencia()->Nome, '%'.$this->txtPesquisar->Text.'%'), null);
+			if(isset($_SESSION['referencia_list']))
+				$this->dtgReferencias->MetaDataBinder(QQ::Like(QQN::Referencia()->Nome, '%'.$_SESSION['referencia_list'].'%'), QQ::Clause(QQ::OrderBy(QQN::Referencia()->Nome)));
+			else
+				$this->dtgReferencias->MetaDataBinder(QQ::Like(QQN::Referencia()->Nome, '%%'), QQ::Clause(QQ::OrderBy(QQN::Referencia()->Nome)));
 		}
 		
 		public function RenderFeferenciaRendimentos(Referencia $objReferencia){
@@ -73,10 +76,12 @@
 			$this->txtPesquisar->CssClass = 'form-control input-lg';
 			$this->txtPesquisar->SetCustomAttribute('placeholder', 'PESQUISAR REFERÊNCIA');
 			$this->txtPesquisar->AddAction(new QEnterKeyEvent(), new QServerAction('txtPesquisar_Enter'));
+			if(isset($_SESSION['referencia_list'])) $this->txtPesquisar->Text = $_SESSION['referencia_list'];
 			$this->txtPesquisar_RenderScript();
 		}
 		
 		protected function txtPesquisar_Enter($strFormId, $strControlId, $strParameter){
+			$_SESSION['referencia_list'] = $this->txtPesquisar->Text;
 			$this->txtPesquisar_RenderScript();
 		}
 		

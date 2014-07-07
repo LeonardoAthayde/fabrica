@@ -43,7 +43,10 @@
 		}
 		
 		protected function dtgTecidos_Bind(){
-			$this->dtgTecidos->MetaDataBinder(QQ::Like(QQN::Tecido()->Nome, '%'.$this->txtPesquisar->Text.'%'), null);
+			if(isset($_SESSION['tecido_list']))
+				$this->dtgTecidos->MetaDataBinder(QQ::Like(QQN::Tecido()->Nome, '%'.$_SESSION['tecido_list'].'%'), null);
+			else
+				$this->dtgTecidos->MetaDataBinder(QQ::Like(QQN::Tecido()->Nome, '%%'), null);
 		}
 		
 		protected function DefaultWaitIcon_Create(){
@@ -61,10 +64,12 @@
 			$this->txtPesquisar->CssClass = 'form-control input-lg';
 			$this->txtPesquisar->SetCustomAttribute('placeholder', 'PESQUISAR TECIDO');
 			$this->txtPesquisar->AddAction(new QEnterKeyEvent(), new QServerAction('txtPesquisar_Enter'));
+			if(isset($_SESSION['tecido_list'])) $this->txtPesquisar->Text = $_SESSION['tecido_list'];
 			$this->txtPesquisar_RenderScript();
 		}
 		
 		protected function txtPesquisar_Enter($strFormId, $strControlId, $strParameter){
+			$_SESSION['tecido_list'] = $this->txtPesquisar->Text;
 			$this->txtPesquisar_RenderScript();
 		}
 		
