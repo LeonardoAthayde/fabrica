@@ -45,7 +45,7 @@
 			$this->lstQuantidadeRisco->Display = false;
 			$this->lstQuantidadeRisco->RenderMethod = 'RenderWithName';
 			$this->lstQuantidadeRisco->AddItem('QUANTIDADE RISCO');
-			for($i = 1; $i <= 40; $i++)
+			for($i = 0; $i <= 40; $i++)
 				$this->lstQuantidadeRisco->AddItem($i, $i);
 		}
 		

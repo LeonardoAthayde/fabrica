@@ -225,6 +225,7 @@
 			$blnReferenciasValida = true;
 			$objComando = $this->Form->GetComando();
 			foreach ($objComando->GetComandoPecaArray() as $objComandoPeca){
+				QApplication::DisplayAlert($this->txtReferencia->Text.$objComandoPeca->Tecido->Codigo);
 				$objReferencia = Referencia::LoadByNome($this->txtReferencia->Text.$objComandoPeca->Tecido->Codigo);
 				if(!$objReferencia)
 					$blnReferenciasValida = false;
