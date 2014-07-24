@@ -283,7 +283,7 @@
 				$this->Form->RefreshTables();
 				QApplication::ExecuteJavaScript("$('#risco-modal').modal('hide');");
 			} else {
-				if(count($objArrayReferencia) == 0){
+				if(count($objArrayReferencia) == 0)
 					QApplication::DisplayAlert('REFERÊNCIA INVÁLIDA');
 				if(!$blnReferenciasValida)
 					QApplication::DisplayAlert('NÃO HÁ TECIDO PARA ESSA REFERÊNCIA');
