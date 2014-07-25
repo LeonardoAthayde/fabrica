@@ -37,6 +37,69 @@
 		}
 		
 		
+		/**
+		 * Create and setup QListBox lstReferenciaCategoria
+		 * @param string $strControlId optional ControlId to use
+		 * @param QQCondition $objConditions override the default condition of QQ::All() to the query, itself
+		 * @param QQClause[] $objOptionalClauses additional optional QQClause object or array of QQClause objects for the query
+		 * @return QListBox
+		 */
+		public function lstReferenciaCategoria_Create($strControlId = null, QQCondition $objCondition = null, $objOptionalClauses = null) {
+			$this->lstReferenciaCategoria = new QListBox($this->objParentObject, $strControlId);
+			$this->lstReferenciaCategoria->Name = QApplication::Translate('Referencia Categoria');
+			$this->lstReferenciaCategoria->Required = true;
+			if (!$this->blnEditMode)
+				$this->lstReferenciaCategoria->AddItem(QApplication::Translate('- Select One -'), null);
+
+			// Setup and perform the Query
+			if (is_null($objCondition)) $objCondition = QQ::All();
+			$objReferenciaCategoriaCursor = ReferenciaCategoria::QueryCursor($objCondition, QQ::Clause(QQ::OrderBy(QQN::ReferenciaCategoria()->Nome)));
+
+			// Iterate through the Cursor
+			while ($objReferenciaCategoria = ReferenciaCategoria::InstantiateCursor($objReferenciaCategoriaCursor)) {
+				$objListItem = new QListItem($objReferenciaCategoria->__toString(), $objReferenciaCategoria->Id);
+				if (($this->objReferencia->ReferenciaCategoria) && ($this->objReferencia->ReferenciaCategoria->Id == $objReferenciaCategoria->Id))
+					$objListItem->Selected = true;
+				$this->lstReferenciaCategoria->AddItem($objListItem);
+			}
+
+			// Return the QListBox
+			return $this->lstReferenciaCategoria;
+		}		
+		
+		
+		/**
+		 * Create and setup QListBox lstTecido
+		 * @param string $strControlId optional ControlId to use
+		 * @param QQCondition $objConditions override the default condition of QQ::All() to the query, itself
+		 * @param QQClause[] $objOptionalClauses additional optional QQClause object or array of QQClause objects for the query
+		 * @return QListBox
+		 */
+		public function lstTecido_Create($strControlId = null, QQCondition $objCondition = null, $objOptionalClauses = null) {
+			$this->lstTecido = new QListBox($this->objParentObject, $strControlId);
+			$this->lstTecido->Name = QApplication::Translate('Tecido');
+			$this->lstTecido->Required = true;
+			if (!$this->blnEditMode)
+				$this->lstTecido->AddItem(QApplication::Translate('- Select One -'), null);
+
+			// Setup and perform the Query
+			if (is_null($objCondition)) $objCondition = QQ::All();
+			$objTecidoCursor = Tecido::QueryCursor($objCondition, QQ::Clause(QQ::OrderBy(QQN::Tecido()->Nome)));
+
+			// Iterate through the Cursor
+			while ($objTecido = Tecido::InstantiateCursor($objTecidoCursor)) {
+				$objListItem = new QListItem($objTecido->__toString(), $objTecido->Id);
+				if (($this->objReferencia->Tecido) && ($this->objReferencia->Tecido->Id == $objTecido->Id))
+					$objListItem->Selected = true;
+				$this->lstTecido->AddItem($objListItem);
+			}
+
+			// Return the QListBox
+			return $this->lstTecido;
+		}
+		
+		
+		
 		public function SaveReferencia() {
 			try {
 				// Update any fields for controls that have been created

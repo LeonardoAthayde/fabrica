@@ -44,7 +44,7 @@
 			$this->lstTecido->Required = true;
 			$this->lstTecido->CssClass = 'form-control input-lg';
 			$this->lstTecido->AddItem('SELECIONAR UM TECIDO ==>');
-			foreach (Tecido::QueryArray(QQ::GreaterThan(QQN::Tecido()->Metro, 0)) as $objTecido)
+			foreach (Tecido::QueryArray(QQ::GreaterThan(QQN::Tecido()->Metro, 0), QQ::Clause(QQ::OrderBy(QQN::Tecido()->Nome))) as $objTecido)
 				if($this->objReferenciaRendimento && $this->objReferenciaRendimento->TecidoId == $objTecido->Id) 
 					$this->lstTecido->AddItem($objTecido->Nome, $objTecido->Id, true);
 				else
