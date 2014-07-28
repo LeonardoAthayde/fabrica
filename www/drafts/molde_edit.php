@@ -4,33 +4,30 @@
 
 	/**
 	 * This is a quick-and-dirty draft QForm object to do Create, Edit, and Delete functionality
-	 * of the Tecido class.  It uses the code-generated
-	 * TecidoMetaControl class, which has meta-methods to help with
-	 * easily creating/defining controls to modify the fields of a Tecido columns.
+	 * of the Molde class.  It uses the code-generated
+	 * MoldeMetaControl class, which has meta-methods to help with
+	 * easily creating/defining controls to modify the fields of a Molde columns.
 	 *
 	 * Any display customizations and presentation-tier logic can be implemented
 	 * here by overriding existing or implementing new methods, properties and variables.
 	 * 
 	 * NOTE: This file is overwritten on any code regenerations.  If you want to make
-	 * permanent changes, it is STRONGLY RECOMMENDED to move both tecido_edit.php AND
-	 * tecido_edit.tpl.php out of this Form Drafts directory.
+	 * permanent changes, it is STRONGLY RECOMMENDED to move both molde_edit.php AND
+	 * molde_edit.tpl.php out of this Form Drafts directory.
 	 *
 	 * @package My Application
 	 * @subpackage Drafts
 	 */
-	class TecidoEditForm extends QForm {
+	class MoldeEditForm extends QForm {
 	
 		protected $objUsuario;
 	
-		// Local instance of the TecidoMetaControl
-		protected $mctTecido;
+		// Local instance of the MoldeMetaControl
+		protected $mctMolde;
 
-		// Controls for Tecido's Data Fields
+		// Controls for Molde's Data Fields
 		protected $lblId;
 		protected $txtNome;
-		protected $txtCodigo;
-		protected $txtMetro;
-		protected $txtPreco;
 
 		// Other ListBoxes (if applicable) via Unique ReverseReferences and ManyToMany References
 
@@ -67,16 +64,13 @@
 		}		
 
 		protected function Form_Create() {
-			// Use the CreateFromPathInfo shortcut (this can also be done manually using the TecidoMetaControl constructor)
+			// Use the CreateFromPathInfo shortcut (this can also be done manually using the MoldeMetaControl constructor)
 			// MAKE SURE we specify "$this" as the MetaControl's (and thus all subsequent controls') parent
-			$this->mctTecido = TecidoMetaControl::CreateFromPathInfo($this);
+			$this->mctMolde = MoldeMetaControl::CreateFromPathInfo($this);
 
-			// Call MetaControl's methods to create qcontrols based on Tecido's data fields
-			$this->lblId = $this->mctTecido->lblId_Create();
-			$this->txtNome = $this->mctTecido->txtNome_Create();
-			$this->txtCodigo = $this->mctTecido->txtCodigo_Create();
-			$this->txtMetro = $this->mctTecido->txtMetro_Create();
-			$this->txtPreco = $this->mctTecido->txtPreco_Create();
+			// Call MetaControl's methods to create qcontrols based on Molde's data fields
+			$this->lblId = $this->mctMolde->lblId_Create();
+			$this->txtNome = $this->mctMolde->txtNome_Create();
 
 			// Create Buttons and Actions on this Form
 			$this->btnSave = new QButton($this);
@@ -90,9 +84,9 @@
 
 			$this->btnDelete = new QButton($this);
 			$this->btnDelete->Text = QApplication::Translate('Delete');
-			$this->btnDelete->AddAction(new QClickEvent(), new QConfirmAction(QApplication::Translate('Are you SURE you want to DELETE this') . ' ' . QApplication::Translate('Tecido') . '?'));
+			$this->btnDelete->AddAction(new QClickEvent(), new QConfirmAction(QApplication::Translate('Are you SURE you want to DELETE this') . ' ' . QApplication::Translate('Molde') . '?'));
 			$this->btnDelete->AddAction(new QClickEvent(), new QAjaxAction('btnDelete_Click'));
-			$this->btnDelete->Visible = $this->mctTecido->EditMode;
+			$this->btnDelete->Visible = $this->mctMolde->EditMode;
 		}
 
 		/**
@@ -124,14 +118,14 @@
 		// Button Event Handlers
 
 		protected function btnSave_Click($strFormId, $strControlId, $strParameter) {
-			// Delegate "Save" processing to the TecidoMetaControl
-			$this->mctTecido->SaveTecido();
+			// Delegate "Save" processing to the MoldeMetaControl
+			$this->mctMolde->SaveMolde();
 			$this->RedirectToListPage();
 		}
 
 		protected function btnDelete_Click($strFormId, $strControlId, $strParameter) {
-			// Delegate "Delete" processing to the TecidoMetaControl
-			$this->mctTecido->DeleteTecido();
+			// Delegate "Delete" processing to the MoldeMetaControl
+			$this->mctMolde->DeleteMolde();
 			$this->RedirectToListPage();
 		}
 
@@ -142,11 +136,11 @@
 		// Other Methods
 		
 		protected function RedirectToListPage() {
-			QApplication::Redirect(__VIRTUAL_DIRECTORY__ . __FORM_DRAFTS__ . '/tecido_list.php');
+			QApplication::Redirect(__VIRTUAL_DIRECTORY__ . __FORM_DRAFTS__ . '/molde_list.php');
 		}
 	}
 
 	// Go ahead and run this form object to render the page and its event handlers, implicitly using
-	// tecido_edit.tpl.php as the included HTML template file
-	TecidoEditForm::Run('TecidoEditForm');
+	// molde_edit.tpl.php as the included HTML template file
+	MoldeEditForm::Run('MoldeEditForm');
 ?>

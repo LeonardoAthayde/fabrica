@@ -297,6 +297,7 @@
 				case 'Nome': return QQN::Tecido()->Nome;
 				case 'Codigo': return QQN::Tecido()->Codigo;
 				case 'Metro': return QQN::Tecido()->Metro;
+				case 'Preco': return QQN::Tecido()->Preco;
 				default: throw new QCallerException('Simple Property not found in TecidoDataGrid content: ' . $mixContent);
 			} else if ($mixContent instanceof QQAssociationNode)
 				throw new QCallerException('Content QQNode cannot go through any "To Many" association nodes.');

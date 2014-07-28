@@ -109,6 +109,12 @@
 			return new QQNodeMenu('menu', null, null);
 		}
 		/**
+		 * @return QQNodeMolde
+		 */
+		static public function Molde() {
+			return new QQNodeMolde('molde', null, null);
+		}
+		/**
 		 * @return QQNodeReferencia
 		 */
 		static public function Referencia() {

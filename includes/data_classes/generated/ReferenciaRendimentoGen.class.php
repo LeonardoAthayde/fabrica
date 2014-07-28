@@ -16,11 +16,14 @@
 	 * @package My Application
 	 * @subpackage GeneratedDataObjects
 	 * @property integer $Id the value for intId (Read-Only PK)
+	 * @property integer $MoldeId the value for intMoldeId 
 	 * @property integer $ReferenciaId the value for intReferenciaId (Not Null)
 	 * @property double $Comprimento the value for fltComprimento (Not Null)
 	 * @property integer $Pecas the value for intPecas (Not Null)
 	 * @property double $Peso the value for fltPeso (Not Null)
+	 * @property double $Preco the value for fltPreco (Not Null)
 	 * @property integer $TecidoId the value for intTecidoId (Not Null)
+	 * @property Molde $Molde the value for the Molde object referenced by intMoldeId 
 	 * @property Referencia $Referencia the value for the Referencia object referenced by intReferenciaId (Not Null)
 	 * @property Tecido $Tecido the value for the Tecido object referenced by intTecidoId (Not Null)
 	 * @property boolean $__Restored whether or not this object was restored from the database (as opposed to created new)
@@ -37,6 +40,14 @@
 		 */
 		protected $intId;
 		const IdDefault = null;
+
+
+		/**
+		 * Protected member variable that maps to the database column referencia_rendimento.molde_id
+		 * @var integer intMoldeId
+		 */
+		protected $intMoldeId;
+		const MoldeIdDefault = null;
 
 
 		/**
@@ -72,6 +83,14 @@
 
 
 		/**
+		 * Protected member variable that maps to the database column referencia_rendimento.preco
+		 * @var double fltPreco
+		 */
+		protected $fltPreco;
+		const PrecoDefault = null;
+
+
+		/**
 		 * Protected member variable that maps to the database column referencia_rendimento.tecido_id
 		 * @var integer intTecidoId
 		 */
@@ -100,6 +119,16 @@
 		///////////////////////////////
 		// PROTECTED MEMBER OBJECTS
 		///////////////////////////////
+
+		/**
+		 * Protected member variable that contains the object pointed by the reference
+		 * in the database column referencia_rendimento.molde_id.
+		 *
+		 * NOTE: Always use the Molde property getter to correctly retrieve this Molde object.
+		 * (Because this class implements late binding, this variable reference MAY be null.)
+		 * @var Molde objMolde
+		 */
+		protected $objMolde;
 
 		/**
 		 * Protected member variable that contains the object pointed by the reference
@@ -432,10 +461,12 @@
 			}
 
 			$objBuilder->AddSelectItem($strTableName, 'id', $strAliasPrefix . 'id');
+			$objBuilder->AddSelectItem($strTableName, 'molde_id', $strAliasPrefix . 'molde_id');
 			$objBuilder->AddSelectItem($strTableName, 'referencia_id', $strAliasPrefix . 'referencia_id');
 			$objBuilder->AddSelectItem($strTableName, 'comprimento', $strAliasPrefix . 'comprimento');
 			$objBuilder->AddSelectItem($strTableName, 'pecas', $strAliasPrefix . 'pecas');
 			$objBuilder->AddSelectItem($strTableName, 'peso', $strAliasPrefix . 'peso');
+			$objBuilder->AddSelectItem($strTableName, 'preco', $strAliasPrefix . 'preco');
 			$objBuilder->AddSelectItem($strTableName, 'tecido_id', $strAliasPrefix . 'tecido_id');
 		}
 
@@ -470,6 +501,8 @@
 
 			$strAliasName = array_key_exists($strAliasPrefix . 'id', $strColumnAliasArray) ? $strColumnAliasArray[$strAliasPrefix . 'id'] : $strAliasPrefix . 'id';
 			$objToReturn->intId = $objDbRow->GetColumn($strAliasName, 'Integer');
+			$strAliasName = array_key_exists($strAliasPrefix . 'molde_id', $strColumnAliasArray) ? $strColumnAliasArray[$strAliasPrefix . 'molde_id'] : $strAliasPrefix . 'molde_id';
+			$objToReturn->intMoldeId = $objDbRow->GetColumn($strAliasName, 'Integer');
 			$strAliasName = array_key_exists($strAliasPrefix . 'referencia_id', $strColumnAliasArray) ? $strColumnAliasArray[$strAliasPrefix . 'referencia_id'] : $strAliasPrefix . 'referencia_id';
 			$objToReturn->intReferenciaId = $objDbRow->GetColumn($strAliasName, 'Integer');
 			$strAliasName = array_key_exists($strAliasPrefix . 'comprimento', $strColumnAliasArray) ? $strColumnAliasArray[$strAliasPrefix . 'comprimento'] : $strAliasPrefix . 'comprimento';
@@ -478,6 +511,8 @@
 			$objToReturn->intPecas = $objDbRow->GetColumn($strAliasName, 'Integer');
 			$strAliasName = array_key_exists($strAliasPrefix . 'peso', $strColumnAliasArray) ? $strColumnAliasArray[$strAliasPrefix . 'peso'] : $strAliasPrefix . 'peso';
 			$objToReturn->fltPeso = $objDbRow->GetColumn($strAliasName, 'Float');
+			$strAliasName = array_key_exists($strAliasPrefix . 'preco', $strColumnAliasArray) ? $strColumnAliasArray[$strAliasPrefix . 'preco'] : $strAliasPrefix . 'preco';
+			$objToReturn->fltPreco = $objDbRow->GetColumn($strAliasName, 'Float');
 			$strAliasName = array_key_exists($strAliasPrefix . 'tecido_id', $strColumnAliasArray) ? $strColumnAliasArray[$strAliasPrefix . 'tecido_id'] : $strAliasPrefix . 'tecido_id';
 			$objToReturn->intTecidoId = $objDbRow->GetColumn($strAliasName, 'Integer');
 
@@ -492,6 +527,12 @@
 			// Prepare to Check for Early/Virtual Binding
 			if (!$strAliasPrefix)
 				$strAliasPrefix = 'referencia_rendimento__';
+
+			// Check for Molde Early Binding
+			$strAlias = $strAliasPrefix . 'molde_id__id';
+			$strAliasName = array_key_exists($strAlias, $strColumnAliasArray) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			if (!is_null($objDbRow->GetColumn($strAliasName)))
+				$objToReturn->objMolde = Molde::InstantiateDbRow($objDbRow, $strAliasPrefix . 'molde_id__', $strExpandAsArrayNodes, null, $strColumnAliasArray);
 
 			// Check for Referencia Early Binding
 			$strAlias = $strAliasPrefix . 'referencia_id__id';
@@ -659,6 +700,40 @@
 			, $objOptionalClauses
 			);
 		}
+			
+		/**
+		 * Load an array of ReferenciaRendimento objects,
+		 * by MoldeId Index(es)
+		 * @param integer $intMoldeId
+		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
+		 * @return ReferenciaRendimento[]
+		*/
+		public static function LoadArrayByMoldeId($intMoldeId, $objOptionalClauses = null) {
+			// Call ReferenciaRendimento::QueryArray to perform the LoadArrayByMoldeId query
+			try {
+				return ReferenciaRendimento::QueryArray(
+					QQ::Equal(QQN::ReferenciaRendimento()->MoldeId, $intMoldeId),
+					$objOptionalClauses
+					);
+			} catch (QCallerException $objExc) {
+				$objExc->IncrementOffset();
+				throw $objExc;
+			}
+		}
+
+		/**
+		 * Count ReferenciaRendimentos
+		 * by MoldeId Index(es)
+		 * @param integer $intMoldeId
+		 * @return int
+		*/
+		public static function CountByMoldeId($intMoldeId, $objOptionalClauses = null) {
+			// Call ReferenciaRendimento::QueryCount to perform the CountByMoldeId query
+			return ReferenciaRendimento::QueryCount(
+				QQ::Equal(QQN::ReferenciaRendimento()->MoldeId, $intMoldeId)
+			, $objOptionalClauses
+			);
+		}
 
 
 
@@ -690,16 +765,20 @@
 					// Perform an INSERT query
 					$objDatabase->NonQuery('
 						INSERT INTO `referencia_rendimento` (
+							`molde_id`,
 							`referencia_id`,
 							`comprimento`,
 							`pecas`,
 							`peso`,
+							`preco`,
 							`tecido_id`
 						) VALUES (
+							' . $objDatabase->SqlVariable($this->intMoldeId) . ',
 							' . $objDatabase->SqlVariable($this->intReferenciaId) . ',
 							' . $objDatabase->SqlVariable($this->fltComprimento) . ',
 							' . $objDatabase->SqlVariable($this->intPecas) . ',
 							' . $objDatabase->SqlVariable($this->fltPeso) . ',
+							' . $objDatabase->SqlVariable($this->fltPreco) . ',
 							' . $objDatabase->SqlVariable($this->intTecidoId) . '
 						)
 					');
@@ -720,10 +799,12 @@
 						UPDATE
 							`referencia_rendimento`
 						SET
+							`molde_id` = ' . $objDatabase->SqlVariable($this->intMoldeId) . ',
 							`referencia_id` = ' . $objDatabase->SqlVariable($this->intReferenciaId) . ',
 							`comprimento` = ' . $objDatabase->SqlVariable($this->fltComprimento) . ',
 							`pecas` = ' . $objDatabase->SqlVariable($this->intPecas) . ',
 							`peso` = ' . $objDatabase->SqlVariable($this->fltPeso) . ',
+							`preco` = ' . $objDatabase->SqlVariable($this->fltPreco) . ',
 							`tecido_id` = ' . $objDatabase->SqlVariable($this->intTecidoId) . '
 						WHERE
 							`id` = ' . $objDatabase->SqlVariable($this->intId) . '
@@ -809,10 +890,12 @@
 			$objReloaded = ReferenciaRendimento::Load($this->intId);
 
 			// Update $this's local variables to match
+			$this->MoldeId = $objReloaded->MoldeId;
 			$this->ReferenciaId = $objReloaded->ReferenciaId;
 			$this->fltComprimento = $objReloaded->fltComprimento;
 			$this->intPecas = $objReloaded->intPecas;
 			$this->fltPeso = $objReloaded->fltPeso;
+			$this->fltPreco = $objReloaded->fltPreco;
 			$this->TecidoId = $objReloaded->TecidoId;
 		}
 
@@ -827,20 +910,24 @@
 			$objDatabase->NonQuery('
 				INSERT INTO `referencia_rendimento` (
 					`id`,
+					`molde_id`,
 					`referencia_id`,
 					`comprimento`,
 					`pecas`,
 					`peso`,
+					`preco`,
 					`tecido_id`,
 					__sys_login_id,
 					__sys_action,
 					__sys_date
 				) VALUES (
 					' . $objDatabase->SqlVariable($this->intId) . ',
+					' . $objDatabase->SqlVariable($this->intMoldeId) . ',
 					' . $objDatabase->SqlVariable($this->intReferenciaId) . ',
 					' . $objDatabase->SqlVariable($this->fltComprimento) . ',
 					' . $objDatabase->SqlVariable($this->intPecas) . ',
 					' . $objDatabase->SqlVariable($this->fltPeso) . ',
+					' . $objDatabase->SqlVariable($this->fltPreco) . ',
 					' . $objDatabase->SqlVariable($this->intTecidoId) . ',
 					' . (($objDatabase->JournaledById) ? $objDatabase->JournaledById : 'NULL') . ',
 					' . $objDatabase->SqlVariable($strJournalCommand) . ',
@@ -897,6 +984,11 @@
 					// @return integer
 					return $this->intId;
 
+				case 'MoldeId':
+					// Gets the value for intMoldeId 
+					// @return integer
+					return $this->intMoldeId;
+
 				case 'ReferenciaId':
 					// Gets the value for intReferenciaId (Not Null)
 					// @return integer
@@ -917,6 +1009,11 @@
 					// @return double
 					return $this->fltPeso;
 
+				case 'Preco':
+					// Gets the value for fltPreco (Not Null)
+					// @return double
+					return $this->fltPreco;
+
 				case 'TecidoId':
 					// Gets the value for intTecidoId (Not Null)
 					// @return integer
@@ -926,6 +1023,18 @@
 				///////////////////
 				// Member Objects
 				///////////////////
+				case 'Molde':
+					// Gets the value for the Molde object referenced by intMoldeId 
+					// @return Molde
+					try {
+						if ((!$this->objMolde) && (!is_null($this->intMoldeId)))
+							$this->objMolde = Molde::Load($this->intMoldeId);
+						return $this->objMolde;
+					} catch (QCallerException $objExc) {
+						$objExc->IncrementOffset();
+						throw $objExc;
+					}
+
 				case 'Referencia':
 					// Gets the value for the Referencia object referenced by intReferenciaId (Not Null)
 					// @return Referencia
@@ -983,6 +1092,18 @@
 				///////////////////
 				// Member Variables
 				///////////////////
+				case 'MoldeId':
+					// Sets the value for intMoldeId 
+					// @param integer $mixValue
+					// @return integer
+					try {
+						$this->objMolde = null;
+						return ($this->intMoldeId = QType::Cast($mixValue, QType::Integer));
+					} catch (QCallerException $objExc) {
+						$objExc->IncrementOffset();
+						throw $objExc;
+					}
+
 				case 'ReferenciaId':
 					// Sets the value for intReferenciaId (Not Null)
 					// @param integer $mixValue
@@ -1028,6 +1149,17 @@
 						throw $objExc;
 					}
 
+				case 'Preco':
+					// Sets the value for fltPreco (Not Null)
+					// @param double $mixValue
+					// @return double
+					try {
+						return ($this->fltPreco = QType::Cast($mixValue, QType::Float));
+					} catch (QCallerException $objExc) {
+						$objExc->IncrementOffset();
+						throw $objExc;
+					}
+
 				case 'TecidoId':
 					// Sets the value for intTecidoId (Not Null)
 					// @param integer $mixValue
@@ -1044,6 +1176,36 @@
 				///////////////////
 				// Member Objects
 				///////////////////
+				case 'Molde':
+					// Sets the value for the Molde object referenced by intMoldeId 
+					// @param Molde $mixValue
+					// @return Molde
+					if (is_null($mixValue)) {
+						$this->intMoldeId = null;
+						$this->objMolde = null;
+						return null;
+					} else {
+						// Make sure $mixValue actually is a Molde object
+						try {
+							$mixValue = QType::Cast($mixValue, 'Molde');
+						} catch (QInvalidCastException $objExc) {
+							$objExc->IncrementOffset();
+							throw $objExc;
+						} 
+
+						// Make sure $mixValue is a SAVED Molde object
+						if (is_null($mixValue->Id))
+							throw new QCallerException('Unable to set an unsaved Molde for this ReferenciaRendimento');
+
+						// Update Local Member Variables
+						$this->objMolde = $mixValue;
+						$this->intMoldeId = $mixValue->Id;
+
+						// Return $mixValue
+						return $mixValue;
+					}
+					break;
+
 				case 'Referencia':
 					// Sets the value for the Referencia object referenced by intReferenciaId (Not Null)
 					// @param Referencia $mixValue
@@ -1142,10 +1304,12 @@
 		public static function GetSoapComplexTypeXml() {
 			$strToReturn = '<complexType name="ReferenciaRendimento"><sequence>';
 			$strToReturn .= '<element name="Id" type="xsd:int"/>';
+			$strToReturn .= '<element name="Molde" type="xsd1:Molde"/>';
 			$strToReturn .= '<element name="Referencia" type="xsd1:Referencia"/>';
 			$strToReturn .= '<element name="Comprimento" type="xsd:float"/>';
 			$strToReturn .= '<element name="Pecas" type="xsd:int"/>';
 			$strToReturn .= '<element name="Peso" type="xsd:float"/>';
+			$strToReturn .= '<element name="Preco" type="xsd:float"/>';
 			$strToReturn .= '<element name="Tecido" type="xsd1:Tecido"/>';
 			$strToReturn .= '<element name="__blnRestored" type="xsd:boolean"/>';
 			$strToReturn .= '</sequence></complexType>';
@@ -1155,6 +1319,7 @@
 		public static function AlterSoapComplexTypeArray(&$strComplexTypeArray) {
 			if (!array_key_exists('ReferenciaRendimento', $strComplexTypeArray)) {
 				$strComplexTypeArray['ReferenciaRendimento'] = ReferenciaRendimento::GetSoapComplexTypeXml();
+				Molde::AlterSoapComplexTypeArray($strComplexTypeArray);
 				Referencia::AlterSoapComplexTypeArray($strComplexTypeArray);
 				Tecido::AlterSoapComplexTypeArray($strComplexTypeArray);
 			}
@@ -1173,6 +1338,9 @@
 			$objToReturn = new ReferenciaRendimento();
 			if (property_exists($objSoapObject, 'Id'))
 				$objToReturn->intId = $objSoapObject->Id;
+			if ((property_exists($objSoapObject, 'Molde')) &&
+				($objSoapObject->Molde))
+				$objToReturn->Molde = Molde::GetObjectFromSoapObject($objSoapObject->Molde);
 			if ((property_exists($objSoapObject, 'Referencia')) &&
 				($objSoapObject->Referencia))
 				$objToReturn->Referencia = Referencia::GetObjectFromSoapObject($objSoapObject->Referencia);
@@ -1182,6 +1350,8 @@
 				$objToReturn->intPecas = $objSoapObject->Pecas;
 			if (property_exists($objSoapObject, 'Peso'))
 				$objToReturn->fltPeso = $objSoapObject->Peso;
+			if (property_exists($objSoapObject, 'Preco'))
+				$objToReturn->fltPreco = $objSoapObject->Preco;
 			if ((property_exists($objSoapObject, 'Tecido')) &&
 				($objSoapObject->Tecido))
 				$objToReturn->Tecido = Tecido::GetObjectFromSoapObject($objSoapObject->Tecido);
@@ -1203,6 +1373,10 @@
 		}
 
 		public static function GetSoapObjectFromObject($objObject, $blnBindRelatedObjects) {
+			if ($objObject->objMolde)
+				$objObject->objMolde = Molde::GetSoapObjectFromObject($objObject->objMolde, false);
+			else if (!$blnBindRelatedObjects)
+				$objObject->intMoldeId = null;
 			if ($objObject->objReferencia)
 				$objObject->objReferencia = Referencia::GetSoapObjectFromObject($objObject->objReferencia, false);
 			else if (!$blnBindRelatedObjects)
@@ -1227,11 +1401,14 @@
 
 	/**
 	 * @property-read QQNode $Id
+	 * @property-read QQNode $MoldeId
+	 * @property-read QQNodeMolde $Molde
 	 * @property-read QQNode $ReferenciaId
 	 * @property-read QQNodeReferencia $Referencia
 	 * @property-read QQNode $Comprimento
 	 * @property-read QQNode $Pecas
 	 * @property-read QQNode $Peso
+	 * @property-read QQNode $Preco
 	 * @property-read QQNode $TecidoId
 	 * @property-read QQNodeTecido $Tecido
 	 */
@@ -1243,6 +1420,10 @@
 			switch ($strName) {
 				case 'Id':
 					return new QQNode('id', 'Id', 'integer', $this);
+				case 'MoldeId':
+					return new QQNode('molde_id', 'MoldeId', 'integer', $this);
+				case 'Molde':
+					return new QQNodeMolde('molde_id', 'Molde', 'integer', $this);
 				case 'ReferenciaId':
 					return new QQNode('referencia_id', 'ReferenciaId', 'integer', $this);
 				case 'Referencia':
@@ -1253,6 +1434,8 @@
 					return new QQNode('pecas', 'Pecas', 'integer', $this);
 				case 'Peso':
 					return new QQNode('peso', 'Peso', 'double', $this);
+				case 'Preco':
+					return new QQNode('preco', 'Preco', 'double', $this);
 				case 'TecidoId':
 					return new QQNode('tecido_id', 'TecidoId', 'integer', $this);
 				case 'Tecido':
@@ -1273,11 +1456,14 @@
 	
 	/**
 	 * @property-read QQNode $Id
+	 * @property-read QQNode $MoldeId
+	 * @property-read QQNodeMolde $Molde
 	 * @property-read QQNode $ReferenciaId
 	 * @property-read QQNodeReferencia $Referencia
 	 * @property-read QQNode $Comprimento
 	 * @property-read QQNode $Pecas
 	 * @property-read QQNode $Peso
+	 * @property-read QQNode $Preco
 	 * @property-read QQNode $TecidoId
 	 * @property-read QQNodeTecido $Tecido
 	 * @property-read QQNode $_PrimaryKeyNode
@@ -1290,6 +1476,10 @@
 			switch ($strName) {
 				case 'Id':
 					return new QQNode('id', 'Id', 'integer', $this);
+				case 'MoldeId':
+					return new QQNode('molde_id', 'MoldeId', 'integer', $this);
+				case 'Molde':
+					return new QQNodeMolde('molde_id', 'Molde', 'integer', $this);
 				case 'ReferenciaId':
 					return new QQNode('referencia_id', 'ReferenciaId', 'integer', $this);
 				case 'Referencia':
@@ -1300,6 +1490,8 @@
 					return new QQNode('pecas', 'Pecas', 'integer', $this);
 				case 'Peso':
 					return new QQNode('peso', 'Peso', 'double', $this);
+				case 'Preco':
+					return new QQNode('preco', 'Preco', 'double', $this);
 				case 'TecidoId':
 					return new QQNode('tecido_id', 'TecidoId', 'integer', $this);
 				case 'Tecido':

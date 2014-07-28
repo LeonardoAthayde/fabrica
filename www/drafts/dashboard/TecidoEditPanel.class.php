@@ -24,6 +24,7 @@
 		public $txtNome;
 		public $txtCodigo;
 		public $txtMetro;
+		public $txtPreco;
 
 		// Other ListBoxes (if applicable) via Unique ReverseReferences and ManyToMany References
 
@@ -57,6 +58,7 @@
 			$this->txtNome = $this->mctTecido->txtNome_Create();
 			$this->txtCodigo = $this->mctTecido->txtCodigo_Create();
 			$this->txtMetro = $this->mctTecido->txtMetro_Create();
+			$this->txtPreco = $this->mctTecido->txtPreco_Create();
 
 			// Create Buttons and Actions on this Form
 			$this->btnSave = new QButton($this);

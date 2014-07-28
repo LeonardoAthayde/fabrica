@@ -13,6 +13,7 @@
 		protected $txtNome;
 		protected $txtCodigo;
 		protected $txtMetro;
+		protected $txtPreco;
 
 		// Other ListBoxes (if applicable) via Unique ReverseReferences and ManyToMany References
 
@@ -36,6 +37,8 @@
 			$this->txtCodigo->CssClass = 'form-control input-lg';
 			$this->txtMetro = $this->mctTecido->txtMetro_Create();
 			$this->txtMetro->CssClass = 'form-control input-lg';
+			$this->txtPreco = $this->mctTecido->txtPreco_Create();
+			$this->txtPreco->CssClass = 'form-control input-lg';
 
 			// Create Buttons and Actions on this Form
 			$this->btnSave = new QButton($this);
@@ -99,7 +102,7 @@
 
 		protected function btnSave_Click($strFormId, $strControlId, $strParameter) {
 			$blnMetro = false;
-			if($this->mctTecido->Tecido->Metro != $this->txtMetro->Text && $this->mctTecido->EditMode)
+			if($this->mctTecido->EditMode && ($this->mctTecido->Tecido->Metro != $this->txtMetro->Text || $this->mctTecido->Tecido->Preco != $this->txtPreco->Text ))
 				$blnMetro = true;
 			// Delegate "Save" processing to the TecidoMetaControl
 			$this->mctTecido->SaveTecido();
@@ -108,6 +111,7 @@
 				$objTecido = $this->mctTecido->Tecido;
 				foreach ($objTecido->GetReferenciaRendimentoArray() as $objReferenciaRendimento){
 					$objReferenciaRendimento->Peso = (($objReferenciaRendimento->Comprimento/$objReferenciaRendimento->Tecido->Metro)/$objReferenciaRendimento->Pecas);
+					$objReferenciaRendimento->Preco = $objReferenciaRendimento->Tecido->Preco*$objReferenciaRendimento->Peso;
 					$objReferenciaRendimento->Save();
 				}
 			}

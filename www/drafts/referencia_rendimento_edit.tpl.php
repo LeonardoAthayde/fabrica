@@ -20,6 +20,8 @@
 	<div id="formControls">
 		<?php $this->lblId->RenderWithName(); ?>
 
+		<?php $this->lstMolde->RenderWithName(); ?>
+
 		<?php $this->lstReferencia->RenderWithName(); ?>
 
 		<?php $this->txtComprimento->RenderWithName(); ?>
@@ -27,6 +29,8 @@
 		<?php $this->txtPecas->RenderWithName(); ?>
 
 		<?php $this->txtPeso->RenderWithName(); ?>
+
+		<?php $this->txtPreco->RenderWithName(); ?>
 
 		<?php $this->lstTecido->RenderWithName(); ?>
 

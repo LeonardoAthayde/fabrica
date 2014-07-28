@@ -74,10 +74,12 @@
 			// Create the Other Columns (note that you can use strings for referencia_rendimento's properties, or you
 			// can traverse down QQN::referencia_rendimento() to display fields that are down the hierarchy)
 			$this->dtgReferenciaRendimentos->MetaAddColumn('Id');
+			$this->dtgReferenciaRendimentos->MetaAddColumn(QQN::ReferenciaRendimento()->Molde);
 			$this->dtgReferenciaRendimentos->MetaAddColumn(QQN::ReferenciaRendimento()->Referencia);
 			$this->dtgReferenciaRendimentos->MetaAddColumn('Comprimento');
 			$this->dtgReferenciaRendimentos->MetaAddColumn('Pecas');
 			$this->dtgReferenciaRendimentos->MetaAddColumn('Peso');
+			$this->dtgReferenciaRendimentos->MetaAddColumn('Preco');
 			$this->dtgReferenciaRendimentos->MetaAddColumn(QQN::ReferenciaRendimento()->Tecido);
 		}
 	}

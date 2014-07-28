@@ -19,6 +19,7 @@
 	 * @property string $Nome the value for strNome (Unique)
 	 * @property string $Codigo the value for strCodigo (Not Null)
 	 * @property double $Metro the value for fltMetro (Not Null)
+	 * @property double $Preco the value for fltPreco (Not Null)
 	 * @property ComandoPeca $_ComandoPeca the value for the private _objComandoPeca (Read-Only) if set due to an expansion on the comando_peca.tecido_id reverse relationship
 	 * @property ComandoPeca[] $_ComandoPecaArray the value for the private _objComandoPecaArray (Read-Only) if set due to an ExpandAsArray on the comando_peca.tecido_id reverse relationship
 	 * @property Referencia $_Referencia the value for the private _objReferencia (Read-Only) if set due to an expansion on the referencia.tecido_id reverse relationship
@@ -65,6 +66,14 @@
 		 */
 		protected $fltMetro;
 		const MetroDefault = null;
+
+
+		/**
+		 * Protected member variable that maps to the database column tecido.preco
+		 * @var double fltPreco
+		 */
+		protected $fltPreco;
+		const PrecoDefault = null;
 
 
 		/**
@@ -451,6 +460,7 @@
 			$objBuilder->AddSelectItem($strTableName, 'nome', $strAliasPrefix . 'nome');
 			$objBuilder->AddSelectItem($strTableName, 'codigo', $strAliasPrefix . 'codigo');
 			$objBuilder->AddSelectItem($strTableName, 'metro', $strAliasPrefix . 'metro');
+			$objBuilder->AddSelectItem($strTableName, 'preco', $strAliasPrefix . 'preco');
 		}
 
 
@@ -550,6 +560,8 @@
 			$objToReturn->strCodigo = $objDbRow->GetColumn($strAliasName, 'VarChar');
 			$strAliasName = array_key_exists($strAliasPrefix . 'metro', $strColumnAliasArray) ? $strColumnAliasArray[$strAliasPrefix . 'metro'] : $strAliasPrefix . 'metro';
 			$objToReturn->fltMetro = $objDbRow->GetColumn($strAliasName, 'Float');
+			$strAliasName = array_key_exists($strAliasPrefix . 'preco', $strColumnAliasArray) ? $strColumnAliasArray[$strAliasPrefix . 'preco'] : $strAliasPrefix . 'preco';
+			$objToReturn->fltPreco = $objDbRow->GetColumn($strAliasName, 'Float');
 
 			// Instantiate Virtual Attributes
 			foreach ($objDbRow->GetColumnNameArray() as $strColumnName => $mixValue) {
@@ -725,11 +737,13 @@
 						INSERT INTO `tecido` (
 							`nome`,
 							`codigo`,
-							`metro`
+							`metro`,
+							`preco`
 						) VALUES (
 							' . $objDatabase->SqlVariable($this->strNome) . ',
 							' . $objDatabase->SqlVariable($this->strCodigo) . ',
-							' . $objDatabase->SqlVariable($this->fltMetro) . '
+							' . $objDatabase->SqlVariable($this->fltMetro) . ',
+							' . $objDatabase->SqlVariable($this->fltPreco) . '
 						)
 					');
 
@@ -751,7 +765,8 @@
 						SET
 							`nome` = ' . $objDatabase->SqlVariable($this->strNome) . ',
 							`codigo` = ' . $objDatabase->SqlVariable($this->strCodigo) . ',
-							`metro` = ' . $objDatabase->SqlVariable($this->fltMetro) . '
+							`metro` = ' . $objDatabase->SqlVariable($this->fltMetro) . ',
+							`preco` = ' . $objDatabase->SqlVariable($this->fltPreco) . '
 						WHERE
 							`id` = ' . $objDatabase->SqlVariable($this->intId) . '
 					');
@@ -839,6 +854,7 @@
 			$this->strNome = $objReloaded->strNome;
 			$this->strCodigo = $objReloaded->strCodigo;
 			$this->fltMetro = $objReloaded->fltMetro;
+			$this->fltPreco = $objReloaded->fltPreco;
 		}
 
 		/**
@@ -855,6 +871,7 @@
 					`nome`,
 					`codigo`,
 					`metro`,
+					`preco`,
 					__sys_login_id,
 					__sys_action,
 					__sys_date
@@ -863,6 +880,7 @@
 					' . $objDatabase->SqlVariable($this->strNome) . ',
 					' . $objDatabase->SqlVariable($this->strCodigo) . ',
 					' . $objDatabase->SqlVariable($this->fltMetro) . ',
+					' . $objDatabase->SqlVariable($this->fltPreco) . ',
 					' . (($objDatabase->JournaledById) ? $objDatabase->JournaledById : 'NULL') . ',
 					' . $objDatabase->SqlVariable($strJournalCommand) . ',
 					NOW()
@@ -932,6 +950,11 @@
 					// Gets the value for fltMetro (Not Null)
 					// @return double
 					return $this->fltMetro;
+
+				case 'Preco':
+					// Gets the value for fltPreco (Not Null)
+					// @return double
+					return $this->fltPreco;
 
 
 				///////////////////
@@ -1034,6 +1057,17 @@
 					// @return double
 					try {
 						return ($this->fltMetro = QType::Cast($mixValue, QType::Float));
+					} catch (QCallerException $objExc) {
+						$objExc->IncrementOffset();
+						throw $objExc;
+					}
+
+				case 'Preco':
+					// Sets the value for fltPreco (Not Null)
+					// @param double $mixValue
+					// @return double
+					try {
+						return ($this->fltPreco = QType::Cast($mixValue, QType::Float));
 					} catch (QCallerException $objExc) {
 						$objExc->IncrementOffset();
 						throw $objExc;
@@ -1630,6 +1664,7 @@
 			$strToReturn .= '<element name="Nome" type="xsd:string"/>';
 			$strToReturn .= '<element name="Codigo" type="xsd:string"/>';
 			$strToReturn .= '<element name="Metro" type="xsd:float"/>';
+			$strToReturn .= '<element name="Preco" type="xsd:float"/>';
 			$strToReturn .= '<element name="__blnRestored" type="xsd:boolean"/>';
 			$strToReturn .= '</sequence></complexType>';
 			return $strToReturn;
@@ -1660,6 +1695,8 @@
 				$objToReturn->strCodigo = $objSoapObject->Codigo;
 			if (property_exists($objSoapObject, 'Metro'))
 				$objToReturn->fltMetro = $objSoapObject->Metro;
+			if (property_exists($objSoapObject, 'Preco'))
+				$objToReturn->fltPreco = $objSoapObject->Preco;
 			if (property_exists($objSoapObject, '__blnRestored'))
 				$objToReturn->__blnRestored = $objSoapObject->__blnRestored;
 			return $objToReturn;
@@ -1697,6 +1734,7 @@
 	 * @property-read QQNode $Nome
 	 * @property-read QQNode $Codigo
 	 * @property-read QQNode $Metro
+	 * @property-read QQNode $Preco
 	 * @property-read QQReverseReferenceNodeComandoPeca $ComandoPeca
 	 * @property-read QQReverseReferenceNodeReferencia $Referencia
 	 * @property-read QQReverseReferenceNodeReferenciaRendimento $ReferenciaRendimento
@@ -1715,6 +1753,8 @@
 					return new QQNode('codigo', 'Codigo', 'string', $this);
 				case 'Metro':
 					return new QQNode('metro', 'Metro', 'double', $this);
+				case 'Preco':
+					return new QQNode('preco', 'Preco', 'double', $this);
 				case 'ComandoPeca':
 					return new QQReverseReferenceNodeComandoPeca($this, 'comandopeca', 'reverse_reference', 'tecido_id');
 				case 'Referencia':
@@ -1740,6 +1780,7 @@
 	 * @property-read QQNode $Nome
 	 * @property-read QQNode $Codigo
 	 * @property-read QQNode $Metro
+	 * @property-read QQNode $Preco
 	 * @property-read QQReverseReferenceNodeComandoPeca $ComandoPeca
 	 * @property-read QQReverseReferenceNodeReferencia $Referencia
 	 * @property-read QQReverseReferenceNodeReferenciaRendimento $ReferenciaRendimento
@@ -1759,6 +1800,8 @@
 					return new QQNode('codigo', 'Codigo', 'string', $this);
 				case 'Metro':
 					return new QQNode('metro', 'Metro', 'double', $this);
+				case 'Preco':
+					return new QQNode('preco', 'Preco', 'double', $this);
 				case 'ComandoPeca':
 					return new QQReverseReferenceNodeComandoPeca($this, 'comandopeca', 'reverse_reference', 'tecido_id');
 				case 'Referencia':

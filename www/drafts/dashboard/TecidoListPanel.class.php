@@ -69,6 +69,7 @@
 			$this->dtgTecidos->MetaAddColumn('Nome');
 			$this->dtgTecidos->MetaAddColumn('Codigo');
 			$this->dtgTecidos->MetaAddColumn('Metro');
+			$this->dtgTecidos->MetaAddColumn('Preco');
 
 			// Setup the Create New button
 			$this->btnCreateNew = new QButton($this);

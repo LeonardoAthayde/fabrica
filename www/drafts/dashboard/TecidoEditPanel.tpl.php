@@ -13,6 +13,8 @@
 
 		<?php $_CONTROL->txtMetro->RenderWithName(); ?>
 
+		<?php $_CONTROL->txtPreco->RenderWithName(); ?>
+
 	</div>
 
 	<div id="formActions">

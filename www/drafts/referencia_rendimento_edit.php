@@ -27,10 +27,12 @@
 
 		// Controls for ReferenciaRendimento's Data Fields
 		protected $lblId;
+		protected $lstMolde;
 		protected $lstReferencia;
 		protected $txtComprimento;
 		protected $txtPecas;
 		protected $txtPeso;
+		protected $txtPreco;
 		protected $lstTecido;
 
 		// Other ListBoxes (if applicable) via Unique ReverseReferences and ManyToMany References
@@ -74,10 +76,12 @@
 
 			// Call MetaControl's methods to create qcontrols based on ReferenciaRendimento's data fields
 			$this->lblId = $this->mctReferenciaRendimento->lblId_Create();
+			$this->lstMolde = $this->mctReferenciaRendimento->lstMolde_Create();
 			$this->lstReferencia = $this->mctReferenciaRendimento->lstReferencia_Create();
 			$this->txtComprimento = $this->mctReferenciaRendimento->txtComprimento_Create();
 			$this->txtPecas = $this->mctReferenciaRendimento->txtPecas_Create();
 			$this->txtPeso = $this->mctReferenciaRendimento->txtPeso_Create();
+			$this->txtPreco = $this->mctReferenciaRendimento->txtPreco_Create();
 			$this->lstTecido = $this->mctReferenciaRendimento->lstTecido_Create();
 
 			// Create Buttons and Actions on this Form

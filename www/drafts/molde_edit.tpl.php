@@ -1,11 +1,11 @@
 <?php
-	// This is the HTML template include file (.tpl.php) for the tecido_edit.php
+	// This is the HTML template include file (.tpl.php) for the molde_edit.php
 	// form DRAFT page.  Remember that this is a DRAFT.  It is MEANT to be altered/modified.
 
 	// Be sure to move this out of the generated/ subdirectory before modifying to ensure that subsequent 
 	// code re-generations do not overwrite your changes.
 
-	$strPageTitle = QApplication::Translate('Tecido') . ' - ' . $this->mctTecido->TitleVerb;
+	$strPageTitle = QApplication::Translate('Molde') . ' - ' . $this->mctMolde->TitleVerb;
 	//require(__INCLUDES__ . '/header.inc.php');
 	require __DOCROOT__.'/tpl/header.inc.php';
 ?>
@@ -13,20 +13,14 @@
 	<?php //$this->RenderBegin() ?>
 
 	<div id="titleBar">
-		<h2><?php _p($this->mctTecido->TitleVerb); ?></h2>
-		<h1><?php _t('Tecido')?></h1>
+		<h2><?php _p($this->mctMolde->TitleVerb); ?></h2>
+		<h1><?php _t('Molde')?></h1>
 	</div>
 
 	<div id="formControls">
 		<?php $this->lblId->RenderWithName(); ?>
 
 		<?php $this->txtNome->RenderWithName(); ?>
-
-		<?php $this->txtCodigo->RenderWithName(); ?>
-
-		<?php $this->txtMetro->RenderWithName(); ?>
-
-		<?php $this->txtPreco->RenderWithName(); ?>
 
 	</div>
 

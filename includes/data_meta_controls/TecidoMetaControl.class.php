@@ -34,6 +34,7 @@
 				if ($this->txtNome) $this->objTecido->Nome = $this->txtNome->Text;
 				if ($this->txtCodigo) $this->objTecido->Codigo = $this->txtCodigo->Text;
 				if ($this->txtMetro) $this->objTecido->Metro = $this->txtMetro->Text;
+				if ($this->txtPreco) $this->objTecido->Preco = $this->txtPreco->Text;
 
 				// Update any UniqueReverseReferences (if any) for controls that have been created for it
 

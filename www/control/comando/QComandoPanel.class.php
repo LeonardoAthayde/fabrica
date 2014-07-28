@@ -68,9 +68,10 @@
 			$this->pnlPeca = new QPanel($this);
 			$this->pnlPeca->AutoRenderChildren = true;			
 			
-			$this->lstQuantidadePanos_Create();
 			$this->lstTecido_Create();
 			$this->txtCor_Create();
+			$this->lstQuantidadePanos_Create();
+		
 			$this->btnSavePeca_Create();
 		}
 		
@@ -92,7 +93,7 @@
 			$this->lstTecido->AddItem('ESCOLHE UM TECIDO ==>');
 			$this->lstTecido->SetCustomStyle('margin-bottom', '20px');
 			$this->lstTecido->RenderMethod = 'RenderWithName';
-			foreach (Tecido::LoadAll() as $objTecido)
+			foreach (Tecido::LoadAll(QQ::Clause(QQ::OrderBy(QQN::Tecido()->Nome))) as $objTecido)
 				$this->lstTecido->AddItem($objTecido->Nome, $objTecido->Id);			
 		}		
 		
@@ -153,10 +154,16 @@
 						$fltMeia = 0.5;
 					$objComandoRiscoPeca->QuantidadeReal = ($objComandoRisco->QuantidadeRisco+$fltMeia)*$objComandoPeca->QuantidadePanos;
 					$objReferencia = Referencia::LoadByNome($objComandoRisco->Referencia.$objComandoPeca->Tecido->Codigo);
+					
+					$blnFlagPeso = true;
 					foreach ($objReferencia->GetReferenciaRendimentoArray() as $objReferenciaRendimento){
-						if($objReferenciaRendimento->TecidoId == $objComandoPeca->TecidoId)
+						if($objReferenciaRendimento->TecidoId == $objComandoPeca->TecidoId){
 							$objComandoRiscoPeca->Peso = $objReferenciaRendimento->Peso*$objComandoRiscoPeca->QuantidadeReal;
+							$blnFlagPeso = true;
+						}
 					}
+					if($blnFlagPeso)
+						$objComandoRiscoPeca->Peso = 0;					
 					$objComandoRiscoPeca->Save();
 					$fltTotalPeso+=$objComandoRiscoPeca->Peso;
 				}
@@ -249,7 +256,10 @@
 						
 						$pnlItemRisco->chkTamanho->Checked = false;
 						$pnlItemRisco->lstQuantidadeRisco->SelectedIndex = 0;
+						$pnlItemRisco->lstQuantidadeRisco->Display = false;
 						$pnlItemRisco->chkMeia->Checked = false;
+						$pnlItemRisco->chkMeia->Display = false;
+						
 						foreach ($objComando->GetComandoPecaArray() as $objComandoPeca){
 							$objComandoRiscoPeca = new ComandoRiscoPeca();
 							$objComandoRiscoPeca->ComandoRiscoId = $objComandoRisco->Id;
@@ -259,16 +269,22 @@
 								$fltMeia = 0.5;
 							$objComandoRiscoPeca->QuantidadeReal = ($objComandoRisco->QuantidadeRisco+$fltMeia)*$objComandoPeca->QuantidadePanos;
 							
+							$blnFlagPeso = true;
 							$objReferencia = Referencia::LoadByNome($objComandoRisco->Referencia.$objComandoPeca->Tecido->Codigo);
 							foreach ($objReferencia->GetReferenciaRendimentoArray() as $objReferenciaRendimento){
-								if($objReferenciaRendimento->TecidoId == $objComandoPeca->TecidoId)
+								if($objReferenciaRendimento->TecidoId == $objComandoPeca->TecidoId) {
 									$objComandoRiscoPeca->Peso = $objReferenciaRendimento->Peso*$objComandoRiscoPeca->QuantidadeReal;
+									$blnFlagPeso = false;
+								}
 							}
+							if($blnFlagPeso)
+								$objComandoRiscoPeca->Peso = 0;
 							$objComandoRiscoPeca->Save();					
 						}
 					}
 				}
 				$this->txtReferencia->Text = '';
+				$this->txtReferencia_RenderScript();
 				
 				foreach ($objComando->GetComandoPecaArray() as $objComandoPeca){
 					$fltTotalPeso = 0;

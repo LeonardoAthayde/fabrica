@@ -24,6 +24,8 @@
 	 * property-read QLabel $CodigoLabel
 	 * property QFloatTextBox $MetroControl
 	 * property-read QLabel $MetroLabel
+	 * property QFloatTextBox $PrecoControl
+	 * property-read QLabel $PrecoLabel
 	 * property-read string $TitleVerb a verb indicating whether or not this is being edited or created
 	 * property-read boolean $EditMode a boolean indicating whether or not this is being edited or created
 	 */
@@ -79,6 +81,12 @@
          */
 		protected $txtMetro;
 
+        /**
+         * @var QFloatTextBox txtPreco;
+         * @access protected
+         */
+		protected $txtPreco;
+
 
 		// Controls that allow the viewing of Tecido's individual data fields
         /**
@@ -98,6 +106,12 @@
          * @access protected
          */
 		protected $lblMetro;
+
+        /**
+         * @var QLabel lblPreco
+         * @access protected
+         */
+		protected $lblPreco;
 
 
 		// QListBox Controls (if applicable) to edit Unique ReverseReferences and ManyToMany References
@@ -294,6 +308,34 @@
 			return $this->lblMetro;
 		}
 
+		/**
+		 * Create and setup QFloatTextBox txtPreco
+		 * @param string $strControlId optional ControlId to use
+		 * @return QFloatTextBox
+		 */
+		public function txtPreco_Create($strControlId = null) {
+			$this->txtPreco = new QFloatTextBox($this->objParentObject, $strControlId);
+			$this->txtPreco->Name = QApplication::Translate('Preco');
+			$this->txtPreco->Text = $this->objTecido->Preco;
+			$this->txtPreco->Required = true;
+			return $this->txtPreco;
+		}
+
+		/**
+		 * Create and setup QLabel lblPreco
+		 * @param string $strControlId optional ControlId to use
+		 * @param string $strFormat optional sprintf format to use
+		 * @return QLabel
+		 */
+		public function lblPreco_Create($strControlId = null, $strFormat = null) {
+			$this->lblPreco = new QLabel($this->objParentObject, $strControlId);
+			$this->lblPreco->Name = QApplication::Translate('Preco');
+			$this->lblPreco->Text = $this->objTecido->Preco;
+			$this->lblPreco->Required = true;
+			$this->lblPreco->Format = $strFormat;
+			return $this->lblPreco;
+		}
+
 
 
 		/**
@@ -315,6 +357,9 @@
 
 			if ($this->txtMetro) $this->txtMetro->Text = $this->objTecido->Metro;
 			if ($this->lblMetro) $this->lblMetro->Text = $this->objTecido->Metro;
+
+			if ($this->txtPreco) $this->txtPreco->Text = $this->objTecido->Preco;
+			if ($this->lblPreco) $this->lblPreco->Text = $this->objTecido->Preco;
 
 		}
 
@@ -342,6 +387,7 @@
 				if ($this->txtNome) $this->objTecido->Nome = $this->txtNome->Text;
 				if ($this->txtCodigo) $this->objTecido->Codigo = $this->txtCodigo->Text;
 				if ($this->txtMetro) $this->objTecido->Metro = $this->txtMetro->Text;
+				if ($this->txtPreco) $this->objTecido->Preco = $this->txtPreco->Text;
 
 				// Update any UniqueReverseReferences (if any) for controls that have been created for it
 
@@ -408,6 +454,12 @@
 				case 'MetroLabel':
 					if (!$this->lblMetro) return $this->lblMetro_Create();
 					return $this->lblMetro;
+				case 'PrecoControl':
+					if (!$this->txtPreco) return $this->txtPreco_Create();
+					return $this->txtPreco;
+				case 'PrecoLabel':
+					if (!$this->lblPreco) return $this->lblPreco_Create();
+					return $this->lblPreco;
 				default:
 					try {
 						return parent::__get($strName);
@@ -438,6 +490,8 @@
 						return ($this->txtCodigo = QType::Cast($mixValue, 'QControl'));
 					case 'MetroControl':
 						return ($this->txtMetro = QType::Cast($mixValue, 'QControl'));
+					case 'PrecoControl':
+						return ($this->txtPreco = QType::Cast($mixValue, 'QControl'));
 					default:
 						return parent::__set($strName, $mixValue);
 				}

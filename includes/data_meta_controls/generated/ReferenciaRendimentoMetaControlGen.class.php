@@ -18,6 +18,8 @@
 	 * property-read ReferenciaRendimento $ReferenciaRendimento the actual ReferenciaRendimento data class being edited
 	 * property QLabel $IdControl
 	 * property-read QLabel $IdLabel
+	 * property QListBox $MoldeIdControl
+	 * property-read QLabel $MoldeIdLabel
 	 * property QListBox $ReferenciaIdControl
 	 * property-read QLabel $ReferenciaIdLabel
 	 * property QFloatTextBox $ComprimentoControl
@@ -26,6 +28,8 @@
 	 * property-read QLabel $PecasLabel
 	 * property QFloatTextBox $PesoControl
 	 * property-read QLabel $PesoLabel
+	 * property QFloatTextBox $PrecoControl
+	 * property-read QLabel $PrecoLabel
 	 * property QListBox $TecidoIdControl
 	 * property-read QLabel $TecidoIdLabel
 	 * property-read string $TitleVerb a verb indicating whether or not this is being edited or created
@@ -66,6 +70,12 @@
 		protected $lblId;
 
         /**
+         * @var QListBox lstMolde;
+         * @access protected
+         */
+		protected $lstMolde;
+
+        /**
          * @var QListBox lstReferencia;
          * @access protected
          */
@@ -90,6 +100,12 @@
 		protected $txtPeso;
 
         /**
+         * @var QFloatTextBox txtPreco;
+         * @access protected
+         */
+		protected $txtPreco;
+
+        /**
          * @var QListBox lstTecido;
          * @access protected
          */
@@ -97,6 +113,12 @@
 
 
 		// Controls that allow the viewing of ReferenciaRendimento's individual data fields
+        /**
+         * @var QLabel lblMoldeId
+         * @access protected
+         */
+		protected $lblMoldeId;
+
         /**
          * @var QLabel lblReferenciaId
          * @access protected
@@ -120,6 +142,12 @@
          * @access protected
          */
 		protected $lblPeso;
+
+        /**
+         * @var QLabel lblPreco
+         * @access protected
+         */
+		protected $lblPreco;
 
         /**
          * @var QLabel lblTecidoId
@@ -238,6 +266,46 @@
 			else
 				$this->lblId->Text = 'N/A';
 			return $this->lblId;
+		}
+
+		/**
+		 * Create and setup QListBox lstMolde
+		 * @param string $strControlId optional ControlId to use
+		 * @param QQCondition $objConditions override the default condition of QQ::All() to the query, itself
+		 * @param QQClause[] $objOptionalClauses additional optional QQClause object or array of QQClause objects for the query
+		 * @return QListBox
+		 */
+		public function lstMolde_Create($strControlId = null, QQCondition $objCondition = null, $objOptionalClauses = null) {
+			$this->lstMolde = new QListBox($this->objParentObject, $strControlId);
+			$this->lstMolde->Name = QApplication::Translate('Molde');
+			$this->lstMolde->AddItem(QApplication::Translate('- Select One -'), null);
+
+			// Setup and perform the Query
+			if (is_null($objCondition)) $objCondition = QQ::All();
+			$objMoldeCursor = Molde::QueryCursor($objCondition, $objOptionalClauses);
+
+			// Iterate through the Cursor
+			while ($objMolde = Molde::InstantiateCursor($objMoldeCursor)) {
+				$objListItem = new QListItem($objMolde->__toString(), $objMolde->Id);
+				if (($this->objReferenciaRendimento->Molde) && ($this->objReferenciaRendimento->Molde->Id == $objMolde->Id))
+					$objListItem->Selected = true;
+				$this->lstMolde->AddItem($objListItem);
+			}
+
+			// Return the QListBox
+			return $this->lstMolde;
+		}
+
+		/**
+		 * Create and setup QLabel lblMoldeId
+		 * @param string $strControlId optional ControlId to use
+		 * @return QLabel
+		 */
+		public function lblMoldeId_Create($strControlId = null) {
+			$this->lblMoldeId = new QLabel($this->objParentObject, $strControlId);
+			$this->lblMoldeId->Name = QApplication::Translate('Molde');
+			$this->lblMoldeId->Text = ($this->objReferenciaRendimento->Molde) ? $this->objReferenciaRendimento->Molde->__toString() : null;
+			return $this->lblMoldeId;
 		}
 
 		/**
@@ -368,6 +436,34 @@
 		}
 
 		/**
+		 * Create and setup QFloatTextBox txtPreco
+		 * @param string $strControlId optional ControlId to use
+		 * @return QFloatTextBox
+		 */
+		public function txtPreco_Create($strControlId = null) {
+			$this->txtPreco = new QFloatTextBox($this->objParentObject, $strControlId);
+			$this->txtPreco->Name = QApplication::Translate('Preco');
+			$this->txtPreco->Text = $this->objReferenciaRendimento->Preco;
+			$this->txtPreco->Required = true;
+			return $this->txtPreco;
+		}
+
+		/**
+		 * Create and setup QLabel lblPreco
+		 * @param string $strControlId optional ControlId to use
+		 * @param string $strFormat optional sprintf format to use
+		 * @return QLabel
+		 */
+		public function lblPreco_Create($strControlId = null, $strFormat = null) {
+			$this->lblPreco = new QLabel($this->objParentObject, $strControlId);
+			$this->lblPreco->Name = QApplication::Translate('Preco');
+			$this->lblPreco->Text = $this->objReferenciaRendimento->Preco;
+			$this->lblPreco->Required = true;
+			$this->lblPreco->Format = $strFormat;
+			return $this->lblPreco;
+		}
+
+		/**
 		 * Create and setup QListBox lstTecido
 		 * @param string $strControlId optional ControlId to use
 		 * @param QQCondition $objConditions override the default condition of QQ::All() to the query, itself
@@ -423,6 +519,19 @@
 
 			if ($this->lblId) if ($this->blnEditMode) $this->lblId->Text = $this->objReferenciaRendimento->Id;
 
+			if ($this->lstMolde) {
+					$this->lstMolde->RemoveAllItems();
+				$this->lstMolde->AddItem(QApplication::Translate('- Select One -'), null);
+				$objMoldeArray = Molde::LoadAll();
+				if ($objMoldeArray) foreach ($objMoldeArray as $objMolde) {
+					$objListItem = new QListItem($objMolde->__toString(), $objMolde->Id);
+					if (($this->objReferenciaRendimento->Molde) && ($this->objReferenciaRendimento->Molde->Id == $objMolde->Id))
+						$objListItem->Selected = true;
+					$this->lstMolde->AddItem($objListItem);
+				}
+			}
+			if ($this->lblMoldeId) $this->lblMoldeId->Text = ($this->objReferenciaRendimento->Molde) ? $this->objReferenciaRendimento->Molde->__toString() : null;
+
 			if ($this->lstReferencia) {
 					$this->lstReferencia->RemoveAllItems();
 				if (!$this->blnEditMode)
@@ -445,6 +554,9 @@
 
 			if ($this->txtPeso) $this->txtPeso->Text = $this->objReferenciaRendimento->Peso;
 			if ($this->lblPeso) $this->lblPeso->Text = $this->objReferenciaRendimento->Peso;
+
+			if ($this->txtPreco) $this->txtPreco->Text = $this->objReferenciaRendimento->Preco;
+			if ($this->lblPreco) $this->lblPreco->Text = $this->objReferenciaRendimento->Preco;
 
 			if ($this->lstTecido) {
 					$this->lstTecido->RemoveAllItems();
@@ -483,10 +595,12 @@
 		public function SaveReferenciaRendimento() {
 			try {
 				// Update any fields for controls that have been created
+				if ($this->lstMolde) $this->objReferenciaRendimento->MoldeId = $this->lstMolde->SelectedValue;
 				if ($this->lstReferencia) $this->objReferenciaRendimento->ReferenciaId = $this->lstReferencia->SelectedValue;
 				if ($this->txtComprimento) $this->objReferenciaRendimento->Comprimento = $this->txtComprimento->Text;
 				if ($this->txtPecas) $this->objReferenciaRendimento->Pecas = $this->txtPecas->Text;
 				if ($this->txtPeso) $this->objReferenciaRendimento->Peso = $this->txtPeso->Text;
+				if ($this->txtPreco) $this->objReferenciaRendimento->Preco = $this->txtPreco->Text;
 				if ($this->lstTecido) $this->objReferenciaRendimento->TecidoId = $this->lstTecido->SelectedValue;
 
 				// Update any UniqueReverseReferences (if any) for controls that have been created for it
@@ -536,6 +650,12 @@
 				case 'IdLabel':
 					if (!$this->lblId) return $this->lblId_Create();
 					return $this->lblId;
+				case 'MoldeIdControl':
+					if (!$this->lstMolde) return $this->lstMolde_Create();
+					return $this->lstMolde;
+				case 'MoldeIdLabel':
+					if (!$this->lblMoldeId) return $this->lblMoldeId_Create();
+					return $this->lblMoldeId;
 				case 'ReferenciaIdControl':
 					if (!$this->lstReferencia) return $this->lstReferencia_Create();
 					return $this->lstReferencia;
@@ -560,6 +680,12 @@
 				case 'PesoLabel':
 					if (!$this->lblPeso) return $this->lblPeso_Create();
 					return $this->lblPeso;
+				case 'PrecoControl':
+					if (!$this->txtPreco) return $this->txtPreco_Create();
+					return $this->txtPreco;
+				case 'PrecoLabel':
+					if (!$this->lblPreco) return $this->lblPreco_Create();
+					return $this->lblPreco;
 				case 'TecidoIdControl':
 					if (!$this->lstTecido) return $this->lstTecido_Create();
 					return $this->lstTecido;
@@ -590,6 +716,8 @@
 					// Controls that point to ReferenciaRendimento fields
 					case 'IdControl':
 						return ($this->lblId = QType::Cast($mixValue, 'QControl'));
+					case 'MoldeIdControl':
+						return ($this->lstMolde = QType::Cast($mixValue, 'QControl'));
 					case 'ReferenciaIdControl':
 						return ($this->lstReferencia = QType::Cast($mixValue, 'QControl'));
 					case 'ComprimentoControl':
@@ -598,6 +726,8 @@
 						return ($this->txtPecas = QType::Cast($mixValue, 'QControl'));
 					case 'PesoControl':
 						return ($this->txtPeso = QType::Cast($mixValue, 'QControl'));
+					case 'PrecoControl':
+						return ($this->txtPreco = QType::Cast($mixValue, 'QControl'));
 					case 'TecidoIdControl':
 						return ($this->lstTecido = QType::Cast($mixValue, 'QControl'));
 					default:

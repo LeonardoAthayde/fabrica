@@ -42,7 +42,8 @@
 			$this->dtgReferencias->MetaAddColumn(QQN::Referencia()->ReferenciaCategoria);
 			$this->dtgReferencias->MetaAddColumn('Modelo');
 			$this->dtgReferencias->MetaAddColumn(QQN::Referencia()->Tecido);
-			$this->dtgReferencias->AddColumn(new QDataGridColumn('RENDIMENTO', '<?=$_FORM->RenderFeferenciaRendimentos($_ITEM); ?>'));
+			$this->dtgReferencias->AddColumn(new QDataGridColumn('RENDIMENTO', '<?=$_FORM->RenderFeferenciaRendimentos($_ITEM); ?>', 'HtmlEntities=false'));
+			$this->dtgReferencias->AddColumn(new QDataGridColumn('PREÇO', '<?=$_FORM->RenderPreco($_ITEM); ?>', 'HtmlEntities=false'));
 			//$this->dtgReferencias->MetaAddColumn(QQN::Referencia()->ReferenciaRendimento);
 			
 			$this->dtgReferencias->MetaAddEditLinkColumn($strEditPageUrl, 'Edit', 'Edit');
@@ -59,9 +60,19 @@
 		
 		public function RenderFeferenciaRendimentos(Referencia $objReferencia){
 			$strToReturn = '';
-			foreach ($objReferencia->GetReferenciaRendimentoArray() as $objReferenciaRendimento)
-				$strToReturn.= $objReferenciaRendimento->Tecido->Nome.' ('.number_format ($objReferenciaRendimento->Peso, 3).' Kg), ';
-			return substr($strToReturn, 0, strlen($strToReturn)-2);
+			foreach ($objReferencia->GetReferenciaRendimentoArray(QQ::Clause(QQ::OrderBy(QQN::ReferenciaRendimento()->Preco, false))) as $objReferenciaRendimento)
+				if($objReferenciaRendimento->Molde)
+					$strToReturn.= $objReferenciaRendimento->Molde->Nome.' ('.$objReferenciaRendimento->Tecido->Nome.' - '.number_format ($objReferenciaRendimento->Peso, 3).'Kg) '.number_format ($objReferenciaRendimento->Preco,2).' R$<br>';
+				else
+					$strToReturn.= '('.$objReferenciaRendimento->Tecido->Nome.' - '.number_format ($objReferenciaRendimento->Peso, 3).'Kg) '.number_format ($objReferenciaRendimento->Preco,2).' R$<br>';
+			return substr($strToReturn, 0, strlen($strToReturn)-4);
+		}
+		
+		public function RenderPreco(Referencia $objReferencia){
+			$fltPreco = 0;
+			foreach ($objReferencia->GetReferenciaRendimentoArray(QQ::Clause(QQ::OrderBy(QQN::ReferenciaRendimento()->Preco, false))) as $objReferenciaRendimento)
+				$fltPreco+= $objReferenciaRendimento->Preco;
+			return number_format($fltPreco,2).'R$';			
 		}
 		
 		protected function DefaultWaitIcon_Create(){

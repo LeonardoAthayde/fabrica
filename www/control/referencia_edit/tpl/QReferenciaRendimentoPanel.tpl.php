@@ -1,8 +1,18 @@
-<div class="panel panel-default">
+<div class="panel <?=($_CONTROL->objReferenciaRendimento->Peso)?'panel-default':'panel-primary';?>">
 	<div class="panel-heading">
 		<div class="panel-title">PESO: <?=$_CONTROL->GetTitle(); ?></div>
 	</div>
 	<div class="panel-body">
+		<div class="row marginBottom20">
+			<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+				<?php $_CONTROL->lstMolde->RenderWithName(); ?>
+			</div>
+		</div>			
+		<div class="row marginBottom20">
+			<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+				<?php $_CONTROL->lstTecido->RenderWithName(); ?>
+			</div>
+		</div>		
 		<div class="row marginBottom20">
 			<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 				<?php $_CONTROL->txtComprimento->RenderWithName(); ?>
@@ -11,11 +21,6 @@
 		<div class="row marginBottom20">
 			<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 				<?php $_CONTROL->txtPecas->RenderWithName(); ?>
-			</div>
-		</div>
-		<div class="row marginBottom20">
-			<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-				<?php $_CONTROL->lstTecido->RenderWithName(); ?>
 			</div>
 		</div>
 		<div class="row">

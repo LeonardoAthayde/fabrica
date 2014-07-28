@@ -89,10 +89,13 @@
 		}		
 		
 		protected function btnAddReferenciaRendimento_Create(){
-			$this->btnAddReferenciaRendimento = new QButton($this);
-			$this->btnAddReferenciaRendimento->CssClass = 'btn btn-default btn-lg width100';
-			$this->btnAddReferenciaRendimento->Text = 'NOVO REFERENCIA RENDIMENTO';
+			$this->btnAddReferenciaRendimento = new QLinkButton($this);
+			$this->btnAddReferenciaRendimento->HtmlEntities = false;
+			$this->btnAddReferenciaRendimento->Text = '<button type="button" class="btn btn-default btn-lg width100">
+					<span class="glyphicon glyphicon-plus"></span> RENDIMENTO DO MALDE
+				</button>'; //"<span class='glyphicon glyphicon-plus'></span>NOVO REFERENCIA RENDIMENTO";
 			$this->btnAddReferenciaRendimento->AddAction(new QClickEvent(), new QAjaxAction('btnAddReferenciaRendimento_Click'));
+			$this->btnAddReferenciaRendimento->AddAction(new QClickEvent(), new QTerminateAction());
 		}
 		
 		protected function btnAddReferenciaRendimento_Click($strFormId, $strControlId, $strParameter){
@@ -113,7 +116,7 @@
 			$this->dtrReferenciaRendimento->Template = __DOCROOT__.'/control/referencia_edit/tpl/dtr_ReferenciaRendimento.tpl.php';
 			
 			if($this->mctReferencia->EditMode)
-				foreach ($this->mctReferencia->Referencia->GetReferenciaRendimentoArray() as $objReferenciaRendimento)
+				foreach ($this->mctReferencia->Referencia->GetReferenciaRendimentoArray(QQ::Clause(QQ::OrderBy(QQN::ReferenciaRendimento()->Preco, false))) as $objReferenciaRendimento)
 					array_push ($this->objArrayReferenciaRendimento, $objReferenciaRendimento);
 		}
 		
@@ -172,7 +175,8 @@
 			foreach ($this->objArrayReferenciaRendimentoDelete as$objReferenciaRendimentoDelete)
 				if($objReferenciaRendimentoDelete->Id)
 					$objReferenciaRendimentoDelete->Delete();
-			
+				$objReferencia = $this->mctReferencia->Referencia;
+			$_SESSION['referencia_list'] = $objReferencia->ReferenciaCategoria->Nome.$objReferencia->Modelo;
 			$this->RedirectToListPage();
 		}
 
@@ -209,7 +213,11 @@
 					return true;
 			} else 
 				return false;
-		}		
+		}
+		
+		public function Get_lstTecido(){
+			return $this->lstTecido;
+		}
 		
 	}
 

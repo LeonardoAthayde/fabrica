@@ -125,6 +125,13 @@
 		QApplicationBase::$ClassFile['menumetacontrol'] = __DATA_META_CONTROLS__ . '/MenuMetaControl.class.php';
 		QApplicationBase::$ClassFile['menudatagrid'] = __DATA_META_CONTROLS__ . '/MenuDataGrid.class.php';
 
+	// ClassPaths for the Molde class
+		QApplicationBase::$ClassFile['molde'] = __DATA_CLASSES__ . '/Molde.class.php';
+		QApplicationBase::$ClassFile['qqnodemolde'] = __DATA_CLASSES__ . '/Molde.class.php';
+		QApplicationBase::$ClassFile['qqreversereferencenodemolde'] = __DATA_CLASSES__ . '/Molde.class.php';
+		QApplicationBase::$ClassFile['moldemetacontrol'] = __DATA_META_CONTROLS__ . '/MoldeMetaControl.class.php';
+		QApplicationBase::$ClassFile['moldedatagrid'] = __DATA_META_CONTROLS__ . '/MoldeDataGrid.class.php';
+
 	// ClassPaths for the Referencia class
 		QApplicationBase::$ClassFile['referencia'] = __DATA_CLASSES__ . '/Referencia.class.php';
 		QApplicationBase::$ClassFile['qqnodereferencia'] = __DATA_CLASSES__ . '/Referencia.class.php';
