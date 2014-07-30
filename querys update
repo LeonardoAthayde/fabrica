@@ -1,18 +1,2 @@
-CREATE TABLE IF NOT EXISTS `molde` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `nome` varchar(20) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
-
-
-ALTER TABLE  `referencia_rendimento` ADD  `molde_id` INT NULL AFTER  `id`;
-
-ALTER TABLE  `referencia_rendimento` ADD INDEX (  `molde_id` );
-
-ALTER TABLE  `referencia_rendimento` ADD FOREIGN KEY (  `molde_id` ) REFERENCES  `fabrica3`.`molde` (
-`id`
-) ON DELETE SET NULL ON UPDATE CASCADE ;
-
-ALTER TABLE  `tecido` ADD  `preco` FLOAT NOT NULL AFTER  `metro`;
-
-ALTER TABLE  `referencia_rendimento` ADD  `preco` FLOAT NOT NULL AFTER  `peso`;
+ALTER TABLE  `fluxograma_acoes_tempo` ADD  `tempo_marcado` TIME NOT NULL;
+ALTER TABLE  `fluxograma_acoes_tempo` ADD  `tempo_ajustado` TIME NOT NULL;

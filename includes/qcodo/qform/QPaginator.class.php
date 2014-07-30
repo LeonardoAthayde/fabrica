@@ -117,9 +117,9 @@
 					$intPageStart = min($intMaximumStartOfBunch, $this->intPageNumber - $intLeftOfBunchCount);
 
 					$this->strActionParameter = 1;
-					$strStartEllipsis = sprintf('<span class="page"><a href="" %s>%s</a></span>',
+					$strStartEllipsis = sprintf('<li class="page"><a href="" %s>%s</a></li>',
 						$this->GetActionAttributes(), 1);
-					$strStartEllipsis .= '<span class="ellipsis">...</span>';
+					$strStartEllipsis .= '<li class="ellipsis disabled"><a href="#">...</a></li>';
 				}
 				
 				if ($this->intPageNumber > $intRightBunchTrigger) {
@@ -127,20 +127,20 @@
 					$strEndEllipsis = "";
 				} else {
 					$intPageEnd = max($intMinimumEndOfBunch, $this->intPageNumber + $intRightOfBunchCount);
-					$strEndEllipsis = '<span class="ellipsis">...</span>';
+					$strEndEllipsis = '<li class="ellipsis disabled"><a href="#">...</a></li>';
 
 					$this->strActionParameter = $this->PageCount;
-					$strEndEllipsis .= sprintf('<span class="page"><a href="" %s>%s</a></span>',
+					$strEndEllipsis .= sprintf('<li class="page"><a href="" %s>%s</a></li>',
 						$this->GetActionAttributes(), $this->PageCount);
 				}
 
 				$strToReturn .= $strStartEllipsis;
 				for ($intIndex = $intPageStart; $intIndex <= $intPageEnd; $intIndex++) {
 					if ($this->intPageNumber == $intIndex) {
-						$strToReturn .= sprintf('<span class="selected">%s</span>', $intIndex);
+						$strToReturn .= sprintf('<li class="selected page active"><a href="#">%s</a></li>', $intIndex);
 					} else {
 						$this->strActionParameter = $intIndex;
-						$strToReturn .= sprintf('<span class="page"><a href="" %s>%s</a></span>',
+						$strToReturn .= sprintf('<li class="page"><a href="" %s>%s</a></li>',
 							$this->GetActionAttributes(), $intIndex);
 					}
 				}

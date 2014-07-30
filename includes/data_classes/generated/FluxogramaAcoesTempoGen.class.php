@@ -18,6 +18,8 @@
 	 * @property integer $Id the value for intId (Read-Only PK)
 	 * @property integer $FluxogramaAcoesId the value for intFluxogramaAcoesId (Not Null)
 	 * @property integer $Tempo the value for intTempo (Not Null)
+	 * @property QDateTime $TempoMarcado the value for dttTempoMarcado (Not Null)
+	 * @property QDateTime $TempoAjustado the value for dttTempoAjustado (Not Null)
 	 * @property FluxogramaAcoes $FluxogramaAcoes the value for the FluxogramaAcoes object referenced by intFluxogramaAcoesId (Not Null)
 	 * @property FluxogramaItem $_FluxogramaItem the value for the private _objFluxogramaItem (Read-Only) if set due to an expansion on the fluxograma_item.fluxograma_acoes_tempo_id reverse relationship
 	 * @property FluxogramaItem[] $_FluxogramaItemArray the value for the private _objFluxogramaItemArray (Read-Only) if set due to an ExpandAsArray on the fluxograma_item.fluxograma_acoes_tempo_id reverse relationship
@@ -51,6 +53,22 @@
 		 */
 		protected $intTempo;
 		const TempoDefault = null;
+
+
+		/**
+		 * Protected member variable that maps to the database column fluxograma_acoes_tempo.tempo_marcado
+		 * @var QDateTime dttTempoMarcado
+		 */
+		protected $dttTempoMarcado;
+		const TempoMarcadoDefault = null;
+
+
+		/**
+		 * Protected member variable that maps to the database column fluxograma_acoes_tempo.tempo_ajustado
+		 * @var QDateTime dttTempoAjustado
+		 */
+		protected $dttTempoAjustado;
+		const TempoAjustadoDefault = null;
 
 
 		/**
@@ -414,6 +432,8 @@
 			$objBuilder->AddSelectItem($strTableName, 'id', $strAliasPrefix . 'id');
 			$objBuilder->AddSelectItem($strTableName, 'fluxograma_acoes_id', $strAliasPrefix . 'fluxograma_acoes_id');
 			$objBuilder->AddSelectItem($strTableName, 'tempo', $strAliasPrefix . 'tempo');
+			$objBuilder->AddSelectItem($strTableName, 'tempo_marcado', $strAliasPrefix . 'tempo_marcado');
+			$objBuilder->AddSelectItem($strTableName, 'tempo_ajustado', $strAliasPrefix . 'tempo_ajustado');
 		}
 
 
@@ -483,6 +503,10 @@
 			$objToReturn->intFluxogramaAcoesId = $objDbRow->GetColumn($strAliasName, 'Integer');
 			$strAliasName = array_key_exists($strAliasPrefix . 'tempo', $strColumnAliasArray) ? $strColumnAliasArray[$strAliasPrefix . 'tempo'] : $strAliasPrefix . 'tempo';
 			$objToReturn->intTempo = $objDbRow->GetColumn($strAliasName, 'Integer');
+			$strAliasName = array_key_exists($strAliasPrefix . 'tempo_marcado', $strColumnAliasArray) ? $strColumnAliasArray[$strAliasPrefix . 'tempo_marcado'] : $strAliasPrefix . 'tempo_marcado';
+			$objToReturn->dttTempoMarcado = $objDbRow->GetColumn($strAliasName, 'Time');
+			$strAliasName = array_key_exists($strAliasPrefix . 'tempo_ajustado', $strColumnAliasArray) ? $strColumnAliasArray[$strAliasPrefix . 'tempo_ajustado'] : $strAliasPrefix . 'tempo_ajustado';
+			$objToReturn->dttTempoAjustado = $objDbRow->GetColumn($strAliasName, 'Time');
 
 			// Instantiate Virtual Attributes
 			foreach ($objDbRow->GetColumnNameArray() as $strColumnName => $mixValue) {
@@ -664,10 +688,14 @@
 					$objDatabase->NonQuery('
 						INSERT INTO `fluxograma_acoes_tempo` (
 							`fluxograma_acoes_id`,
-							`tempo`
+							`tempo`,
+							`tempo_marcado`,
+							`tempo_ajustado`
 						) VALUES (
 							' . $objDatabase->SqlVariable($this->intFluxogramaAcoesId) . ',
-							' . $objDatabase->SqlVariable($this->intTempo) . '
+							' . $objDatabase->SqlVariable($this->intTempo) . ',
+							' . $objDatabase->SqlVariable($this->dttTempoMarcado) . ',
+							' . $objDatabase->SqlVariable($this->dttTempoAjustado) . '
 						)
 					');
 
@@ -688,7 +716,9 @@
 							`fluxograma_acoes_tempo`
 						SET
 							`fluxograma_acoes_id` = ' . $objDatabase->SqlVariable($this->intFluxogramaAcoesId) . ',
-							`tempo` = ' . $objDatabase->SqlVariable($this->intTempo) . '
+							`tempo` = ' . $objDatabase->SqlVariable($this->intTempo) . ',
+							`tempo_marcado` = ' . $objDatabase->SqlVariable($this->dttTempoMarcado) . ',
+							`tempo_ajustado` = ' . $objDatabase->SqlVariable($this->dttTempoAjustado) . '
 						WHERE
 							`id` = ' . $objDatabase->SqlVariable($this->intId) . '
 					');
@@ -775,6 +805,8 @@
 			// Update $this's local variables to match
 			$this->FluxogramaAcoesId = $objReloaded->FluxogramaAcoesId;
 			$this->intTempo = $objReloaded->intTempo;
+			$this->dttTempoMarcado = $objReloaded->dttTempoMarcado;
+			$this->dttTempoAjustado = $objReloaded->dttTempoAjustado;
 		}
 
 		/**
@@ -790,6 +822,8 @@
 					`id`,
 					`fluxograma_acoes_id`,
 					`tempo`,
+					`tempo_marcado`,
+					`tempo_ajustado`,
 					__sys_login_id,
 					__sys_action,
 					__sys_date
@@ -797,6 +831,8 @@
 					' . $objDatabase->SqlVariable($this->intId) . ',
 					' . $objDatabase->SqlVariable($this->intFluxogramaAcoesId) . ',
 					' . $objDatabase->SqlVariable($this->intTempo) . ',
+					' . $objDatabase->SqlVariable($this->dttTempoMarcado) . ',
+					' . $objDatabase->SqlVariable($this->dttTempoAjustado) . ',
 					' . (($objDatabase->JournaledById) ? $objDatabase->JournaledById : 'NULL') . ',
 					' . $objDatabase->SqlVariable($strJournalCommand) . ',
 					NOW()
@@ -861,6 +897,16 @@
 					// Gets the value for intTempo (Not Null)
 					// @return integer
 					return $this->intTempo;
+
+				case 'TempoMarcado':
+					// Gets the value for dttTempoMarcado (Not Null)
+					// @return QDateTime
+					return $this->dttTempoMarcado;
+
+				case 'TempoAjustado':
+					// Gets the value for dttTempoAjustado (Not Null)
+					// @return QDateTime
+					return $this->dttTempoAjustado;
 
 
 				///////////////////
@@ -941,6 +987,28 @@
 					// @return integer
 					try {
 						return ($this->intTempo = QType::Cast($mixValue, QType::Integer));
+					} catch (QCallerException $objExc) {
+						$objExc->IncrementOffset();
+						throw $objExc;
+					}
+
+				case 'TempoMarcado':
+					// Sets the value for dttTempoMarcado (Not Null)
+					// @param QDateTime $mixValue
+					// @return QDateTime
+					try {
+						return ($this->dttTempoMarcado = QType::Cast($mixValue, QType::DateTime));
+					} catch (QCallerException $objExc) {
+						$objExc->IncrementOffset();
+						throw $objExc;
+					}
+
+				case 'TempoAjustado':
+					// Sets the value for dttTempoAjustado (Not Null)
+					// @param QDateTime $mixValue
+					// @return QDateTime
+					try {
+						return ($this->dttTempoAjustado = QType::Cast($mixValue, QType::DateTime));
 					} catch (QCallerException $objExc) {
 						$objExc->IncrementOffset();
 						throw $objExc;
@@ -1202,6 +1270,8 @@
 			$strToReturn .= '<element name="Id" type="xsd:int"/>';
 			$strToReturn .= '<element name="FluxogramaAcoes" type="xsd1:FluxogramaAcoes"/>';
 			$strToReturn .= '<element name="Tempo" type="xsd:int"/>';
+			$strToReturn .= '<element name="TempoMarcado" type="xsd:dateTime"/>';
+			$strToReturn .= '<element name="TempoAjustado" type="xsd:dateTime"/>';
 			$strToReturn .= '<element name="__blnRestored" type="xsd:boolean"/>';
 			$strToReturn .= '</sequence></complexType>';
 			return $strToReturn;
@@ -1232,6 +1302,10 @@
 				$objToReturn->FluxogramaAcoes = FluxogramaAcoes::GetObjectFromSoapObject($objSoapObject->FluxogramaAcoes);
 			if (property_exists($objSoapObject, 'Tempo'))
 				$objToReturn->intTempo = $objSoapObject->Tempo;
+			if (property_exists($objSoapObject, 'TempoMarcado'))
+				$objToReturn->dttTempoMarcado = new QDateTime($objSoapObject->TempoMarcado);
+			if (property_exists($objSoapObject, 'TempoAjustado'))
+				$objToReturn->dttTempoAjustado = new QDateTime($objSoapObject->TempoAjustado);
 			if (property_exists($objSoapObject, '__blnRestored'))
 				$objToReturn->__blnRestored = $objSoapObject->__blnRestored;
 			return $objToReturn;
@@ -1254,6 +1328,10 @@
 				$objObject->objFluxogramaAcoes = FluxogramaAcoes::GetSoapObjectFromObject($objObject->objFluxogramaAcoes, false);
 			else if (!$blnBindRelatedObjects)
 				$objObject->intFluxogramaAcoesId = null;
+			if ($objObject->dttTempoMarcado)
+				$objObject->dttTempoMarcado = $objObject->dttTempoMarcado->__toString(QDateTime::FormatSoap);
+			if ($objObject->dttTempoAjustado)
+				$objObject->dttTempoAjustado = $objObject->dttTempoAjustado->__toString(QDateTime::FormatSoap);
 			return $objObject;
 		}
 
@@ -1273,6 +1351,8 @@
 	 * @property-read QQNode $FluxogramaAcoesId
 	 * @property-read QQNodeFluxogramaAcoes $FluxogramaAcoes
 	 * @property-read QQNode $Tempo
+	 * @property-read QQNode $TempoMarcado
+	 * @property-read QQNode $TempoAjustado
 	 * @property-read QQReverseReferenceNodeFluxogramaItem $FluxogramaItem
 	 */
 	class QQNodeFluxogramaAcoesTempo extends QQNode {
@@ -1289,6 +1369,10 @@
 					return new QQNodeFluxogramaAcoes('fluxograma_acoes_id', 'FluxogramaAcoes', 'integer', $this);
 				case 'Tempo':
 					return new QQNode('tempo', 'Tempo', 'integer', $this);
+				case 'TempoMarcado':
+					return new QQNode('tempo_marcado', 'TempoMarcado', 'QDateTime', $this);
+				case 'TempoAjustado':
+					return new QQNode('tempo_ajustado', 'TempoAjustado', 'QDateTime', $this);
 				case 'FluxogramaItem':
 					return new QQReverseReferenceNodeFluxogramaItem($this, 'fluxogramaitem', 'reverse_reference', 'fluxograma_acoes_tempo_id');
 
@@ -1310,6 +1394,8 @@
 	 * @property-read QQNode $FluxogramaAcoesId
 	 * @property-read QQNodeFluxogramaAcoes $FluxogramaAcoes
 	 * @property-read QQNode $Tempo
+	 * @property-read QQNode $TempoMarcado
+	 * @property-read QQNode $TempoAjustado
 	 * @property-read QQReverseReferenceNodeFluxogramaItem $FluxogramaItem
 	 * @property-read QQNode $_PrimaryKeyNode
 	 */
@@ -1327,6 +1413,10 @@
 					return new QQNodeFluxogramaAcoes('fluxograma_acoes_id', 'FluxogramaAcoes', 'integer', $this);
 				case 'Tempo':
 					return new QQNode('tempo', 'Tempo', 'integer', $this);
+				case 'TempoMarcado':
+					return new QQNode('tempo_marcado', 'TempoMarcado', 'QDateTime', $this);
+				case 'TempoAjustado':
+					return new QQNode('tempo_ajustado', 'TempoAjustado', 'QDateTime', $this);
 				case 'FluxogramaItem':
 					return new QQReverseReferenceNodeFluxogramaItem($this, 'fluxogramaitem', 'reverse_reference', 'fluxograma_acoes_tempo_id');
 

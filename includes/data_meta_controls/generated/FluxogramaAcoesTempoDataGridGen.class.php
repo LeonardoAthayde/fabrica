@@ -297,6 +297,8 @@
 				case 'FluxogramaAcoesId': return QQN::FluxogramaAcoesTempo()->FluxogramaAcoesId;
 				case 'FluxogramaAcoes': return QQN::FluxogramaAcoesTempo()->FluxogramaAcoes;
 				case 'Tempo': return QQN::FluxogramaAcoesTempo()->Tempo;
+				case 'TempoMarcado': return QQN::FluxogramaAcoesTempo()->TempoMarcado;
+				case 'TempoAjustado': return QQN::FluxogramaAcoesTempo()->TempoAjustado;
 				default: throw new QCallerException('Simple Property not found in FluxogramaAcoesTempoDataGrid content: ' . $mixContent);
 			} else if ($mixContent instanceof QQAssociationNode)
 				throw new QCallerException('Content QQNode cannot go through any "To Many" association nodes.');

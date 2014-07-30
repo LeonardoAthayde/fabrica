@@ -63,6 +63,7 @@
 
 			// Add Pagination (if desired)
 			$this->dtgFluxogramaAcoesTempos->Paginator = new QPaginator($this->dtgFluxogramaAcoesTempos);
+			$this->dtgFluxogramaAcoesTempos->Paginator->CssClass = 'pagination';
 			$this->dtgFluxogramaAcoesTempos->ItemsPerPage = 20;
 
 			// Use the MetaDataGrid functionality to add Columns for this datagrid
@@ -76,6 +77,8 @@
 			$this->dtgFluxogramaAcoesTempos->MetaAddColumn('Id');
 			$this->dtgFluxogramaAcoesTempos->MetaAddColumn(QQN::FluxogramaAcoesTempo()->FluxogramaAcoes);
 			$this->dtgFluxogramaAcoesTempos->MetaAddColumn('Tempo');
+			$this->dtgFluxogramaAcoesTempos->MetaAddColumn('TempoMarcado');
+			$this->dtgFluxogramaAcoesTempos->MetaAddColumn('TempoAjustado');
 		}
 	}
 

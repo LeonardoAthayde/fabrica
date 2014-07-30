@@ -63,6 +63,7 @@
 
 			// Add Pagination (if desired)
 			$this->dtgComandoPecas->Paginator = new QPaginator($this->dtgComandoPecas);
+			$this->dtgComandoPecas->Paginator->CssClass = 'pagination';
 			$this->dtgComandoPecas->ItemsPerPage = 20;
 
 			// Use the MetaDataGrid functionality to add Columns for this datagrid

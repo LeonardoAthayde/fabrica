@@ -63,6 +63,7 @@
 
 			// Add Pagination (if desired)
 			$this->dtgCostureiraTempoEficientes->Paginator = new QPaginator($this->dtgCostureiraTempoEficientes);
+			$this->dtgCostureiraTempoEficientes->Paginator->CssClass = 'pagination';
 			$this->dtgCostureiraTempoEficientes->ItemsPerPage = 20;
 
 			// Use the MetaDataGrid functionality to add Columns for this datagrid

@@ -63,6 +63,7 @@
 
 			// Add Pagination (if desired)
 			$this->dtgMenus->Paginator = new QPaginator($this->dtgMenus);
+			$this->dtgMenus->Paginator->CssClass = 'pagination';
 			$this->dtgMenus->ItemsPerPage = 20;
 
 			// Use the MetaDataGrid functionality to add Columns for this datagrid

@@ -24,6 +24,10 @@
 
 		<?php $this->txtTempo->RenderWithName(); ?>
 
+		<?php $this->calTempoMarcado->RenderWithName(); ?>
+
+		<?php $this->calTempoAjustado->RenderWithName(); ?>
+
 	</div>
 
 	<div id="formActions">

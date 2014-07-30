@@ -11,6 +11,10 @@
 
 		<?php $_CONTROL->txtTempo->RenderWithName(); ?>
 
+		<?php $_CONTROL->calTempoMarcado->RenderWithName(); ?>
+
+		<?php $_CONTROL->calTempoAjustado->RenderWithName(); ?>
+
 	</div>
 
 	<div id="formActions">

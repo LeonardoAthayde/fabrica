@@ -68,6 +68,8 @@
 			$this->dtgFluxogramaAcoesTempos->MetaAddColumn('Id');
 			$this->dtgFluxogramaAcoesTempos->MetaAddColumn(QQN::FluxogramaAcoesTempo()->FluxogramaAcoes);
 			$this->dtgFluxogramaAcoesTempos->MetaAddColumn('Tempo');
+			$this->dtgFluxogramaAcoesTempos->MetaAddColumn('TempoMarcado');
+			$this->dtgFluxogramaAcoesTempos->MetaAddColumn('TempoAjustado');
 
 			// Setup the Create New button
 			$this->btnCreateNew = new QButton($this);

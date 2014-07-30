@@ -63,6 +63,7 @@
 
 			// Add Pagination (if desired)
 			$this->dtgUsuarios->Paginator = new QPaginator($this->dtgUsuarios);
+			$this->dtgUsuarios->Paginator->CssClass = 'pagination';
 			$this->dtgUsuarios->ItemsPerPage = 20;
 
 			// Use the MetaDataGrid functionality to add Columns for this datagrid

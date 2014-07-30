@@ -25,7 +25,6 @@
 
 			// Add Pagination (if desired)
 			$this->dtgReferencias->Paginator = new QPaginator($this->dtgReferencias);
-			$o = new QPaginator($this->dtgReferencias);
 			$this->dtgReferencias->Paginator->CssClass = 'pagination';
 			
 			$this->dtgReferencias->ItemsPerPage = 20;

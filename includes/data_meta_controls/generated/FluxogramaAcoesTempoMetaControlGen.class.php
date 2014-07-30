@@ -22,6 +22,10 @@
 	 * property-read QLabel $FluxogramaAcoesIdLabel
 	 * property QIntegerTextBox $TempoControl
 	 * property-read QLabel $TempoLabel
+	 * property QDateTimePicker $TempoMarcadoControl
+	 * property-read QLabel $TempoMarcadoLabel
+	 * property QDateTimePicker $TempoAjustadoControl
+	 * property-read QLabel $TempoAjustadoLabel
 	 * property-read string $TitleVerb a verb indicating whether or not this is being edited or created
 	 * property-read boolean $EditMode a boolean indicating whether or not this is being edited or created
 	 */
@@ -71,6 +75,18 @@
          */
 		protected $txtTempo;
 
+        /**
+         * @var QDateTimePicker calTempoMarcado;
+         * @access protected
+         */
+		protected $calTempoMarcado;
+
+        /**
+         * @var QDateTimePicker calTempoAjustado;
+         * @access protected
+         */
+		protected $calTempoAjustado;
+
 
 		// Controls that allow the viewing of FluxogramaAcoesTempo's individual data fields
         /**
@@ -84,6 +100,18 @@
          * @access protected
          */
 		protected $lblTempo;
+
+        /**
+         * @var QLabel lblTempoMarcado
+         * @access protected
+         */
+		protected $lblTempoMarcado;
+
+        /**
+         * @var QLabel lblTempoAjustado
+         * @access protected
+         */
+		protected $lblTempoAjustado;
 
 
 		// QListBox Controls (if applicable) to edit Unique ReverseReferences and ManyToMany References
@@ -269,6 +297,68 @@
 			return $this->lblTempo;
 		}
 
+		/**
+		 * Create and setup QDateTimePicker calTempoMarcado
+		 * @param string $strControlId optional ControlId to use
+		 * @return QDateTimePicker
+		 */
+		public function calTempoMarcado_Create($strControlId = null) {
+			$this->calTempoMarcado = new QDateTimePicker($this->objParentObject, $strControlId);
+			$this->calTempoMarcado->Name = QApplication::Translate('Tempo Marcado');
+			$this->calTempoMarcado->DateTime = $this->objFluxogramaAcoesTempo->TempoMarcado;
+			$this->calTempoMarcado->DateTimePickerType = QDateTimePickerType::Time;
+			$this->calTempoMarcado->Required = true;
+			return $this->calTempoMarcado;
+		}
+
+		/**
+		 * Create and setup QLabel lblTempoMarcado
+		 * @param string $strControlId optional ControlId to use
+		 * @param string $strDateTimeFormat optional DateTimeFormat to use
+		 * @return QLabel
+		 */
+		public function lblTempoMarcado_Create($strControlId = null, $strDateTimeFormat = null) {
+			$this->lblTempoMarcado = new QLabel($this->objParentObject, $strControlId);
+			$this->lblTempoMarcado->Name = QApplication::Translate('Tempo Marcado');
+			$this->strTempoMarcadoDateTimeFormat = $strDateTimeFormat;
+			$this->lblTempoMarcado->Text = sprintf($this->objFluxogramaAcoesTempo->TempoMarcado) ? $this->objFluxogramaAcoesTempo->TempoMarcado->__toString($this->strTempoMarcadoDateTimeFormat) : null;
+			$this->lblTempoMarcado->Required = true;
+			return $this->lblTempoMarcado;
+		}
+
+		protected $strTempoMarcadoDateTimeFormat;
+
+		/**
+		 * Create and setup QDateTimePicker calTempoAjustado
+		 * @param string $strControlId optional ControlId to use
+		 * @return QDateTimePicker
+		 */
+		public function calTempoAjustado_Create($strControlId = null) {
+			$this->calTempoAjustado = new QDateTimePicker($this->objParentObject, $strControlId);
+			$this->calTempoAjustado->Name = QApplication::Translate('Tempo Ajustado');
+			$this->calTempoAjustado->DateTime = $this->objFluxogramaAcoesTempo->TempoAjustado;
+			$this->calTempoAjustado->DateTimePickerType = QDateTimePickerType::Time;
+			$this->calTempoAjustado->Required = true;
+			return $this->calTempoAjustado;
+		}
+
+		/**
+		 * Create and setup QLabel lblTempoAjustado
+		 * @param string $strControlId optional ControlId to use
+		 * @param string $strDateTimeFormat optional DateTimeFormat to use
+		 * @return QLabel
+		 */
+		public function lblTempoAjustado_Create($strControlId = null, $strDateTimeFormat = null) {
+			$this->lblTempoAjustado = new QLabel($this->objParentObject, $strControlId);
+			$this->lblTempoAjustado->Name = QApplication::Translate('Tempo Ajustado');
+			$this->strTempoAjustadoDateTimeFormat = $strDateTimeFormat;
+			$this->lblTempoAjustado->Text = sprintf($this->objFluxogramaAcoesTempo->TempoAjustado) ? $this->objFluxogramaAcoesTempo->TempoAjustado->__toString($this->strTempoAjustadoDateTimeFormat) : null;
+			$this->lblTempoAjustado->Required = true;
+			return $this->lblTempoAjustado;
+		}
+
+		protected $strTempoAjustadoDateTimeFormat;
+
 
 
 		/**
@@ -299,6 +389,12 @@
 			if ($this->txtTempo) $this->txtTempo->Text = $this->objFluxogramaAcoesTempo->Tempo;
 			if ($this->lblTempo) $this->lblTempo->Text = $this->objFluxogramaAcoesTempo->Tempo;
 
+			if ($this->calTempoMarcado) $this->calTempoMarcado->DateTime = $this->objFluxogramaAcoesTempo->TempoMarcado;
+			if ($this->lblTempoMarcado) $this->lblTempoMarcado->Text = sprintf($this->objFluxogramaAcoesTempo->TempoMarcado) ? $this->objFluxogramaAcoesTempo->__toString($this->strTempoMarcadoDateTimeFormat) : null;
+
+			if ($this->calTempoAjustado) $this->calTempoAjustado->DateTime = $this->objFluxogramaAcoesTempo->TempoAjustado;
+			if ($this->lblTempoAjustado) $this->lblTempoAjustado->Text = sprintf($this->objFluxogramaAcoesTempo->TempoAjustado) ? $this->objFluxogramaAcoesTempo->__toString($this->strTempoAjustadoDateTimeFormat) : null;
+
 		}
 
 
@@ -324,6 +420,8 @@
 				// Update any fields for controls that have been created
 				if ($this->lstFluxogramaAcoes) $this->objFluxogramaAcoesTempo->FluxogramaAcoesId = $this->lstFluxogramaAcoes->SelectedValue;
 				if ($this->txtTempo) $this->objFluxogramaAcoesTempo->Tempo = $this->txtTempo->Text;
+				if ($this->calTempoMarcado) $this->objFluxogramaAcoesTempo->TempoMarcado = $this->calTempoMarcado->DateTime;
+				if ($this->calTempoAjustado) $this->objFluxogramaAcoesTempo->TempoAjustado = $this->calTempoAjustado->DateTime;
 
 				// Update any UniqueReverseReferences (if any) for controls that have been created for it
 
@@ -384,6 +482,18 @@
 				case 'TempoLabel':
 					if (!$this->lblTempo) return $this->lblTempo_Create();
 					return $this->lblTempo;
+				case 'TempoMarcadoControl':
+					if (!$this->calTempoMarcado) return $this->calTempoMarcado_Create();
+					return $this->calTempoMarcado;
+				case 'TempoMarcadoLabel':
+					if (!$this->lblTempoMarcado) return $this->lblTempoMarcado_Create();
+					return $this->lblTempoMarcado;
+				case 'TempoAjustadoControl':
+					if (!$this->calTempoAjustado) return $this->calTempoAjustado_Create();
+					return $this->calTempoAjustado;
+				case 'TempoAjustadoLabel':
+					if (!$this->lblTempoAjustado) return $this->lblTempoAjustado_Create();
+					return $this->lblTempoAjustado;
 				default:
 					try {
 						return parent::__get($strName);
@@ -412,6 +522,10 @@
 						return ($this->lstFluxogramaAcoes = QType::Cast($mixValue, 'QControl'));
 					case 'TempoControl':
 						return ($this->txtTempo = QType::Cast($mixValue, 'QControl'));
+					case 'TempoMarcadoControl':
+						return ($this->calTempoMarcado = QType::Cast($mixValue, 'QControl'));
+					case 'TempoAjustadoControl':
+						return ($this->calTempoAjustado = QType::Cast($mixValue, 'QControl'));
 					default:
 						return parent::__set($strName, $mixValue);
 				}

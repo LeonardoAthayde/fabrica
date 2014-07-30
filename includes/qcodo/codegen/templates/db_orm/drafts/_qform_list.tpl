@@ -64,6 +64,7 @@
 
 			// Add Pagination (if desired)
 			$this->dtg<%= $objTable->ClassNamePlural %>->Paginator = new QPaginator($this->dtg<%= $objTable->ClassNamePlural %>);
+			$this->dtg<%= $objTable->ClassNamePlural %>->Paginator->CssClass = 'pagination';
 			$this->dtg<%= $objTable->ClassNamePlural %>->ItemsPerPage = 20;
 
 			// Use the MetaDataGrid functionality to add Columns for this datagrid

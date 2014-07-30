@@ -29,6 +29,8 @@
 		protected $lblId;
 		protected $lstFluxogramaAcoes;
 		protected $txtTempo;
+		protected $calTempoMarcado;
+		protected $calTempoAjustado;
 
 		// Other ListBoxes (if applicable) via Unique ReverseReferences and ManyToMany References
 
@@ -73,6 +75,8 @@
 			$this->lblId = $this->mctFluxogramaAcoesTempo->lblId_Create();
 			$this->lstFluxogramaAcoes = $this->mctFluxogramaAcoesTempo->lstFluxogramaAcoes_Create();
 			$this->txtTempo = $this->mctFluxogramaAcoesTempo->txtTempo_Create();
+			$this->calTempoMarcado = $this->mctFluxogramaAcoesTempo->calTempoMarcado_Create();
+			$this->calTempoAjustado = $this->mctFluxogramaAcoesTempo->calTempoAjustado_Create();
 
 			// Create Buttons and Actions on this Form
 			$this->btnSave = new QButton($this);

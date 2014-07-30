@@ -63,6 +63,7 @@
 
 			// Add Pagination (if desired)
 			$this->dtgBalancoAcoesDepedencias->Paginator = new QPaginator($this->dtgBalancoAcoesDepedencias);
+			$this->dtgBalancoAcoesDepedencias->Paginator->CssClass = 'pagination';
 			$this->dtgBalancoAcoesDepedencias->ItemsPerPage = 20;
 
 			// Use the MetaDataGrid functionality to add Columns for this datagrid

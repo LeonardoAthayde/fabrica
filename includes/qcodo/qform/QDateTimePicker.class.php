@@ -16,7 +16,7 @@
 
 		// Default format of the Hour field (see http://www.php.net/date for more info)
 		// Two digit representation of the hour in 12-hour format followed by UPPER-CASE 'AM' or 'PM'
-		protected $strHourFormat = 'g A';  
+		protected $strHourFormat = 'H';  
 
 		// Default format of Month field (see http://www.php.net/strftime for more info)
 		// Abbreviated month name, based on the locale

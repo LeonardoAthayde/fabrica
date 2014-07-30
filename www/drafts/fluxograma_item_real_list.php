@@ -63,6 +63,7 @@
 
 			// Add Pagination (if desired)
 			$this->dtgFluxogramaItemReals->Paginator = new QPaginator($this->dtgFluxogramaItemReals);
+			$this->dtgFluxogramaItemReals->Paginator->CssClass = 'pagination';
 			$this->dtgFluxogramaItemReals->ItemsPerPage = 20;
 
 			// Use the MetaDataGrid functionality to add Columns for this datagrid
