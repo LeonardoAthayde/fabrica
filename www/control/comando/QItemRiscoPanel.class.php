@@ -7,7 +7,6 @@
 		
 		public $chkTamanho;
 		public $lstQuantidadeRisco;
-		public $chkMeia;
 		
 		public function __construct($objParentObject, Tamanho $objTamanho, $strControlId = null) {
 			parent::__construct($objParentObject, $strControlId);
@@ -15,7 +14,6 @@
 			
 			$this->chkTamanho_Create();
 			$this->lstQuantidadeRisco_Create();
-			$this->chkMeia_Create();
 		}
 		
 		protected function chkTamanho_Create(){
@@ -29,11 +27,9 @@
 			if($this->chkTamanho->Checked) {
 				$this->lstQuantidadeRisco->Required = true;
 				$this->lstQuantidadeRisco->Display = true;
-				$this->chkMeia->Display = true;
 			} else {
 				$this->lstQuantidadeRisco->Required = false;
 				$this->lstQuantidadeRisco->Display = false;
-				$this->chkMeia->Display = false;
 			}
 		}
 		
@@ -49,11 +45,6 @@
 				$this->lstQuantidadeRisco->AddItem($i, $i);
 		}
 		
-		protected function chkMeia_Create(){
-			$this->chkMeia = new QCheckBox($this);
-			$this->chkMeia->Text = 'MEIA';
-			$this->chkMeia->Display = false;
-		}
 		
 	}
 ?>

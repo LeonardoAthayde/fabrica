@@ -12,6 +12,8 @@
 		
 		public $pnlRisco;
 		public $txtReferencia;
+		public $cblMolde;
+		
 		public $pnlItenRiscoPP;
 		public $pnlItenRiscoP;
 		public $pnlItenRiscoM;
@@ -127,10 +129,16 @@
 			$objComando = $this->Form->GetComando();
 			$objTecido = Tecido::Load($this->lstTecido->SelectedValue);
 			foreach ($objComando->GetComandoRiscoArray() as $objComandoRisco){
-				$objReferencia = Referencia::LoadByNome($objComandoRisco->Referencia.$objTecido->Codigo);
-				if(!$objReferencia)
-					$blnReferenciasValida = false;
-				
+				$blnReferenciasValida = false;
+				$objReferenciaCategoria = ReferenciaCategoria::LoadByNome(substr($objComandoRisco->Referencia, 0, 3));
+				if($objReferenciaCategoria)
+					$objArrayReferencia = Referencia::LoadArrayByReferenciaCategoriaIdModelo($objReferenciaCategoria->Id, substr($objComandoRisco->Referencia, 3, 3));
+				foreach ($objArrayReferencia as $objReferencia){
+					foreach ($objReferencia->GetReferenciaRendimentoArray() as $objReferenciaRendimento){
+						if($objReferenciaRendimento->MoldeId == $objComandoRisco->MoldeId && $objReferenciaRendimento->TecidoId == $objTecido->Id)
+							$blnReferenciasValida = true;
+					}
+				}	
 			}			
 			
 			$objCor = Cor::LoadByNome($this->txtCor->Text);
@@ -149,10 +157,7 @@
 					$objComandoRiscoPeca = new ComandoRiscoPeca();
 					$objComandoRiscoPeca->ComandoPecaId = $objComandoPeca->Id;
 					$objComandoRiscoPeca->ComandoRiscoId = $objComandoRisco->Id;
-					$fltMeia = 0;
-					if($objComandoRisco->MeiaRisco)
-						$fltMeia = 0.5;
-					$objComandoRiscoPeca->QuantidadeReal = ($objComandoRisco->QuantidadeRisco+$fltMeia)*$objComandoPeca->QuantidadePanos;
+					$objComandoRiscoPeca->QuantidadeReal = ($objComandoRisco->QuantidadeRisco)*$objComandoPeca->QuantidadePanos;
 					$objReferencia = Referencia::LoadByNome($objComandoRisco->Referencia.$objComandoPeca->Tecido->Codigo);
 					
 					$blnFlagPeso = true;
@@ -185,6 +190,7 @@
 
 			$this->pnlRisco->Template =  __DOCROOT__.'/control/comando/tpl/pnl_Risco.tpl.php';
 			$this->txtReferencia_Create();
+			$this->cblMolde_Create();
 			$this->pnlItenRiscoPP_Create();
 			$this->pnlItenRiscoP_Create();
 			$this->pnlItenRiscoM_Create();
@@ -198,6 +204,60 @@
 			$this->txtReferencia->CssClass = 'form-control input-lg width100';
 			$this->txtReferencia->Required = true;
 			$this->txtReferencia->SetCustomAttribute('placeholder', 'REFERÊNCIA');
+			$this->txtReferencia->AddAction(new QEnterKeyEvent(), new QAjaxControlAction($this, 'txtReferencia_Enter'));
+		}
+		
+		public function txtReferencia_Enter($strFormId, $strControlId, $strParameter){
+			$objComando = $this->Form->GetComando();
+			$this->cblMolde_Fill();
+			if($this->cblMolde->CountItems() == 0)
+				QApplication::DisplayAlert ('A REFERÊNCIA NÃO SE ENCAIXA COM O TECIDO DO COMANDO');
+		}
+		
+		protected function cblMolde_Create(){
+			$this->cblMolde = new QCheckBoxList($this->pnlRisco);
+			$this->cblMolde->CssClass = 'form-control input-lg width100';
+			$this->cblMolde->Required = true;
+		}
+		
+		protected function cblMolde_Fill(){
+			$objComando = $this->Form->GetComando();
+			$this->cblMolde->RemoveAllItems();
+			
+			$objArrayReferenciaRendimentoMolde = array();
+			$objReferenciaCategoria = ReferenciaCategoria::LoadByNome(substr($this->txtReferencia->Text, 0, 3));
+			if($objReferenciaCategoria)
+				$objArrayReferenciaRendimentoMolde = ReferenciaRendimento::QueryArray (
+					QQ::AndCondition (
+						QQ::Equal(QQN::ReferenciaRendimento()->Referencia->ReferenciaCategoria->Id, $objReferenciaCategoria->Id),
+						QQ::Equal(QQN::ReferenciaRendimento()->Referencia->Modelo, substr($this->txtReferencia->Text, 3, 3))
+					), QQ::Clause(
+						QQ::GroupBy(QQN::ReferenciaRendimento()->Molde)
+					));
+			
+			foreach ($objArrayReferenciaRendimentoMolde as $objReferenciaRendimentoMolde){
+				$objArrayReferenciaRendimento = ReferenciaRendimento::QueryArray(
+					QQ::AndCondition (
+						QQ::Equal(QQN::ReferenciaRendimento()->Referencia->ReferenciaCategoria->Id, $objReferenciaCategoria->Id),
+						QQ::Equal(QQN::ReferenciaRendimento()->Referencia->Modelo, substr($this->txtReferencia->Text, 3, 3)),
+						QQ::Equal(QQN::ReferenciaRendimento()->MoldeId, $objReferenciaRendimentoMolde->MoldeId)
+					));
+				$blnFlag = true;
+				foreach ($objComando->GetComandoPecaArray() as $objComandoPeca){
+					$blnFlag = false;
+					foreach ($objArrayReferenciaRendimento as $objReferenciaRendimento){
+						if($objReferenciaRendimento->TecidoId == $objComandoPeca->TecidoId)
+							$blnFlag = true;
+					}
+				}
+				$blnMolde = false;
+			
+					if($blnFlag) 
+						if($objReferenciaRendimentoMolde->Molde)
+							$this->cblMolde->AddItem(new QListItem($objReferenciaRendimentoMolde->Molde, $objReferenciaRendimentoMolde->MoldeId, true));
+						else
+							$this->cblMolde->AddItem(new QListItem('NENHUM MOLDE', null, true));
+			}
 		}
 		
 		protected function pnlItenRiscoPP_Create(){
@@ -229,62 +289,60 @@
 		}
 		
 		public function btnSaveRisco_Click($strFormId, $strControlId, $strParameter){
-			$blnReferenciasValida = true;
 			$objComando = $this->Form->GetComando();
-			foreach ($objComando->GetComandoPecaArray() as $objComandoPeca){
-				$objReferencia = Referencia::LoadByNome($this->txtReferencia->Text.$objComandoPeca->Tecido->Codigo);
-				if(!$objReferencia)
-					$blnReferenciasValida = false;
-				
-			}
-			
 			$objReferenciaCategoria = ReferenciaCategoria::LoadByNome(substr($this->txtReferencia->Text, 0, 3));
-			$objArrayReferencia = array();
 			if($objReferenciaCategoria)
-				$objArrayReferencia = Referencia::LoadArrayByReferenciaCategoriaIdModelo($objReferenciaCategoria->Id, substr($this->txtReferencia->Text, 3, 3));
-			if(count($objArrayReferencia) > 0 && $blnReferenciasValida){
+				$intCountReferencias = count(Referencia::LoadArrayByReferenciaCategoriaIdModelo($objReferenciaCategoria->Id, substr($this->txtReferencia->Text, 3, 3)));
+			if($intCountReferencias > 0){
 				for ($i = 1; $i <= 5; $i++){
 					$pnlItemRisco = $this->pnlRisco->GetChildControl('pnlItemRisco'.$i);
 					if($pnlItemRisco->chkTamanho->Checked){
-						$objComandoRisco = new ComandoRisco();
-						$objComandoRisco->ComandoId = $objComando->Id;
-						$objComandoRisco->Referencia = $this->txtReferencia->Text;
-						$objComandoRisco->TamanhoId = $pnlItemRisco->objTamanho->Id;
-						$objComandoRisco->QuantidadeRisco = $pnlItemRisco->lstQuantidadeRisco->SelectedValue;
-						$objComandoRisco->MeiaRisco = $pnlItemRisco->chkMeia->Checked;
-						$objComandoRisco->Save();
 						
-						$pnlItemRisco->chkTamanho->Checked = false;
-						$pnlItemRisco->lstQuantidadeRisco->SelectedIndex = 0;
-						$pnlItemRisco->lstQuantidadeRisco->Display = false;
-						$pnlItemRisco->chkMeia->Checked = false;
-						$pnlItemRisco->chkMeia->Display = false;
+						foreach ($this->cblMolde->SelectedValues as $intMoldeId){
 						
-						foreach ($objComando->GetComandoPecaArray() as $objComandoPeca){
-							$objComandoRiscoPeca = new ComandoRiscoPeca();
-							$objComandoRiscoPeca->ComandoRiscoId = $objComandoRisco->Id;
-							$objComandoRiscoPeca->ComandoPecaId = $objComandoPeca->Id;
-							$fltMeia = 0;
-							if($objComandoRisco->MeiaRisco)
-								$fltMeia = 0.5;
-							$objComandoRiscoPeca->QuantidadeReal = ($objComandoRisco->QuantidadeRisco+$fltMeia)*$objComandoPeca->QuantidadePanos;
+							$objComandoRisco = new ComandoRisco();
+							$objComandoRisco->ComandoId = $objComando->Id;
+							$objComandoRisco->Referencia = $this->txtReferencia->Text;
+							$objComandoRisco->MoldeId = $intMoldeId;
+							$objComandoRisco->TamanhoId = $pnlItemRisco->objTamanho->Id;
+							$objComandoRisco->QuantidadeRisco = $pnlItemRisco->lstQuantidadeRisco->SelectedValue;
+							$objComandoRisco->Save();
+						
+						
+							foreach ($objComando->GetComandoPecaArray() as $objComandoPeca){
+								$objComandoRiscoPeca = new ComandoRiscoPeca();
+								$objComandoRiscoPeca->ComandoRiscoId = $objComandoRisco->Id;
+								$objComandoRiscoPeca->ComandoPecaId = $objComandoPeca->Id;
+								$objComandoRiscoPeca->QuantidadeReal = ($objComandoRisco->QuantidadeRisco)*$objComandoPeca->QuantidadePanos;
 							
-							$blnFlagPeso = true;
-							$objReferencia = Referencia::LoadByNome($objComandoRisco->Referencia.$objComandoPeca->Tecido->Codigo);
-							foreach ($objReferencia->GetReferenciaRendimentoArray() as $objReferenciaRendimento){
-								if($objReferenciaRendimento->TecidoId == $objComandoPeca->TecidoId) {
+							
+								$objReferenciaRendimento = ReferenciaRendimento::QuerySingle(
+									QQ::AndCondition(
+										QQ::Equal(QQN::ReferenciaRendimento()->Referencia->ReferenciaCategoriaId, $objReferenciaCategoria->Id),
+										QQ::Equal(QQN::ReferenciaRendimento()->Referencia->Modelo, substr($this->txtReferencia->Text, 3, 3)),
+										QQ::Equal(QQN::ReferenciaRendimento()->MoldeId, $intMoldeId),
+										QQ::Equal(QQN::ReferenciaRendimento()->TecidoId, $objComandoPeca->TecidoId)	
+										));
+								
+								if($objReferenciaRendimento)
 									$objComandoRiscoPeca->Peso = $objReferenciaRendimento->Peso*$objComandoRiscoPeca->QuantidadeReal;
-									$blnFlagPeso = false;
-								}
-							}
-							if($blnFlagPeso)
-								$objComandoRiscoPeca->Peso = 0;
-							$objComandoRiscoPeca->Save();					
+								else
+									$objComandoRiscoPeca->Peso = 0;
+								$objComandoRiscoPeca->Save();
+							}	
 						}
+						
+						
 					}
+					
+					$pnlItemRisco->chkTamanho->Checked = false;
+					$pnlItemRisco->lstQuantidadeRisco->SelectedIndex = 0;
+					$pnlItemRisco->lstQuantidadeRisco->Display = false;
+					
 				}
 				$this->txtReferencia->Text = '';
 				$this->txtReferencia_RenderScript();
+				$this->cblMolde->RemoveAllItems();
 				
 				foreach ($objComando->GetComandoPecaArray() as $objComandoPeca){
 					$fltTotalPeso = 0;
@@ -299,10 +357,8 @@
 				$this->Form->RefreshTables();
 				QApplication::ExecuteJavaScript("$('#risco-modal').modal('hide');");
 			} else {
-				if(count($objArrayReferencia) == 0)
+				if($intCountReferencias == 0)
 					QApplication::DisplayAlert('REFERÊNCIA INVÁLIDA');
-				if(!$blnReferenciasValida)
-					QApplication::DisplayAlert('NÃO HÁ TECIDO PARA ESSA REFERÊNCIA');
 				$this->txtReferencia->Text = '';
 				$this->txtReferencia->Focus();
 				$this->txtReferencia_RenderScript();
@@ -312,7 +368,7 @@
 		
 		protected function txtReferencia_RenderScript(){
 			$strJavaScript = '';
-			foreach (Referencia::LoadAll() as $objReferencia)
+			foreach (Referencia::LoadAll(QQ::Clause(QQ::GroupBy(QQN::Referencia()->ReferenciaCategoria->Nome), QQ::GroupBy(QQN::Referencia()->Modelo))) as $objReferencia)
 				$strJavaScript.= ", {value:'".substr($objReferencia->Nome, 0, 6)."', data: '".substr($objReferencia->Nome, 0, 6)."'}";
 			$strJavaScript=  substr($strJavaScript, 1);
 			QApplication::ExecuteJavaScript("$('#".$this->txtReferencia->ControlId."').autocomplete( {lookup: [".$strJavaScript."], 	onSelect: function(value, data){ qc.getW('".$this->txtReferencia->ControlId."').focus();}});");		
@@ -333,5 +389,10 @@
 			}
 		}
 		
+		public function ParsePostData() {
+			$this->txtReferencia_RenderScript();
+		}
+		
+
 	}
 ?>

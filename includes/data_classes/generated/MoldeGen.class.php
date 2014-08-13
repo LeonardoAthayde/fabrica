@@ -17,6 +17,8 @@
 	 * @subpackage GeneratedDataObjects
 	 * @property integer $Id the value for intId (Read-Only PK)
 	 * @property string $Nome the value for strNome (Not Null)
+	 * @property ComandoRisco $_ComandoRisco the value for the private _objComandoRisco (Read-Only) if set due to an expansion on the comando_risco.molde_id reverse relationship
+	 * @property ComandoRisco[] $_ComandoRiscoArray the value for the private _objComandoRiscoArray (Read-Only) if set due to an ExpandAsArray on the comando_risco.molde_id reverse relationship
 	 * @property ReferenciaRendimento $_ReferenciaRendimento the value for the private _objReferenciaRendimento (Read-Only) if set due to an expansion on the referencia_rendimento.molde_id reverse relationship
 	 * @property ReferenciaRendimento[] $_ReferenciaRendimentoArray the value for the private _objReferenciaRendimentoArray (Read-Only) if set due to an ExpandAsArray on the referencia_rendimento.molde_id reverse relationship
 	 * @property boolean $__Restored whether or not this object was restored from the database (as opposed to created new)
@@ -43,6 +45,22 @@
 		const NomeMaxLength = 20;
 		const NomeDefault = null;
 
+
+		/**
+		 * Private member variable that stores a reference to a single ComandoRisco object
+		 * (of type ComandoRisco), if this Molde object was restored with
+		 * an expansion on the comando_risco association table.
+		 * @var ComandoRisco _objComandoRisco;
+		 */
+		private $_objComandoRisco;
+
+		/**
+		 * Private member variable that stores a reference to an array of ComandoRisco objects
+		 * (of type ComandoRisco[]), if this Molde object was restored with
+		 * an ExpandAsArray on the comando_risco association table.
+		 * @var ComandoRisco[] _objComandoRiscoArray;
+		 */
+		private $_objComandoRiscoArray = array();
 
 		/**
 		 * Private member variable that stores a reference to a single ReferenciaRendimento object
@@ -432,6 +450,20 @@
 					$strAliasPrefix = 'molde__';
 
 
+				$strAlias = $strAliasPrefix . 'comandorisco__id';
+				$strAliasName = array_key_exists($strAlias, $strColumnAliasArray) ? $strColumnAliasArray[$strAlias] : $strAlias;
+				if ((array_key_exists($strAlias, $strExpandAsArrayNodes)) &&
+					(!is_null($objDbRow->GetColumn($strAliasName)))) {
+					if ($intPreviousChildItemCount = count($objPreviousItem->_objComandoRiscoArray)) {
+						$objPreviousChildItem = $objPreviousItem->_objComandoRiscoArray[$intPreviousChildItemCount - 1];
+						$objChildItem = ComandoRisco::InstantiateDbRow($objDbRow, $strAliasPrefix . 'comandorisco__', $strExpandAsArrayNodes, $objPreviousChildItem, $strColumnAliasArray);
+						if ($objChildItem)
+							$objPreviousItem->_objComandoRiscoArray[] = $objChildItem;
+					} else
+						$objPreviousItem->_objComandoRiscoArray[] = ComandoRisco::InstantiateDbRow($objDbRow, $strAliasPrefix . 'comandorisco__', $strExpandAsArrayNodes, null, $strColumnAliasArray);
+					$blnExpandedViaArray = true;
+				}
+
 				$strAlias = $strAliasPrefix . 'referenciarendimento__id';
 				$strAliasName = array_key_exists($strAlias, $strColumnAliasArray) ? $strColumnAliasArray[$strAlias] : $strAlias;
 				if ((array_key_exists($strAlias, $strExpandAsArrayNodes)) &&
@@ -476,6 +508,16 @@
 
 
 
+
+			// Check for ComandoRisco Virtual Binding
+			$strAlias = $strAliasPrefix . 'comandorisco__id';
+			$strAliasName = array_key_exists($strAlias, $strColumnAliasArray) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			if (!is_null($objDbRow->GetColumn($strAliasName))) {
+				if (($strExpandAsArrayNodes) && (array_key_exists($strAlias, $strExpandAsArrayNodes)))
+					$objToReturn->_objComandoRiscoArray[] = ComandoRisco::InstantiateDbRow($objDbRow, $strAliasPrefix . 'comandorisco__', $strExpandAsArrayNodes, null, $strColumnAliasArray);
+				else
+					$objToReturn->_objComandoRisco = ComandoRisco::InstantiateDbRow($objDbRow, $strAliasPrefix . 'comandorisco__', $strExpandAsArrayNodes, null, $strColumnAliasArray);
+			}
 
 			// Check for ReferenciaRendimento Virtual Binding
 			$strAlias = $strAliasPrefix . 'referenciarendimento__id';
@@ -799,6 +841,18 @@
 				// (If restored via a "Many-to" expansion)
 				////////////////////////////
 
+				case '_ComandoRisco':
+					// Gets the value for the private _objComandoRisco (Read-Only)
+					// if set due to an expansion on the comando_risco.molde_id reverse relationship
+					// @return ComandoRisco
+					return $this->_objComandoRisco;
+
+				case '_ComandoRiscoArray':
+					// Gets the value for the private _objComandoRiscoArray (Read-Only)
+					// if set due to an ExpandAsArray on the comando_risco.molde_id reverse relationship
+					// @return ComandoRisco[]
+					return (array) $this->_objComandoRiscoArray;
+
 				case '_ReferenciaRendimento':
 					// Gets the value for the private _objReferenciaRendimento (Read-Only)
 					// if set due to an expansion on the referencia_rendimento.molde_id reverse relationship
@@ -879,6 +933,188 @@
 		///////////////////////////////
 		// ASSOCIATED OBJECTS' METHODS
 		///////////////////////////////
+
+			
+		
+		// Related Objects' Methods for ComandoRisco
+		//-------------------------------------------------------------------
+
+		/**
+		 * Gets all associated ComandoRiscos as an array of ComandoRisco objects
+		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
+		 * @return ComandoRisco[]
+		*/ 
+		public function GetComandoRiscoArray($objOptionalClauses = null) {
+			if ((is_null($this->intId)))
+				return array();
+
+			try {
+				return ComandoRisco::LoadArrayByMoldeId($this->intId, $objOptionalClauses);
+			} catch (QCallerException $objExc) {
+				$objExc->IncrementOffset();
+				throw $objExc;
+			}
+		}
+
+		/**
+		 * Counts all associated ComandoRiscos
+		 * @return int
+		*/ 
+		public function CountComandoRiscos() {
+			if ((is_null($this->intId)))
+				return 0;
+
+			return ComandoRisco::CountByMoldeId($this->intId);
+		}
+
+		/**
+		 * Associates a ComandoRisco
+		 * @param ComandoRisco $objComandoRisco
+		 * @return void
+		*/ 
+		public function AssociateComandoRisco(ComandoRisco $objComandoRisco) {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociateComandoRisco on this unsaved Molde.');
+			if ((is_null($objComandoRisco->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociateComandoRisco on this Molde with an unsaved ComandoRisco.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Molde::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`comando_risco`
+				SET
+					`molde_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objComandoRisco->Id) . '
+			');
+
+			// Journaling (if applicable)
+			if ($objDatabase->JournalingDatabase) {
+				$objComandoRisco->MoldeId = $this->intId;
+				$objComandoRisco->Journal('UPDATE');
+			}
+		}
+
+		/**
+		 * Unassociates a ComandoRisco
+		 * @param ComandoRisco $objComandoRisco
+		 * @return void
+		*/ 
+		public function UnassociateComandoRisco(ComandoRisco $objComandoRisco) {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateComandoRisco on this unsaved Molde.');
+			if ((is_null($objComandoRisco->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateComandoRisco on this Molde with an unsaved ComandoRisco.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Molde::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`comando_risco`
+				SET
+					`molde_id` = null
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objComandoRisco->Id) . ' AND
+					`molde_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+
+			// Journaling
+			if ($objDatabase->JournalingDatabase) {
+				$objComandoRisco->MoldeId = null;
+				$objComandoRisco->Journal('UPDATE');
+			}
+		}
+
+		/**
+		 * Unassociates all ComandoRiscos
+		 * @return void
+		*/ 
+		public function UnassociateAllComandoRiscos() {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateComandoRisco on this unsaved Molde.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Molde::GetDatabase();
+
+			// Journaling
+			if ($objDatabase->JournalingDatabase) {
+				foreach (ComandoRisco::LoadArrayByMoldeId($this->intId) as $objComandoRisco) {
+					$objComandoRisco->MoldeId = null;
+					$objComandoRisco->Journal('UPDATE');
+				}
+			}
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`comando_risco`
+				SET
+					`molde_id` = null
+				WHERE
+					`molde_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+		/**
+		 * Deletes an associated ComandoRisco
+		 * @param ComandoRisco $objComandoRisco
+		 * @return void
+		*/ 
+		public function DeleteAssociatedComandoRisco(ComandoRisco $objComandoRisco) {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateComandoRisco on this unsaved Molde.');
+			if ((is_null($objComandoRisco->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateComandoRisco on this Molde with an unsaved ComandoRisco.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Molde::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`comando_risco`
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objComandoRisco->Id) . ' AND
+					`molde_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+
+			// Journaling
+			if ($objDatabase->JournalingDatabase) {
+				$objComandoRisco->Journal('DELETE');
+			}
+		}
+
+		/**
+		 * Deletes all associated ComandoRiscos
+		 * @return void
+		*/ 
+		public function DeleteAllComandoRiscos() {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateComandoRisco on this unsaved Molde.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Molde::GetDatabase();
+
+			// Journaling
+			if ($objDatabase->JournalingDatabase) {
+				foreach (ComandoRisco::LoadArrayByMoldeId($this->intId) as $objComandoRisco) {
+					$objComandoRisco->Journal('DELETE');
+				}
+			}
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`comando_risco`
+				WHERE
+					`molde_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
 
 			
 		
@@ -1135,6 +1371,7 @@
 	/**
 	 * @property-read QQNode $Id
 	 * @property-read QQNode $Nome
+	 * @property-read QQReverseReferenceNodeComandoRisco $ComandoRisco
 	 * @property-read QQReverseReferenceNodeReferenciaRendimento $ReferenciaRendimento
 	 */
 	class QQNodeMolde extends QQNode {
@@ -1147,6 +1384,8 @@
 					return new QQNode('id', 'Id', 'integer', $this);
 				case 'Nome':
 					return new QQNode('nome', 'Nome', 'string', $this);
+				case 'ComandoRisco':
+					return new QQReverseReferenceNodeComandoRisco($this, 'comandorisco', 'reverse_reference', 'molde_id');
 				case 'ReferenciaRendimento':
 					return new QQReverseReferenceNodeReferenciaRendimento($this, 'referenciarendimento', 'reverse_reference', 'molde_id');
 
@@ -1166,6 +1405,7 @@
 	/**
 	 * @property-read QQNode $Id
 	 * @property-read QQNode $Nome
+	 * @property-read QQReverseReferenceNodeComandoRisco $ComandoRisco
 	 * @property-read QQReverseReferenceNodeReferenciaRendimento $ReferenciaRendimento
 	 * @property-read QQNode $_PrimaryKeyNode
 	 */
@@ -1179,6 +1419,8 @@
 					return new QQNode('id', 'Id', 'integer', $this);
 				case 'Nome':
 					return new QQNode('nome', 'Nome', 'string', $this);
+				case 'ComandoRisco':
+					return new QQReverseReferenceNodeComandoRisco($this, 'comandorisco', 'reverse_reference', 'molde_id');
 				case 'ReferenciaRendimento':
 					return new QQReverseReferenceNodeReferenciaRendimento($this, 'referenciarendimento', 'reverse_reference', 'molde_id');
 

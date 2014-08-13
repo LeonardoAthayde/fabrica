@@ -24,11 +24,11 @@
 
 		<?php $this->txtReferencia->RenderWithName(); ?>
 
+		<?php $this->lstMolde->RenderWithName(); ?>
+
 		<?php $this->lstTamanho->RenderWithName(); ?>
 
 		<?php $this->txtQuantidadeRisco->RenderWithName(); ?>
-
-		<?php $this->chkMeiaRisco->RenderWithName(); ?>
 
 		<?php $this->lstBalancoPecasAsOrdemProducaoGrade->RenderWithName(); ?>
 

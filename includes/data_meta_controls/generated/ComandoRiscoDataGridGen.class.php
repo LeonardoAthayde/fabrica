@@ -297,10 +297,11 @@
 				case 'ComandoId': return QQN::ComandoRisco()->ComandoId;
 				case 'Comando': return QQN::ComandoRisco()->Comando;
 				case 'Referencia': return QQN::ComandoRisco()->Referencia;
+				case 'MoldeId': return QQN::ComandoRisco()->MoldeId;
+				case 'Molde': return QQN::ComandoRisco()->Molde;
 				case 'TamanhoId': return QQN::ComandoRisco()->TamanhoId;
 				case 'Tamanho': return QQN::ComandoRisco()->Tamanho;
 				case 'QuantidadeRisco': return QQN::ComandoRisco()->QuantidadeRisco;
-				case 'MeiaRisco': return QQN::ComandoRisco()->MeiaRisco;
 				case 'BalancoPecasAsOrdemProducaoGrade': return QQN::ComandoRisco()->BalancoPecasAsOrdemProducaoGrade;
 
 				default: throw new QCallerException('Simple Property not found in ComandoRiscoDataGrid content: ' . $mixContent);

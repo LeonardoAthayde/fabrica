@@ -29,9 +29,9 @@
 		protected $lblId;
 		protected $lstComando;
 		protected $txtReferencia;
+		protected $lstMolde;
 		protected $lstTamanho;
 		protected $txtQuantidadeRisco;
-		protected $chkMeiaRisco;
 
 		// Other ListBoxes (if applicable) via Unique ReverseReferences and ManyToMany References
 		protected $lstBalancoPecasAsOrdemProducaoGrade;
@@ -77,9 +77,9 @@
 			$this->lblId = $this->mctComandoRisco->lblId_Create();
 			$this->lstComando = $this->mctComandoRisco->lstComando_Create();
 			$this->txtReferencia = $this->mctComandoRisco->txtReferencia_Create();
+			$this->lstMolde = $this->mctComandoRisco->lstMolde_Create();
 			$this->lstTamanho = $this->mctComandoRisco->lstTamanho_Create();
 			$this->txtQuantidadeRisco = $this->mctComandoRisco->txtQuantidadeRisco_Create();
-			$this->chkMeiaRisco = $this->mctComandoRisco->chkMeiaRisco_Create();
 			$this->lstBalancoPecasAsOrdemProducaoGrade = $this->mctComandoRisco->lstBalancoPecasAsOrdemProducaoGrade_Create();
 
 			// Create Buttons and Actions on this Form

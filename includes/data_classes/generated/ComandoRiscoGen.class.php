@@ -18,10 +18,11 @@
 	 * @property integer $Id the value for intId (Read-Only PK)
 	 * @property integer $ComandoId the value for intComandoId (Not Null)
 	 * @property string $Referencia the value for strReferencia (Not Null)
+	 * @property integer $MoldeId the value for intMoldeId (Not Null)
 	 * @property integer $TamanhoId the value for intTamanhoId (Not Null)
 	 * @property integer $QuantidadeRisco the value for intQuantidadeRisco (Not Null)
-	 * @property boolean $MeiaRisco the value for blnMeiaRisco (Not Null)
 	 * @property Comando $Comando the value for the Comando object referenced by intComandoId (Not Null)
+	 * @property Molde $Molde the value for the Molde object referenced by intMoldeId (Not Null)
 	 * @property Tamanho $Tamanho the value for the Tamanho object referenced by intTamanhoId (Not Null)
 	 * @property BalancoPecas $BalancoPecasAsOrdemProducaoGrade the value for the BalancoPecas object that uniquely references this ComandoRisco
 	 * @property BalancoAcoes $_BalancoAcoesAsOrdemProducaoGrade the value for the private _objBalancoAcoesAsOrdemProducaoGrade (Read-Only) if set due to an expansion on the balanco_acoes.ordem_producao_grade_id reverse relationship
@@ -62,6 +63,14 @@
 
 
 		/**
+		 * Protected member variable that maps to the database column comando_risco.molde_id
+		 * @var integer intMoldeId
+		 */
+		protected $intMoldeId;
+		const MoldeIdDefault = null;
+
+
+		/**
 		 * Protected member variable that maps to the database column comando_risco.tamanho_id
 		 * @var integer intTamanhoId
 		 */
@@ -75,14 +84,6 @@
 		 */
 		protected $intQuantidadeRisco;
 		const QuantidadeRiscoDefault = null;
-
-
-		/**
-		 * Protected member variable that maps to the database column comando_risco.meia_risco
-		 * @var boolean blnMeiaRisco
-		 */
-		protected $blnMeiaRisco;
-		const MeiaRiscoDefault = null;
 
 
 		/**
@@ -148,6 +149,16 @@
 		 * @var Comando objComando
 		 */
 		protected $objComando;
+
+		/**
+		 * Protected member variable that contains the object pointed by the reference
+		 * in the database column comando_risco.molde_id.
+		 *
+		 * NOTE: Always use the Molde property getter to correctly retrieve this Molde object.
+		 * (Because this class implements late binding, this variable reference MAY be null.)
+		 * @var Molde objMolde
+		 */
+		protected $objMolde;
 
 		/**
 		 * Protected member variable that contains the object pointed by the reference
@@ -490,9 +501,9 @@
 			$objBuilder->AddSelectItem($strTableName, 'id', $strAliasPrefix . 'id');
 			$objBuilder->AddSelectItem($strTableName, 'comando_id', $strAliasPrefix . 'comando_id');
 			$objBuilder->AddSelectItem($strTableName, 'referencia', $strAliasPrefix . 'referencia');
+			$objBuilder->AddSelectItem($strTableName, 'molde_id', $strAliasPrefix . 'molde_id');
 			$objBuilder->AddSelectItem($strTableName, 'tamanho_id', $strAliasPrefix . 'tamanho_id');
 			$objBuilder->AddSelectItem($strTableName, 'quantidade_risco', $strAliasPrefix . 'quantidade_risco');
-			$objBuilder->AddSelectItem($strTableName, 'meia_risco', $strAliasPrefix . 'meia_risco');
 		}
 
 
@@ -576,12 +587,12 @@
 			$objToReturn->intComandoId = $objDbRow->GetColumn($strAliasName, 'Integer');
 			$strAliasName = array_key_exists($strAliasPrefix . 'referencia', $strColumnAliasArray) ? $strColumnAliasArray[$strAliasPrefix . 'referencia'] : $strAliasPrefix . 'referencia';
 			$objToReturn->strReferencia = $objDbRow->GetColumn($strAliasName, 'VarChar');
+			$strAliasName = array_key_exists($strAliasPrefix . 'molde_id', $strColumnAliasArray) ? $strColumnAliasArray[$strAliasPrefix . 'molde_id'] : $strAliasPrefix . 'molde_id';
+			$objToReturn->intMoldeId = $objDbRow->GetColumn($strAliasName, 'Integer');
 			$strAliasName = array_key_exists($strAliasPrefix . 'tamanho_id', $strColumnAliasArray) ? $strColumnAliasArray[$strAliasPrefix . 'tamanho_id'] : $strAliasPrefix . 'tamanho_id';
 			$objToReturn->intTamanhoId = $objDbRow->GetColumn($strAliasName, 'Integer');
 			$strAliasName = array_key_exists($strAliasPrefix . 'quantidade_risco', $strColumnAliasArray) ? $strColumnAliasArray[$strAliasPrefix . 'quantidade_risco'] : $strAliasPrefix . 'quantidade_risco';
 			$objToReturn->intQuantidadeRisco = $objDbRow->GetColumn($strAliasName, 'Integer');
-			$strAliasName = array_key_exists($strAliasPrefix . 'meia_risco', $strColumnAliasArray) ? $strColumnAliasArray[$strAliasPrefix . 'meia_risco'] : $strAliasPrefix . 'meia_risco';
-			$objToReturn->blnMeiaRisco = $objDbRow->GetColumn($strAliasName, 'Bit');
 
 			// Instantiate Virtual Attributes
 			foreach ($objDbRow->GetColumnNameArray() as $strColumnName => $mixValue) {
@@ -600,6 +611,12 @@
 			$strAliasName = array_key_exists($strAlias, $strColumnAliasArray) ? $strColumnAliasArray[$strAlias] : $strAlias;
 			if (!is_null($objDbRow->GetColumn($strAliasName)))
 				$objToReturn->objComando = Comando::InstantiateDbRow($objDbRow, $strAliasPrefix . 'comando_id__', $strExpandAsArrayNodes, null, $strColumnAliasArray);
+
+			// Check for Molde Early Binding
+			$strAlias = $strAliasPrefix . 'molde_id__id';
+			$strAliasName = array_key_exists($strAlias, $strColumnAliasArray) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			if (!is_null($objDbRow->GetColumn($strAliasName)))
+				$objToReturn->objMolde = Molde::InstantiateDbRow($objDbRow, $strAliasPrefix . 'molde_id__', $strExpandAsArrayNodes, null, $strColumnAliasArray);
 
 			// Check for Tamanho Early Binding
 			$strAlias = $strAliasPrefix . 'tamanho_id__id';
@@ -793,6 +810,40 @@
 			, $objOptionalClauses
 			);
 		}
+			
+		/**
+		 * Load an array of ComandoRisco objects,
+		 * by MoldeId Index(es)
+		 * @param integer $intMoldeId
+		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
+		 * @return ComandoRisco[]
+		*/
+		public static function LoadArrayByMoldeId($intMoldeId, $objOptionalClauses = null) {
+			// Call ComandoRisco::QueryArray to perform the LoadArrayByMoldeId query
+			try {
+				return ComandoRisco::QueryArray(
+					QQ::Equal(QQN::ComandoRisco()->MoldeId, $intMoldeId),
+					$objOptionalClauses
+					);
+			} catch (QCallerException $objExc) {
+				$objExc->IncrementOffset();
+				throw $objExc;
+			}
+		}
+
+		/**
+		 * Count ComandoRiscos
+		 * by MoldeId Index(es)
+		 * @param integer $intMoldeId
+		 * @return int
+		*/
+		public static function CountByMoldeId($intMoldeId, $objOptionalClauses = null) {
+			// Call ComandoRisco::QueryCount to perform the CountByMoldeId query
+			return ComandoRisco::QueryCount(
+				QQ::Equal(QQN::ComandoRisco()->MoldeId, $intMoldeId)
+			, $objOptionalClauses
+			);
+		}
 
 
 
@@ -826,15 +877,15 @@
 						INSERT INTO `comando_risco` (
 							`comando_id`,
 							`referencia`,
+							`molde_id`,
 							`tamanho_id`,
-							`quantidade_risco`,
-							`meia_risco`
+							`quantidade_risco`
 						) VALUES (
 							' . $objDatabase->SqlVariable($this->intComandoId) . ',
 							' . $objDatabase->SqlVariable($this->strReferencia) . ',
+							' . $objDatabase->SqlVariable($this->intMoldeId) . ',
 							' . $objDatabase->SqlVariable($this->intTamanhoId) . ',
-							' . $objDatabase->SqlVariable($this->intQuantidadeRisco) . ',
-							' . $objDatabase->SqlVariable($this->blnMeiaRisco) . '
+							' . $objDatabase->SqlVariable($this->intQuantidadeRisco) . '
 						)
 					');
 
@@ -856,9 +907,9 @@
 						SET
 							`comando_id` = ' . $objDatabase->SqlVariable($this->intComandoId) . ',
 							`referencia` = ' . $objDatabase->SqlVariable($this->strReferencia) . ',
+							`molde_id` = ' . $objDatabase->SqlVariable($this->intMoldeId) . ',
 							`tamanho_id` = ' . $objDatabase->SqlVariable($this->intTamanhoId) . ',
-							`quantidade_risco` = ' . $objDatabase->SqlVariable($this->intQuantidadeRisco) . ',
-							`meia_risco` = ' . $objDatabase->SqlVariable($this->blnMeiaRisco) . '
+							`quantidade_risco` = ' . $objDatabase->SqlVariable($this->intQuantidadeRisco) . '
 						WHERE
 							`id` = ' . $objDatabase->SqlVariable($this->intId) . '
 					');
@@ -974,9 +1025,9 @@
 			// Update $this's local variables to match
 			$this->ComandoId = $objReloaded->ComandoId;
 			$this->strReferencia = $objReloaded->strReferencia;
+			$this->MoldeId = $objReloaded->MoldeId;
 			$this->TamanhoId = $objReloaded->TamanhoId;
 			$this->intQuantidadeRisco = $objReloaded->intQuantidadeRisco;
-			$this->blnMeiaRisco = $objReloaded->blnMeiaRisco;
 		}
 
 		/**
@@ -992,9 +1043,9 @@
 					`id`,
 					`comando_id`,
 					`referencia`,
+					`molde_id`,
 					`tamanho_id`,
 					`quantidade_risco`,
-					`meia_risco`,
 					__sys_login_id,
 					__sys_action,
 					__sys_date
@@ -1002,9 +1053,9 @@
 					' . $objDatabase->SqlVariable($this->intId) . ',
 					' . $objDatabase->SqlVariable($this->intComandoId) . ',
 					' . $objDatabase->SqlVariable($this->strReferencia) . ',
+					' . $objDatabase->SqlVariable($this->intMoldeId) . ',
 					' . $objDatabase->SqlVariable($this->intTamanhoId) . ',
 					' . $objDatabase->SqlVariable($this->intQuantidadeRisco) . ',
-					' . $objDatabase->SqlVariable($this->blnMeiaRisco) . ',
 					' . (($objDatabase->JournaledById) ? $objDatabase->JournaledById : 'NULL') . ',
 					' . $objDatabase->SqlVariable($strJournalCommand) . ',
 					NOW()
@@ -1070,6 +1121,11 @@
 					// @return string
 					return $this->strReferencia;
 
+				case 'MoldeId':
+					// Gets the value for intMoldeId (Not Null)
+					// @return integer
+					return $this->intMoldeId;
+
 				case 'TamanhoId':
 					// Gets the value for intTamanhoId (Not Null)
 					// @return integer
@@ -1079,11 +1135,6 @@
 					// Gets the value for intQuantidadeRisco (Not Null)
 					// @return integer
 					return $this->intQuantidadeRisco;
-
-				case 'MeiaRisco':
-					// Gets the value for blnMeiaRisco (Not Null)
-					// @return boolean
-					return $this->blnMeiaRisco;
 
 
 				///////////////////
@@ -1096,6 +1147,18 @@
 						if ((!$this->objComando) && (!is_null($this->intComandoId)))
 							$this->objComando = Comando::Load($this->intComandoId);
 						return $this->objComando;
+					} catch (QCallerException $objExc) {
+						$objExc->IncrementOffset();
+						throw $objExc;
+					}
+
+				case 'Molde':
+					// Gets the value for the Molde object referenced by intMoldeId (Not Null)
+					// @return Molde
+					try {
+						if ((!$this->objMolde) && (!is_null($this->intMoldeId)))
+							$this->objMolde = Molde::Load($this->intMoldeId);
+						return $this->objMolde;
 					} catch (QCallerException $objExc) {
 						$objExc->IncrementOffset();
 						throw $objExc;
@@ -1211,6 +1274,18 @@
 						throw $objExc;
 					}
 
+				case 'MoldeId':
+					// Sets the value for intMoldeId (Not Null)
+					// @param integer $mixValue
+					// @return integer
+					try {
+						$this->objMolde = null;
+						return ($this->intMoldeId = QType::Cast($mixValue, QType::Integer));
+					} catch (QCallerException $objExc) {
+						$objExc->IncrementOffset();
+						throw $objExc;
+					}
+
 				case 'TamanhoId':
 					// Sets the value for intTamanhoId (Not Null)
 					// @param integer $mixValue
@@ -1229,17 +1304,6 @@
 					// @return integer
 					try {
 						return ($this->intQuantidadeRisco = QType::Cast($mixValue, QType::Integer));
-					} catch (QCallerException $objExc) {
-						$objExc->IncrementOffset();
-						throw $objExc;
-					}
-
-				case 'MeiaRisco':
-					// Sets the value for blnMeiaRisco (Not Null)
-					// @param boolean $mixValue
-					// @return boolean
-					try {
-						return ($this->blnMeiaRisco = QType::Cast($mixValue, QType::Boolean));
 					} catch (QCallerException $objExc) {
 						$objExc->IncrementOffset();
 						throw $objExc;
@@ -1273,6 +1337,36 @@
 						// Update Local Member Variables
 						$this->objComando = $mixValue;
 						$this->intComandoId = $mixValue->Id;
+
+						// Return $mixValue
+						return $mixValue;
+					}
+					break;
+
+				case 'Molde':
+					// Sets the value for the Molde object referenced by intMoldeId (Not Null)
+					// @param Molde $mixValue
+					// @return Molde
+					if (is_null($mixValue)) {
+						$this->intMoldeId = null;
+						$this->objMolde = null;
+						return null;
+					} else {
+						// Make sure $mixValue actually is a Molde object
+						try {
+							$mixValue = QType::Cast($mixValue, 'Molde');
+						} catch (QInvalidCastException $objExc) {
+							$objExc->IncrementOffset();
+							throw $objExc;
+						} 
+
+						// Make sure $mixValue is a SAVED Molde object
+						if (is_null($mixValue->Id))
+							throw new QCallerException('Unable to set an unsaved Molde for this ComandoRisco');
+
+						// Update Local Member Variables
+						$this->objMolde = $mixValue;
+						$this->intMoldeId = $mixValue->Id;
 
 						// Return $mixValue
 						return $mixValue;
@@ -1750,9 +1844,9 @@
 			$strToReturn .= '<element name="Id" type="xsd:int"/>';
 			$strToReturn .= '<element name="Comando" type="xsd1:Comando"/>';
 			$strToReturn .= '<element name="Referencia" type="xsd:string"/>';
+			$strToReturn .= '<element name="Molde" type="xsd1:Molde"/>';
 			$strToReturn .= '<element name="Tamanho" type="xsd1:Tamanho"/>';
 			$strToReturn .= '<element name="QuantidadeRisco" type="xsd:int"/>';
-			$strToReturn .= '<element name="MeiaRisco" type="xsd:boolean"/>';
 			$strToReturn .= '<element name="__blnRestored" type="xsd:boolean"/>';
 			$strToReturn .= '</sequence></complexType>';
 			return $strToReturn;
@@ -1762,6 +1856,7 @@
 			if (!array_key_exists('ComandoRisco', $strComplexTypeArray)) {
 				$strComplexTypeArray['ComandoRisco'] = ComandoRisco::GetSoapComplexTypeXml();
 				Comando::AlterSoapComplexTypeArray($strComplexTypeArray);
+				Molde::AlterSoapComplexTypeArray($strComplexTypeArray);
 				Tamanho::AlterSoapComplexTypeArray($strComplexTypeArray);
 			}
 		}
@@ -1784,13 +1879,14 @@
 				$objToReturn->Comando = Comando::GetObjectFromSoapObject($objSoapObject->Comando);
 			if (property_exists($objSoapObject, 'Referencia'))
 				$objToReturn->strReferencia = $objSoapObject->Referencia;
+			if ((property_exists($objSoapObject, 'Molde')) &&
+				($objSoapObject->Molde))
+				$objToReturn->Molde = Molde::GetObjectFromSoapObject($objSoapObject->Molde);
 			if ((property_exists($objSoapObject, 'Tamanho')) &&
 				($objSoapObject->Tamanho))
 				$objToReturn->Tamanho = Tamanho::GetObjectFromSoapObject($objSoapObject->Tamanho);
 			if (property_exists($objSoapObject, 'QuantidadeRisco'))
 				$objToReturn->intQuantidadeRisco = $objSoapObject->QuantidadeRisco;
-			if (property_exists($objSoapObject, 'MeiaRisco'))
-				$objToReturn->blnMeiaRisco = $objSoapObject->MeiaRisco;
 			if (property_exists($objSoapObject, '__blnRestored'))
 				$objToReturn->__blnRestored = $objSoapObject->__blnRestored;
 			return $objToReturn;
@@ -1813,6 +1909,10 @@
 				$objObject->objComando = Comando::GetSoapObjectFromObject($objObject->objComando, false);
 			else if (!$blnBindRelatedObjects)
 				$objObject->intComandoId = null;
+			if ($objObject->objMolde)
+				$objObject->objMolde = Molde::GetSoapObjectFromObject($objObject->objMolde, false);
+			else if (!$blnBindRelatedObjects)
+				$objObject->intMoldeId = null;
 			if ($objObject->objTamanho)
 				$objObject->objTamanho = Tamanho::GetSoapObjectFromObject($objObject->objTamanho, false);
 			else if (!$blnBindRelatedObjects)
@@ -1836,10 +1936,11 @@
 	 * @property-read QQNode $ComandoId
 	 * @property-read QQNodeComando $Comando
 	 * @property-read QQNode $Referencia
+	 * @property-read QQNode $MoldeId
+	 * @property-read QQNodeMolde $Molde
 	 * @property-read QQNode $TamanhoId
 	 * @property-read QQNodeTamanho $Tamanho
 	 * @property-read QQNode $QuantidadeRisco
-	 * @property-read QQNode $MeiaRisco
 	 * @property-read QQReverseReferenceNodeBalancoAcoes $BalancoAcoesAsOrdemProducaoGrade
 	 * @property-read QQReverseReferenceNodeBalancoPecas $BalancoPecasAsOrdemProducaoGrade
 	 * @property-read QQReverseReferenceNodeComandoRiscoPeca $ComandoRiscoPeca
@@ -1858,14 +1959,16 @@
 					return new QQNodeComando('comando_id', 'Comando', 'integer', $this);
 				case 'Referencia':
 					return new QQNode('referencia', 'Referencia', 'string', $this);
+				case 'MoldeId':
+					return new QQNode('molde_id', 'MoldeId', 'integer', $this);
+				case 'Molde':
+					return new QQNodeMolde('molde_id', 'Molde', 'integer', $this);
 				case 'TamanhoId':
 					return new QQNode('tamanho_id', 'TamanhoId', 'integer', $this);
 				case 'Tamanho':
 					return new QQNodeTamanho('tamanho_id', 'Tamanho', 'integer', $this);
 				case 'QuantidadeRisco':
 					return new QQNode('quantidade_risco', 'QuantidadeRisco', 'integer', $this);
-				case 'MeiaRisco':
-					return new QQNode('meia_risco', 'MeiaRisco', 'boolean', $this);
 				case 'BalancoAcoesAsOrdemProducaoGrade':
 					return new QQReverseReferenceNodeBalancoAcoes($this, 'balancoacoesasordemproducaograde', 'reverse_reference', 'ordem_producao_grade_id');
 				case 'BalancoPecasAsOrdemProducaoGrade':
@@ -1891,10 +1994,11 @@
 	 * @property-read QQNode $ComandoId
 	 * @property-read QQNodeComando $Comando
 	 * @property-read QQNode $Referencia
+	 * @property-read QQNode $MoldeId
+	 * @property-read QQNodeMolde $Molde
 	 * @property-read QQNode $TamanhoId
 	 * @property-read QQNodeTamanho $Tamanho
 	 * @property-read QQNode $QuantidadeRisco
-	 * @property-read QQNode $MeiaRisco
 	 * @property-read QQReverseReferenceNodeBalancoAcoes $BalancoAcoesAsOrdemProducaoGrade
 	 * @property-read QQReverseReferenceNodeBalancoPecas $BalancoPecasAsOrdemProducaoGrade
 	 * @property-read QQReverseReferenceNodeComandoRiscoPeca $ComandoRiscoPeca
@@ -1914,14 +2018,16 @@
 					return new QQNodeComando('comando_id', 'Comando', 'integer', $this);
 				case 'Referencia':
 					return new QQNode('referencia', 'Referencia', 'string', $this);
+				case 'MoldeId':
+					return new QQNode('molde_id', 'MoldeId', 'integer', $this);
+				case 'Molde':
+					return new QQNodeMolde('molde_id', 'Molde', 'integer', $this);
 				case 'TamanhoId':
 					return new QQNode('tamanho_id', 'TamanhoId', 'integer', $this);
 				case 'Tamanho':
 					return new QQNodeTamanho('tamanho_id', 'Tamanho', 'integer', $this);
 				case 'QuantidadeRisco':
 					return new QQNode('quantidade_risco', 'QuantidadeRisco', 'integer', $this);
-				case 'MeiaRisco':
-					return new QQNode('meia_risco', 'MeiaRisco', 'boolean', $this);
 				case 'BalancoAcoesAsOrdemProducaoGrade':
 					return new QQReverseReferenceNodeBalancoAcoes($this, 'balancoacoesasordemproducaograde', 'reverse_reference', 'ordem_producao_grade_id');
 				case 'BalancoPecasAsOrdemProducaoGrade':

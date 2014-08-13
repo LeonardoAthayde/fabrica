@@ -77,9 +77,9 @@
 			$this->dtgComandoRiscos->MetaAddColumn('Id');
 			$this->dtgComandoRiscos->MetaAddColumn(QQN::ComandoRisco()->Comando);
 			$this->dtgComandoRiscos->MetaAddColumn('Referencia');
+			$this->dtgComandoRiscos->MetaAddColumn(QQN::ComandoRisco()->Molde);
 			$this->dtgComandoRiscos->MetaAddColumn(QQN::ComandoRisco()->Tamanho);
 			$this->dtgComandoRiscos->MetaAddColumn('QuantidadeRisco');
-			$this->dtgComandoRiscos->MetaAddColumn('MeiaRisco');
 			$this->dtgComandoRiscos->MetaAddColumn(QQN::ComandoRisco()->BalancoPecasAsOrdemProducaoGrade);
 		}
 	}

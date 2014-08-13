@@ -278,7 +278,9 @@
 		public function lstMolde_Create($strControlId = null, QQCondition $objCondition = null, $objOptionalClauses = null) {
 			$this->lstMolde = new QListBox($this->objParentObject, $strControlId);
 			$this->lstMolde->Name = QApplication::Translate('Molde');
-			$this->lstMolde->AddItem(QApplication::Translate('- Select One -'), null);
+			$this->lstMolde->Required = true;
+			if (!$this->blnEditMode)
+				$this->lstMolde->AddItem(QApplication::Translate('- Select One -'), null);
 
 			// Setup and perform the Query
 			if (is_null($objCondition)) $objCondition = QQ::All();
@@ -305,6 +307,7 @@
 			$this->lblMoldeId = new QLabel($this->objParentObject, $strControlId);
 			$this->lblMoldeId->Name = QApplication::Translate('Molde');
 			$this->lblMoldeId->Text = ($this->objReferenciaRendimento->Molde) ? $this->objReferenciaRendimento->Molde->__toString() : null;
+			$this->lblMoldeId->Required = true;
 			return $this->lblMoldeId;
 		}
 
@@ -521,7 +524,8 @@
 
 			if ($this->lstMolde) {
 					$this->lstMolde->RemoveAllItems();
-				$this->lstMolde->AddItem(QApplication::Translate('- Select One -'), null);
+				if (!$this->blnEditMode)
+					$this->lstMolde->AddItem(QApplication::Translate('- Select One -'), null);
 				$objMoldeArray = Molde::LoadAll();
 				if ($objMoldeArray) foreach ($objMoldeArray as $objMolde) {
 					$objListItem = new QListItem($objMolde->__toString(), $objMolde->Id);

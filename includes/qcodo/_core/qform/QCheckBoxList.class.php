@@ -42,7 +42,7 @@
 		// LAYOUT
 		protected $intCellPadding = -1;
 		protected $intCellSpacing = -1;
-		protected $intRepeatColumns = 1;
+		protected $intRepeatColumns = 2;
 		protected $strRepeatDirection = QRepeatDirection::Vertical;
 
 		//////////

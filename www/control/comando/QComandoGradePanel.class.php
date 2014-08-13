@@ -52,6 +52,7 @@
 			$this->dtgComandoRisco = new QDataGrid($this);
 			$this->dtgComandoRisco->CssClass = 'table table-striped table-bordered table-hover';
 			$this->dtgComandoRisco->AddColumn(new QDataGridColumn('REFERÊNCIA', '<?= $_ITEM->Referencia; ?>'));
+			$this->dtgComandoRisco->AddColumn(new QDataGridColumn('MOLDE', '<?= $_ITEM->Molde->Nome; ?>'));
 			$this->dtgComandoRisco->AddColumn(new QDataGridColumn('TAMANHO', '<?= $_ITEM->Tamanho->Valor; ?>'));
 			$this->dtgComandoRisco->AddColumn(new QDataGridColumn('QUANTIDADE RISCO', '<?= $_ITEM->QuantidadeRisco; ?>'));
 			$this->dtgComandoRisco->AddColumn(new QDataGridColumn('PEÇAS', '<?= $_CONTROL->ParentControl->Peca_Render($_ITEM); ?>', 'HtmlEntities=false'));

@@ -11,11 +11,11 @@
 
 		<?php $_CONTROL->txtReferencia->RenderWithName(); ?>
 
+		<?php $_CONTROL->lstMolde->RenderWithName(); ?>
+
 		<?php $_CONTROL->lstTamanho->RenderWithName(); ?>
 
 		<?php $_CONTROL->txtQuantidadeRisco->RenderWithName(); ?>
-
-		<?php $_CONTROL->chkMeiaRisco->RenderWithName(); ?>
 
 		<?php $_CONTROL->lstBalancoPecasAsOrdemProducaoGrade->RenderWithName(); ?>
 

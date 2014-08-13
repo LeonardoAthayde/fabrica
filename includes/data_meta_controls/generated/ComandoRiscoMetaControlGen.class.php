@@ -22,12 +22,12 @@
 	 * property-read QLabel $ComandoIdLabel
 	 * property QTextBox $ReferenciaControl
 	 * property-read QLabel $ReferenciaLabel
+	 * property QListBox $MoldeIdControl
+	 * property-read QLabel $MoldeIdLabel
 	 * property QListBox $TamanhoIdControl
 	 * property-read QLabel $TamanhoIdLabel
 	 * property QIntegerTextBox $QuantidadeRiscoControl
 	 * property-read QLabel $QuantidadeRiscoLabel
-	 * property QCheckBox $MeiaRiscoControl
-	 * property-read QLabel $MeiaRiscoLabel
 	 * property QListBox $BalancoPecasAsOrdemProducaoGradeControl
 	 * property-read QLabel $BalancoPecasAsOrdemProducaoGradeLabel
 	 * property-read string $TitleVerb a verb indicating whether or not this is being edited or created
@@ -80,6 +80,12 @@
 		protected $txtReferencia;
 
         /**
+         * @var QListBox lstMolde;
+         * @access protected
+         */
+		protected $lstMolde;
+
+        /**
          * @var QListBox lstTamanho;
          * @access protected
          */
@@ -90,12 +96,6 @@
          * @access protected
          */
 		protected $txtQuantidadeRisco;
-
-        /**
-         * @var QCheckBox chkMeiaRisco;
-         * @access protected
-         */
-		protected $chkMeiaRisco;
 
 
 		// Controls that allow the viewing of ComandoRisco's individual data fields
@@ -112,6 +112,12 @@
 		protected $lblReferencia;
 
         /**
+         * @var QLabel lblMoldeId
+         * @access protected
+         */
+		protected $lblMoldeId;
+
+        /**
          * @var QLabel lblTamanhoId
          * @access protected
          */
@@ -122,12 +128,6 @@
          * @access protected
          */
 		protected $lblQuantidadeRisco;
-
-        /**
-         * @var QLabel lblMeiaRisco
-         * @access protected
-         */
-		protected $lblMeiaRisco;
 
 
 		// QListBox Controls (if applicable) to edit Unique ReverseReferences and ManyToMany References
@@ -325,6 +325,49 @@
 		}
 
 		/**
+		 * Create and setup QListBox lstMolde
+		 * @param string $strControlId optional ControlId to use
+		 * @param QQCondition $objConditions override the default condition of QQ::All() to the query, itself
+		 * @param QQClause[] $objOptionalClauses additional optional QQClause object or array of QQClause objects for the query
+		 * @return QListBox
+		 */
+		public function lstMolde_Create($strControlId = null, QQCondition $objCondition = null, $objOptionalClauses = null) {
+			$this->lstMolde = new QListBox($this->objParentObject, $strControlId);
+			$this->lstMolde->Name = QApplication::Translate('Molde');
+			$this->lstMolde->Required = true;
+			if (!$this->blnEditMode)
+				$this->lstMolde->AddItem(QApplication::Translate('- Select One -'), null);
+
+			// Setup and perform the Query
+			if (is_null($objCondition)) $objCondition = QQ::All();
+			$objMoldeCursor = Molde::QueryCursor($objCondition, $objOptionalClauses);
+
+			// Iterate through the Cursor
+			while ($objMolde = Molde::InstantiateCursor($objMoldeCursor)) {
+				$objListItem = new QListItem($objMolde->__toString(), $objMolde->Id);
+				if (($this->objComandoRisco->Molde) && ($this->objComandoRisco->Molde->Id == $objMolde->Id))
+					$objListItem->Selected = true;
+				$this->lstMolde->AddItem($objListItem);
+			}
+
+			// Return the QListBox
+			return $this->lstMolde;
+		}
+
+		/**
+		 * Create and setup QLabel lblMoldeId
+		 * @param string $strControlId optional ControlId to use
+		 * @return QLabel
+		 */
+		public function lblMoldeId_Create($strControlId = null) {
+			$this->lblMoldeId = new QLabel($this->objParentObject, $strControlId);
+			$this->lblMoldeId->Name = QApplication::Translate('Molde');
+			$this->lblMoldeId->Text = ($this->objComandoRisco->Molde) ? $this->objComandoRisco->Molde->__toString() : null;
+			$this->lblMoldeId->Required = true;
+			return $this->lblMoldeId;
+		}
+
+		/**
 		 * Create and setup QListBox lstTamanho
 		 * @param string $strControlId optional ControlId to use
 		 * @param QQCondition $objConditions override the default condition of QQ::All() to the query, itself
@@ -393,30 +436,6 @@
 			$this->lblQuantidadeRisco->Required = true;
 			$this->lblQuantidadeRisco->Format = $strFormat;
 			return $this->lblQuantidadeRisco;
-		}
-
-		/**
-		 * Create and setup QCheckBox chkMeiaRisco
-		 * @param string $strControlId optional ControlId to use
-		 * @return QCheckBox
-		 */
-		public function chkMeiaRisco_Create($strControlId = null) {
-			$this->chkMeiaRisco = new QCheckBox($this->objParentObject, $strControlId);
-			$this->chkMeiaRisco->Name = QApplication::Translate('Meia Risco');
-			$this->chkMeiaRisco->Checked = $this->objComandoRisco->MeiaRisco;
-			return $this->chkMeiaRisco;
-		}
-
-		/**
-		 * Create and setup QLabel lblMeiaRisco
-		 * @param string $strControlId optional ControlId to use
-		 * @return QLabel
-		 */
-		public function lblMeiaRisco_Create($strControlId = null) {
-			$this->lblMeiaRisco = new QLabel($this->objParentObject, $strControlId);
-			$this->lblMeiaRisco->Name = QApplication::Translate('Meia Risco');
-			$this->lblMeiaRisco->Text = ($this->objComandoRisco->MeiaRisco) ? QApplication::Translate('Yes') : QApplication::Translate('No');
-			return $this->lblMeiaRisco;
 		}
 
 		/**
@@ -493,6 +512,20 @@
 			if ($this->txtReferencia) $this->txtReferencia->Text = $this->objComandoRisco->Referencia;
 			if ($this->lblReferencia) $this->lblReferencia->Text = $this->objComandoRisco->Referencia;
 
+			if ($this->lstMolde) {
+					$this->lstMolde->RemoveAllItems();
+				if (!$this->blnEditMode)
+					$this->lstMolde->AddItem(QApplication::Translate('- Select One -'), null);
+				$objMoldeArray = Molde::LoadAll();
+				if ($objMoldeArray) foreach ($objMoldeArray as $objMolde) {
+					$objListItem = new QListItem($objMolde->__toString(), $objMolde->Id);
+					if (($this->objComandoRisco->Molde) && ($this->objComandoRisco->Molde->Id == $objMolde->Id))
+						$objListItem->Selected = true;
+					$this->lstMolde->AddItem($objListItem);
+				}
+			}
+			if ($this->lblMoldeId) $this->lblMoldeId->Text = ($this->objComandoRisco->Molde) ? $this->objComandoRisco->Molde->__toString() : null;
+
 			if ($this->lstTamanho) {
 					$this->lstTamanho->RemoveAllItems();
 				if (!$this->blnEditMode)
@@ -509,9 +542,6 @@
 
 			if ($this->txtQuantidadeRisco) $this->txtQuantidadeRisco->Text = $this->objComandoRisco->QuantidadeRisco;
 			if ($this->lblQuantidadeRisco) $this->lblQuantidadeRisco->Text = $this->objComandoRisco->QuantidadeRisco;
-
-			if ($this->chkMeiaRisco) $this->chkMeiaRisco->Checked = $this->objComandoRisco->MeiaRisco;
-			if ($this->lblMeiaRisco) $this->lblMeiaRisco->Text = ($this->objComandoRisco->MeiaRisco) ? QApplication::Translate('Yes') : QApplication::Translate('No');
 
 			if ($this->lstBalancoPecasAsOrdemProducaoGrade) {
 				$this->lstBalancoPecasAsOrdemProducaoGrade->RemoveAllItems();
@@ -556,9 +586,9 @@
 				// Update any fields for controls that have been created
 				if ($this->lstComando) $this->objComandoRisco->ComandoId = $this->lstComando->SelectedValue;
 				if ($this->txtReferencia) $this->objComandoRisco->Referencia = $this->txtReferencia->Text;
+				if ($this->lstMolde) $this->objComandoRisco->MoldeId = $this->lstMolde->SelectedValue;
 				if ($this->lstTamanho) $this->objComandoRisco->TamanhoId = $this->lstTamanho->SelectedValue;
 				if ($this->txtQuantidadeRisco) $this->objComandoRisco->QuantidadeRisco = $this->txtQuantidadeRisco->Text;
-				if ($this->chkMeiaRisco) $this->objComandoRisco->MeiaRisco = $this->chkMeiaRisco->Checked;
 
 				// Update any UniqueReverseReferences (if any) for controls that have been created for it
 				if ($this->lstBalancoPecasAsOrdemProducaoGrade) $this->objComandoRisco->BalancoPecasAsOrdemProducaoGrade = BalancoPecas::Load($this->lstBalancoPecasAsOrdemProducaoGrade->SelectedValue);
@@ -620,6 +650,12 @@
 				case 'ReferenciaLabel':
 					if (!$this->lblReferencia) return $this->lblReferencia_Create();
 					return $this->lblReferencia;
+				case 'MoldeIdControl':
+					if (!$this->lstMolde) return $this->lstMolde_Create();
+					return $this->lstMolde;
+				case 'MoldeIdLabel':
+					if (!$this->lblMoldeId) return $this->lblMoldeId_Create();
+					return $this->lblMoldeId;
 				case 'TamanhoIdControl':
 					if (!$this->lstTamanho) return $this->lstTamanho_Create();
 					return $this->lstTamanho;
@@ -632,12 +668,6 @@
 				case 'QuantidadeRiscoLabel':
 					if (!$this->lblQuantidadeRisco) return $this->lblQuantidadeRisco_Create();
 					return $this->lblQuantidadeRisco;
-				case 'MeiaRiscoControl':
-					if (!$this->chkMeiaRisco) return $this->chkMeiaRisco_Create();
-					return $this->chkMeiaRisco;
-				case 'MeiaRiscoLabel':
-					if (!$this->lblMeiaRisco) return $this->lblMeiaRisco_Create();
-					return $this->lblMeiaRisco;
 				case 'BalancoPecasAsOrdemProducaoGradeControl':
 					if (!$this->lstBalancoPecasAsOrdemProducaoGrade) return $this->lstBalancoPecasAsOrdemProducaoGrade_Create();
 					return $this->lstBalancoPecasAsOrdemProducaoGrade;
@@ -672,12 +702,12 @@
 						return ($this->lstComando = QType::Cast($mixValue, 'QControl'));
 					case 'ReferenciaControl':
 						return ($this->txtReferencia = QType::Cast($mixValue, 'QControl'));
+					case 'MoldeIdControl':
+						return ($this->lstMolde = QType::Cast($mixValue, 'QControl'));
 					case 'TamanhoIdControl':
 						return ($this->lstTamanho = QType::Cast($mixValue, 'QControl'));
 					case 'QuantidadeRiscoControl':
 						return ($this->txtQuantidadeRisco = QType::Cast($mixValue, 'QControl'));
-					case 'MeiaRiscoControl':
-						return ($this->chkMeiaRisco = QType::Cast($mixValue, 'QControl'));
 					case 'BalancoPecasAsOrdemProducaoGradeControl':
 						return ($this->lstBalancoPecasAsOrdemProducaoGrade = QType::Cast($mixValue, 'QControl'));
 					default:

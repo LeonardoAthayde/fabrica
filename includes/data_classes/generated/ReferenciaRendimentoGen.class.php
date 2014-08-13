@@ -16,14 +16,14 @@
 	 * @package My Application
 	 * @subpackage GeneratedDataObjects
 	 * @property integer $Id the value for intId (Read-Only PK)
-	 * @property integer $MoldeId the value for intMoldeId 
+	 * @property integer $MoldeId the value for intMoldeId (Not Null)
 	 * @property integer $ReferenciaId the value for intReferenciaId (Not Null)
 	 * @property double $Comprimento the value for fltComprimento (Not Null)
 	 * @property integer $Pecas the value for intPecas (Not Null)
 	 * @property double $Peso the value for fltPeso (Not Null)
 	 * @property double $Preco the value for fltPreco (Not Null)
 	 * @property integer $TecidoId the value for intTecidoId (Not Null)
-	 * @property Molde $Molde the value for the Molde object referenced by intMoldeId 
+	 * @property Molde $Molde the value for the Molde object referenced by intMoldeId (Not Null)
 	 * @property Referencia $Referencia the value for the Referencia object referenced by intReferenciaId (Not Null)
 	 * @property Tecido $Tecido the value for the Tecido object referenced by intTecidoId (Not Null)
 	 * @property boolean $__Restored whether or not this object was restored from the database (as opposed to created new)
@@ -985,7 +985,7 @@
 					return $this->intId;
 
 				case 'MoldeId':
-					// Gets the value for intMoldeId 
+					// Gets the value for intMoldeId (Not Null)
 					// @return integer
 					return $this->intMoldeId;
 
@@ -1024,7 +1024,7 @@
 				// Member Objects
 				///////////////////
 				case 'Molde':
-					// Gets the value for the Molde object referenced by intMoldeId 
+					// Gets the value for the Molde object referenced by intMoldeId (Not Null)
 					// @return Molde
 					try {
 						if ((!$this->objMolde) && (!is_null($this->intMoldeId)))
@@ -1093,7 +1093,7 @@
 				// Member Variables
 				///////////////////
 				case 'MoldeId':
-					// Sets the value for intMoldeId 
+					// Sets the value for intMoldeId (Not Null)
 					// @param integer $mixValue
 					// @return integer
 					try {
@@ -1177,7 +1177,7 @@
 				// Member Objects
 				///////////////////
 				case 'Molde':
-					// Sets the value for the Molde object referenced by intMoldeId 
+					// Sets the value for the Molde object referenced by intMoldeId (Not Null)
 					// @param Molde $mixValue
 					// @return Molde
 					if (is_null($mixValue)) {
