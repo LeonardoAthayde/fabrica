@@ -36,6 +36,7 @@
 		protected $lstTecido;
 
 		// Other ListBoxes (if applicable) via Unique ReverseReferences and ManyToMany References
+		protected $lstReferenciasAsUniao;
 
 		// Other Controls
 		protected $btnSave;
@@ -83,6 +84,7 @@
 			$this->txtPeso = $this->mctReferenciaRendimento->txtPeso_Create();
 			$this->txtPreco = $this->mctReferenciaRendimento->txtPreco_Create();
 			$this->lstTecido = $this->mctReferenciaRendimento->lstTecido_Create();
+			$this->lstReferenciasAsUniao = $this->mctReferenciaRendimento->lstReferenciasAsUniao_Create();
 
 			// Create Buttons and Actions on this Form
 			$this->btnSave = new QButton($this);

@@ -229,8 +229,8 @@
 			if($objReferenciaCategoria)
 				$objArrayReferenciaRendimentoMolde = ReferenciaRendimento::QueryArray (
 					QQ::AndCondition (
-						QQ::Equal(QQN::ReferenciaRendimento()->Referencia->ReferenciaCategoria->Id, $objReferenciaCategoria->Id),
-						QQ::Equal(QQN::ReferenciaRendimento()->Referencia->Modelo, substr($this->txtReferencia->Text, 3, 3))
+						QQ::Equal(QQN::ReferenciaRendimento()->ReferenciaAsUniao->Referencia->ReferenciaCategoria->Id, $objReferenciaCategoria->Id),
+						QQ::Equal(QQN::ReferenciaRendimento()->ReferenciaAsUniao->Referencia->Modelo, substr($this->txtReferencia->Text, 3, 3))
 					), QQ::Clause(
 						QQ::GroupBy(QQN::ReferenciaRendimento()->Molde)
 					));
@@ -238,8 +238,8 @@
 			foreach ($objArrayReferenciaRendimentoMolde as $objReferenciaRendimentoMolde){
 				$objArrayReferenciaRendimento = ReferenciaRendimento::QueryArray(
 					QQ::AndCondition (
-						QQ::Equal(QQN::ReferenciaRendimento()->Referencia->ReferenciaCategoria->Id, $objReferenciaCategoria->Id),
-						QQ::Equal(QQN::ReferenciaRendimento()->Referencia->Modelo, substr($this->txtReferencia->Text, 3, 3)),
+						QQ::Equal(QQN::ReferenciaRendimento()->ReferenciaAsUniao->Referencia->ReferenciaCategoria->Id, $objReferenciaCategoria->Id),
+						QQ::Equal(QQN::ReferenciaRendimento()->ReferenciaAsUniao->Referencia->Modelo, substr($this->txtReferencia->Text, 3, 3)),
 						QQ::Equal(QQN::ReferenciaRendimento()->MoldeId, $objReferenciaRendimentoMolde->MoldeId)
 					));
 				$blnFlag = true;
@@ -318,8 +318,8 @@
 							
 								$objReferenciaRendimento = ReferenciaRendimento::QuerySingle(
 									QQ::AndCondition(
-										QQ::Equal(QQN::ReferenciaRendimento()->Referencia->ReferenciaCategoriaId, $objReferenciaCategoria->Id),
-										QQ::Equal(QQN::ReferenciaRendimento()->Referencia->Modelo, substr($this->txtReferencia->Text, 3, 3)),
+										QQ::Equal(QQN::ReferenciaRendimento()->ReferenciaAsUniao->Referencia->ReferenciaCategoriaId, $objReferenciaCategoria->Id),
+										QQ::Equal(QQN::ReferenciaRendimento()->ReferenciaAsUniao->Referencia->Modelo, substr($this->txtReferencia->Text, 3, 3)),
 										QQ::Equal(QQN::ReferenciaRendimento()->MoldeId, $intMoldeId),
 										QQ::Equal(QQN::ReferenciaRendimento()->TecidoId, $objComandoPeca->TecidoId)	
 										));

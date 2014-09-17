@@ -1,4 +1,4 @@
-<div class="panel <?=($_CONTROL->objReferenciaRendimento->Peso)?'panel-default':'panel-primary';?>">
+<div class="panel <?=($_CONTROL->objReferenciaRendimento->Molde)?'panel-default':'panel-danger';?>">
 	<div class="panel-heading">
 		<div class="panel-title">PESO: <?=$_CONTROL->GetTitle(); ?></div>
 	</div>

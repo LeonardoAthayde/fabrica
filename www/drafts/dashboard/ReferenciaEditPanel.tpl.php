@@ -17,6 +17,8 @@
 
 		<?php $_CONTROL->lstCors->RenderWithName(true, "Rows=7"); ?>
 
+		<?php $_CONTROL->lstReferenciaRendimentosAsUniao->RenderWithName(true, "Rows=7"); ?>
+
 		<?php $_CONTROL->lstTamanhos->RenderWithName(true, "Rows=7"); ?>
 
 	</div>

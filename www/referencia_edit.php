@@ -5,8 +5,8 @@
 	class ReferenciaEditForm extends QForm {
 	
 		protected $objUsuario;
-		public $objArrayReferenciaRendimento = array();
-		public $objArrayReferenciaRendimentoDelete = array();
+		//public $objArrayReferenciaRendimento = array();
+		//public $objArrayReferenciaRendimentoDelete = array();
 	
 		// Local instance of the ReferenciaMetaControl
 		protected $mctReferencia;
@@ -98,15 +98,15 @@
 			$this->btnAddReferenciaRendimento->AddAction(new QClickEvent(), new QTerminateAction());
 		}
 		
-		protected function btnAddReferenciaRendimento_Click($strFormId, $strControlId, $strParameter){
-			foreach ($this->objArrayReferenciaRendimento as $i => $objReferenciaRendimento)
-				$this->objArrayReferenciaRendimento[$i+1] = $objReferenciaRendimento;
-			$this->objArrayReferenciaRendimento[0] = new ReferenciaRendimento();
-			
-			foreach ($this->dtrReferenciaRendimento->GetChildControls() as $objControl)
-				$objControl->UpdateObjectFromControl();
-			$this->dtrReferenciaRendimento->RemoveChildControls(true);
-			$this->dtrReferenciaRendimento->Refresh();
+		protected function btnAddReferenciaRendimento_Click($strFormId, $strControlId, $strParameter){				
+				$objReferenciaRendimento = new ReferenciaRendimento();
+				$objReferenciaRendimento->Comprimento = 1;
+				$objReferenciaRendimento->Pecas = 1;
+				$objReferenciaRendimento->Peso = 1;
+				$objReferenciaRendimento->Preco = 1;
+				$objReferenciaRendimento->Save();
+				$objReferenciaRendimento->AssociateReferenciaAsUniao($this->mctReferencia->Referencia);
+				$this->dtrReferenciaRendimento->Refresh();
 		}
 		
 		
@@ -115,26 +115,27 @@
 			$this->dtrReferenciaRendimento->SetDataBinder('dtrReferenciaRendimento_Bind');
 			$this->dtrReferenciaRendimento->Template = __DOCROOT__.'/control/referencia_edit/tpl/dtr_ReferenciaRendimento.tpl.php';
 			
-			if($this->mctReferencia->EditMode)
-				foreach ($this->mctReferencia->Referencia->GetReferenciaRendimentoArray(QQ::Clause(QQ::OrderBy(QQN::ReferenciaRendimento()->Preco, false))) as $objReferenciaRendimento)
-					array_push ($this->objArrayReferenciaRendimento, $objReferenciaRendimento);
+			//if($this->mctReferencia->EditMode)
+			//	foreach ($this->mctReferencia->Referencia->GetReferenciaRendimentoAsUniaoArray(QQ::Clause(QQ::OrderBy(QQN::ReferenciaRendimento()->Preco, false))) as $objReferenciaRendimento)
+			//		array_push ($this->objArrayReferenciaRendimento, $objReferenciaRendimento);
 		}
 		
 		protected function dtrReferenciaRendimento_Bind(){
-			$this->dtrReferenciaRendimento->DataSource = $this->objArrayReferenciaRendimento;
+			$this->dtrReferenciaRendimento->DataSource = $this->mctReferencia->Referencia->GetReferenciaRendimentoAsUniaoArray(QQ::Clause(QQ::OrderBy(QQN::ReferenciaRendimento()->Id, false)));
 		}
 		
 		protected function RenderReferenciaRendimentoPanel(ReferenciaRendimento $objReferenciaRendimento){
-			$pnlReferenciaRendimento = new QReferenciaRendimentoPanel($this->dtrReferenciaRendimento, null, $objReferenciaRendimento);
-			return $pnlReferenciaRendimento->Render(false);
+			$pnlReferenciaRendimento = $this->dtrReferenciaRendimento->GetChildControl('panelreferenciarendimento'.$objReferenciaRendimento->Id);
+			if(!$pnlReferenciaRendimento)
+			 $pnlReferenciaRendimento = new QReferenciaRendimentoPanel($objReferenciaRendimento, $this->dtrReferenciaRendimento, 'panelreferenciarendimento'.$objReferenciaRendimento->Id);
+			return $pnlReferenciaRendimento->Render(false);						
 		}
 		
-		public function RemoveReferenciaRendimento($objReferenciaRendimento){
-			foreach ($this->objArrayReferenciaRendimento as $i => $objReferenciaRendimentoItem)
-				if($objReferenciaRendimento->Id == $objReferenciaRendimentoItem->Id)
-					unset($this->objArrayReferenciaRendimento[$i]);
-			$this->dtrReferenciaRendimento->Refresh();	
-			array_push($this->objArrayReferenciaRendimentoDelete, $objReferenciaRendimento);
+		public function RemoveReferenciaRendimento(ReferenciaRendimento $objReferenciaRendimento){
+			if($objReferenciaRendimento->CountReferenciasAsUniao() == 1)
+				$objReferenciaRendimento->Delete ();
+			else
+				$objReferenciaRendimento->UnassociateReferenciaAsUniao ($this->mctReferencia->Referencia);
 		}
 		
 
@@ -170,12 +171,15 @@
 			// Delegate "Save" processing to the ReferenciaMetaControl
 			$this->mctReferencia->SaveReferencia();
 			
+			$this->mctReferencia->Referencia->UnassociateAllReferenciaRendimentosAsUniao();
+			
 			foreach($this->dtrReferenciaRendimento->GetChildControls() as $objChildControl)
 				$objChildControl->SaveReferenciaRendimento($this->mctReferencia->Referencia);
-			foreach ($this->objArrayReferenciaRendimentoDelete as$objReferenciaRendimentoDelete)
-				if($objReferenciaRendimentoDelete->Id)
-					$objReferenciaRendimentoDelete->Delete();
-				$objReferencia = $this->mctReferencia->Referencia;
+			
+			foreach (ReferenciaRendimento::LoadArrayByReferenciaAsUniao(null) as $objReferenciaRendimento)
+				$objReferenciaRendimento->Delete ();
+			
+			$objReferencia = $this->mctReferencia->Referencia;
 			$_SESSION['referencia_list'] = $objReferencia->ReferenciaCategoria->Nome.$objReferencia->Modelo;
 			$this->RedirectToListPage();
 		}
@@ -217,6 +221,10 @@
 		
 		public function Get_lstTecido(){
 			return $this->lstTecido;
+		}
+		
+		public function Get_Referencia(){
+			return $this->mctReferencia->Referencia;
 		}
 		
 	}

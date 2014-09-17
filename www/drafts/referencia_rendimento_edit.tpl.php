@@ -34,6 +34,8 @@
 
 		<?php $this->lstTecido->RenderWithName(); ?>
 
+		<?php $this->lstReferenciasAsUniao->RenderWithName(true, "Rows=7"); ?>
+
 	</div>
 
 	<div id="formActions">

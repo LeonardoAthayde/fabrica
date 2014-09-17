@@ -32,6 +32,8 @@
 	 * property-read QLabel $PrecoLabel
 	 * property QListBox $TecidoIdControl
 	 * property-read QLabel $TecidoIdLabel
+	 * property QListBox $ReferenciaAsUniaoControl
+	 * property-read QLabel $ReferenciaAsUniaoLabel
 	 * property-read string $TitleVerb a verb indicating whether or not this is being edited or created
 	 * property-read boolean $EditMode a boolean indicating whether or not this is being edited or created
 	 */
@@ -157,8 +159,12 @@
 
 
 		// QListBox Controls (if applicable) to edit Unique ReverseReferences and ManyToMany References
+		protected $lstReferenciasAsUniao;
+
 
 		// QLabel Controls (if applicable) to view Unique ReverseReferences and ManyToMany References
+		protected $lblReferenciasAsUniao;
+
 
 
 		/**
@@ -278,9 +284,7 @@
 		public function lstMolde_Create($strControlId = null, QQCondition $objCondition = null, $objOptionalClauses = null) {
 			$this->lstMolde = new QListBox($this->objParentObject, $strControlId);
 			$this->lstMolde->Name = QApplication::Translate('Molde');
-			$this->lstMolde->Required = true;
-			if (!$this->blnEditMode)
-				$this->lstMolde->AddItem(QApplication::Translate('- Select One -'), null);
+			$this->lstMolde->AddItem(QApplication::Translate('- Select One -'), null);
 
 			// Setup and perform the Query
 			if (is_null($objCondition)) $objCondition = QQ::All();
@@ -307,7 +311,6 @@
 			$this->lblMoldeId = new QLabel($this->objParentObject, $strControlId);
 			$this->lblMoldeId->Name = QApplication::Translate('Molde');
 			$this->lblMoldeId->Text = ($this->objReferenciaRendimento->Molde) ? $this->objReferenciaRendimento->Molde->__toString() : null;
-			$this->lblMoldeId->Required = true;
 			return $this->lblMoldeId;
 		}
 
@@ -321,9 +324,7 @@
 		public function lstReferencia_Create($strControlId = null, QQCondition $objCondition = null, $objOptionalClauses = null) {
 			$this->lstReferencia = new QListBox($this->objParentObject, $strControlId);
 			$this->lstReferencia->Name = QApplication::Translate('Referencia');
-			$this->lstReferencia->Required = true;
-			if (!$this->blnEditMode)
-				$this->lstReferencia->AddItem(QApplication::Translate('- Select One -'), null);
+			$this->lstReferencia->AddItem(QApplication::Translate('- Select One -'), null);
 
 			// Setup and perform the Query
 			if (is_null($objCondition)) $objCondition = QQ::All();
@@ -350,7 +351,6 @@
 			$this->lblReferenciaId = new QLabel($this->objParentObject, $strControlId);
 			$this->lblReferenciaId->Name = QApplication::Translate('Referencia');
 			$this->lblReferenciaId->Text = ($this->objReferenciaRendimento->Referencia) ? $this->objReferenciaRendimento->Referencia->__toString() : null;
-			$this->lblReferenciaId->Required = true;
 			return $this->lblReferenciaId;
 		}
 
@@ -476,9 +476,7 @@
 		public function lstTecido_Create($strControlId = null, QQCondition $objCondition = null, $objOptionalClauses = null) {
 			$this->lstTecido = new QListBox($this->objParentObject, $strControlId);
 			$this->lstTecido->Name = QApplication::Translate('Tecido');
-			$this->lstTecido->Required = true;
-			if (!$this->blnEditMode)
-				$this->lstTecido->AddItem(QApplication::Translate('- Select One -'), null);
+			$this->lstTecido->AddItem(QApplication::Translate('- Select One -'), null);
 
 			// Setup and perform the Query
 			if (is_null($objCondition)) $objCondition = QQ::All();
@@ -505,8 +503,58 @@
 			$this->lblTecidoId = new QLabel($this->objParentObject, $strControlId);
 			$this->lblTecidoId->Name = QApplication::Translate('Tecido');
 			$this->lblTecidoId->Text = ($this->objReferenciaRendimento->Tecido) ? $this->objReferenciaRendimento->Tecido->__toString() : null;
-			$this->lblTecidoId->Required = true;
 			return $this->lblTecidoId;
+		}
+
+		/**
+		 * Create and setup QListBox lstReferenciasAsUniao
+		 * @param string $strControlId optional ControlId to use
+		 * @param QQCondition $objConditions override the default condition of QQ::All() to the query, itself
+		 * @param QQClause[] $objOptionalClauses additional optional QQClause object or array of QQClause objects for the query
+		 * @return QListBox
+		 */
+		public function lstReferenciasAsUniao_Create($strControlId = null, QQCondition $objCondition = null, $objOptionalClauses = null) {
+			$this->lstReferenciasAsUniao = new QListBox($this->objParentObject, $strControlId);
+			$this->lstReferenciasAsUniao->Name = QApplication::Translate('Referencias As Uniao');
+			$this->lstReferenciasAsUniao->SelectionMode = QSelectionMode::Multiple;
+
+			// We need to know which items to "Pre-Select"
+			$objAssociatedArray = $this->objReferenciaRendimento->GetReferenciaAsUniaoArray();
+
+			// Setup and perform the Query
+			if (is_null($objCondition)) $objCondition = QQ::All();
+			$objReferenciaCursor = Referencia::QueryCursor($objCondition, $objOptionalClauses);
+
+			// Iterate through the Cursor
+			while ($objReferencia = Referencia::InstantiateCursor($objReferenciaCursor)) {
+				$objListItem = new QListItem($objReferencia->__toString(), $objReferencia->Id);
+				foreach ($objAssociatedArray as $objAssociated) {
+					if ($objAssociated->Id == $objReferencia->Id)
+						$objListItem->Selected = true;
+				}
+				$this->lstReferenciasAsUniao->AddItem($objListItem);
+			}
+
+			// Return the QListControl
+			return $this->lstReferenciasAsUniao;
+		}
+
+		/**
+		 * Create and setup QLabel lblReferenciasAsUniao
+		 * @param string $strControlId optional ControlId to use
+		 * @param string $strGlue glue to display in between each associated object
+		 * @return QLabel
+		 */
+		public function lblReferenciasAsUniao_Create($strControlId = null, $strGlue = ', ') {
+			$this->lblReferenciasAsUniao = new QLabel($this->objParentObject, $strControlId);
+			$this->lstReferenciasAsUniao->Name = QApplication::Translate('Referencias As Uniao');
+			
+			$objAssociatedArray = $this->objReferenciaRendimento->GetReferenciaAsUniaoArray();
+			$strItems = array();
+			foreach ($objAssociatedArray as $objAssociated)
+				$strItems[] = $objAssociated->__toString();
+			$this->lblReferenciasAsUniao->Text = implode($strGlue, $strItems);
+			return $this->lblReferenciasAsUniao;
 		}
 
 
@@ -524,8 +572,7 @@
 
 			if ($this->lstMolde) {
 					$this->lstMolde->RemoveAllItems();
-				if (!$this->blnEditMode)
-					$this->lstMolde->AddItem(QApplication::Translate('- Select One -'), null);
+				$this->lstMolde->AddItem(QApplication::Translate('- Select One -'), null);
 				$objMoldeArray = Molde::LoadAll();
 				if ($objMoldeArray) foreach ($objMoldeArray as $objMolde) {
 					$objListItem = new QListItem($objMolde->__toString(), $objMolde->Id);
@@ -538,8 +585,7 @@
 
 			if ($this->lstReferencia) {
 					$this->lstReferencia->RemoveAllItems();
-				if (!$this->blnEditMode)
-					$this->lstReferencia->AddItem(QApplication::Translate('- Select One -'), null);
+				$this->lstReferencia->AddItem(QApplication::Translate('- Select One -'), null);
 				$objReferenciaArray = Referencia::LoadAll();
 				if ($objReferenciaArray) foreach ($objReferenciaArray as $objReferencia) {
 					$objListItem = new QListItem($objReferencia->__toString(), $objReferencia->Id);
@@ -564,8 +610,7 @@
 
 			if ($this->lstTecido) {
 					$this->lstTecido->RemoveAllItems();
-				if (!$this->blnEditMode)
-					$this->lstTecido->AddItem(QApplication::Translate('- Select One -'), null);
+				$this->lstTecido->AddItem(QApplication::Translate('- Select One -'), null);
 				$objTecidoArray = Tecido::LoadAll();
 				if ($objTecidoArray) foreach ($objTecidoArray as $objTecido) {
 					$objListItem = new QListItem($objTecido->__toString(), $objTecido->Id);
@@ -576,6 +621,27 @@
 			}
 			if ($this->lblTecidoId) $this->lblTecidoId->Text = ($this->objReferenciaRendimento->Tecido) ? $this->objReferenciaRendimento->Tecido->__toString() : null;
 
+			if ($this->lstReferenciasAsUniao) {
+				$this->lstReferenciasAsUniao->RemoveAllItems();
+				$objAssociatedArray = $this->objReferenciaRendimento->GetReferenciaAsUniaoArray();
+				$objReferenciaArray = Referencia::LoadAll();
+				if ($objReferenciaArray) foreach ($objReferenciaArray as $objReferencia) {
+					$objListItem = new QListItem($objReferencia->__toString(), $objReferencia->Id);
+					foreach ($objAssociatedArray as $objAssociated) {
+						if ($objAssociated->Id == $objReferencia->Id)
+							$objListItem->Selected = true;
+					}
+					$this->lstReferenciasAsUniao->AddItem($objListItem);
+				}
+			}
+			if ($this->lblReferenciasAsUniao) {
+				$objAssociatedArray = $this->objReferenciaRendimento->GetReferenciaAsUniaoArray();
+				$strItems = array();
+				foreach ($objAssociatedArray as $objAssociated)
+					$strItems[] = $objAssociated->__toString();
+				$this->lblReferenciasAsUniao->Text = implode($strGlue, $strItems);
+			}
+
 		}
 
 
@@ -583,6 +649,16 @@
 		///////////////////////////////////////////////
 		// PROTECTED UPDATE METHODS for ManyToManyReferences (if any)
 		///////////////////////////////////////////////
+
+		protected function lstReferenciasAsUniao_Update() {
+			if ($this->lstReferenciasAsUniao) {
+				$this->objReferenciaRendimento->UnassociateAllReferenciasAsUniao();
+				$objSelectedListItems = $this->lstReferenciasAsUniao->SelectedItems;
+				if ($objSelectedListItems) foreach ($objSelectedListItems as $objListItem) {
+					$this->objReferenciaRendimento->AssociateReferenciaAsUniao(Referencia::Load($objListItem->Value));
+				}
+			}
+		}
 
 
 
@@ -613,6 +689,7 @@
 				$this->objReferenciaRendimento->Save();
 
 				// Finally, update any ManyToManyReferences (if any)
+				$this->lstReferenciasAsUniao_Update();
 			} catch (QCallerException $objExc) {
 				$objExc->IncrementOffset();
 				throw $objExc;
@@ -624,6 +701,7 @@
 		 * It will also unassociate itself from any ManyToManyReferences.
 		 */
 		public function DeleteReferenciaRendimento() {
+			$this->objReferenciaRendimento->UnassociateAllReferenciasAsUniao();
 			$this->objReferenciaRendimento->Delete();
 		}		
 
@@ -696,6 +774,12 @@
 				case 'TecidoIdLabel':
 					if (!$this->lblTecidoId) return $this->lblTecidoId_Create();
 					return $this->lblTecidoId;
+				case 'ReferenciaAsUniaoControl':
+					if (!$this->lstReferenciasAsUniao) return $this->lstReferenciasAsUniao_Create();
+					return $this->lstReferenciasAsUniao;
+				case 'ReferenciaAsUniaoLabel':
+					if (!$this->lblReferenciasAsUniao) return $this->lblReferenciasAsUniao_Create();
+					return $this->lblReferenciasAsUniao;
 				default:
 					try {
 						return parent::__get($strName);
@@ -734,6 +818,8 @@
 						return ($this->txtPreco = QType::Cast($mixValue, 'QControl'));
 					case 'TecidoIdControl':
 						return ($this->lstTecido = QType::Cast($mixValue, 'QControl'));
+					case 'ReferenciaAsUniaoControl':
+						return ($this->lstReferenciasAsUniao = QType::Cast($mixValue, 'QControl'));
 					default:
 						return parent::__set($strName, $mixValue);
 				}

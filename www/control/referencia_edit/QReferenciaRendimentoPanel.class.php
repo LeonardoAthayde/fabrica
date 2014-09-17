@@ -10,7 +10,7 @@
 		
 		public $objReferenciaRendimento;
 		
-		public function __construct($objParentObject, $strControlId = null, ReferenciaRendimento $objReferenciaRendimento) {
+		public function __construct(ReferenciaRendimento $objReferenciaRendimento = null, $objParentObject, $strControlId = null) {
 			parent::__construct($objParentObject, $strControlId);
 			$this->objReferenciaRendimento = $objReferenciaRendimento;
 			$this->Template = __DOCROOT__.'/control/referencia_edit/tpl/QReferenciaRendimentoPanel.tpl.php';
@@ -23,8 +23,28 @@
 			$this->btnDelete_Create();
 		}
 		
+		protected function lstTecido_Create(){
+			$this->lstTecido = new QListBox($this);
+			$this->lstTecido->Name = 'TIPO DE TECIDO';
+			$this->lstTecido->Required = true;
+			$this->lstTecido->CssClass = 'form-control input-lg';
+			$this->lstTecido->AddItem('SELECIONAR UM TECIDO ==>');
+			
+			foreach (Tecido::QueryArray(QQ::GreaterThan(QQN::Tecido()->Metro, 0), QQ::Clause(QQ::OrderBy(QQN::Tecido()->Nome))) as $objTecido)
+				if($this->objReferenciaRendimento->TecidoId == $objTecido->Id || (!$this->objReferenciaRendimento->TecidoId && $objTecido->Id == $this->Form->Get_lstTecido()->SelectedValue)) 
+					$this->lstTecido->AddItem($objTecido->Nome, $objTecido->Id, true);
+				else
+					$this->lstTecido->AddItem($objTecido->Nome, $objTecido->Id);
+			$this->lstTecido->AddAction(new QChangeEvent(), new QAjaxControlAction($this, 'lstTecido_Change'));
+		}
+		
+		public function lstTecido_Change($strFormId, $strControlId, $strParameter){
+			$this->CheckReferenciaRendimentoExists();
+		}
+		
 		protected function lstMolde_Crete(){
 			$this->lstMolde = new QListBox($this);
+			$this->lstMolde->Required = true;
 			$this->lstMolde->Name = 'TIPO DE MOLDE';
 			$this->lstMolde->CssClass = 'form-control input-lg';
 			$this->lstMolde->AddItem('SELECIONAR UM MOLDE ==>');
@@ -32,7 +52,41 @@
 				if($this->objReferenciaRendimento->MoldeId == $objMolde->Id) 
 					$this->lstMolde->AddItem($objMolde->Nome, $objMolde->Id, true);
 				else
-					$this->lstMolde->AddItem($objMolde->Nome, $objMolde->Id);			
+					$this->lstMolde->AddItem($objMolde->Nome, $objMolde->Id);
+			$this->lstMolde->AddAction(new QClickEvent(), new QAjaxControlAction($this, 'lstMolde_Change'));
+		}
+		
+		
+		
+		public function lstMolde_Change($strFormId, $strControlId, $strParameter){
+			$objReferencia = $this->Form->Get_Referencia();
+			$objReferenciaRendimento = ReferenciaRendimento::QuerySingle(
+				QQ::AndCondition(
+					QQ::Equal(QQN::ReferenciaRendimento()->ReferenciaAsUniao->ReferenciaId, $objReferencia->Id),
+					QQ::Equal(QQN::ReferenciaRendimento()->MoldeId, $this->lstMolde->SelectedValue)));
+			if($objReferenciaRendimento){
+				$this->lstMolde->SelectedIndex = 0;
+				QApplication::DisplayAlert('Esse molde já existe para essa referência.');
+			}
+			
+			$this->CheckReferenciaRendimentoExists();
+			
+		}
+		
+		protected function CheckReferenciaRendimentoExists(){
+			$objReferencia = $this->Form->Get_Referencia();
+			$objReferenciaRendimento = ReferenciaRendimento::QuerySingle(
+				QQ::AndCondition(
+					QQ::Equal(QQN::ReferenciaRendimento()->ReferenciaAsUniao->Referencia->ReferenciaCategoriaId, $objReferencia->ReferenciaCategoriaId),
+					QQ::Equal(QQN::ReferenciaRendimento()->ReferenciaAsUniao->Referencia->Modelo, $objReferencia->Modelo),
+					QQ::Equal(QQN::ReferenciaRendimento()->MoldeId, $this->lstMolde->SelectedValue),
+					QQ::Equal(QQN::ReferenciaRendimento()->TecidoId, $this->lstTecido->SelectedValue)));
+			if($objReferenciaRendimento){
+				$this->objReferenciaRendimento = $objReferenciaRendimento;
+				$this->txtComprimento->Text = $this->objReferenciaRendimento->Comprimento;
+				$this->txtPecas->Text = $this->objReferenciaRendimento->Pecas;
+			} else
+				$this->objReferenciaRendimento = new ReferenciaRendimento();
 		}
 		
 		protected function txtComprimento_Create(){
@@ -52,19 +106,6 @@
 			$this->txtPecas->Text = $this->objReferenciaRendimento->Pecas;
 		}
 		
-		protected function lstTecido_Create(){
-			$this->lstTecido = new QListBox($this);
-			$this->lstTecido->Name = 'TIPO DE TECIDO';
-			$this->lstTecido->Required = true;
-			$this->lstTecido->CssClass = 'form-control input-lg';
-			$this->lstTecido->AddItem('SELECIONAR UM TECIDO ==>');
-			
-			foreach (Tecido::QueryArray(QQ::GreaterThan(QQN::Tecido()->Metro, 0), QQ::Clause(QQ::OrderBy(QQN::Tecido()->Nome))) as $objTecido)
-				if($this->objReferenciaRendimento->TecidoId == $objTecido->Id || (!$this->objReferenciaRendimento->TecidoId && $objTecido->Id == $this->Form->Get_lstTecido()->SelectedValue)) 
-					$this->lstTecido->AddItem($objTecido->Nome, $objTecido->Id, true);
-				else
-					$this->lstTecido->AddItem($objTecido->Nome, $objTecido->Id);
-		}
 		
 		protected function btnSave_Create(){
 			$this->btnSave = new QButton($this);
@@ -92,14 +133,25 @@
 		}
 		
 		public function SaveReferenciaRendimento(Referencia $objReferencia){
+			// confere se já existe um rendimento para o modelo desta referencia
+			$objReferenciaRendimento = ReferenciaRendimento::QuerySingle(
+				QQ::AndCondition(
+					QQ::Equal(QQN::ReferenciaRendimento()->ReferenciaAsUniao->Referencia->ReferenciaCategoriaId, $objReferencia->ReferenciaCategoriaId),
+					QQ::Equal(QQN::ReferenciaRendimento()->ReferenciaAsUniao->Referencia->Modelo, $objReferencia->Modelo),
+					QQ::Equal(QQN::ReferenciaRendimento()->MoldeId, $this->lstMolde->SelectedValue),
+					QQ::Equal(QQN::ReferenciaRendimento()->TecidoId, $this->lstTecido->SelectedValue)));
+			if($objReferenciaRendimento)
+				$this->objReferenciaRendimento = $objReferenciaRendimento;
+			// executa as modificações necessárias
 			$this->objReferenciaRendimento->MoldeId = $this->lstMolde->SelectedValue;
 			$this->objReferenciaRendimento->TecidoId = $this->lstTecido->SelectedValue;
 			$this->objReferenciaRendimento->Comprimento = $this->txtComprimento->Text;
 			$this->objReferenciaRendimento->Pecas = $this->txtPecas->Text;
-			$this->objReferenciaRendimento->ReferenciaId = $objReferencia->Id;
 			$this->objReferenciaRendimento->Peso = ($this->txtComprimento->Text/Tecido::Load($this->lstTecido->SelectedValue)->Metro)/$this->txtPecas->Text;
 			$this->objReferenciaRendimento->Preco = $this->objReferenciaRendimento->Tecido->Preco*$this->objReferenciaRendimento->Peso;
-			$this->objReferenciaRendimento->Save();
+			
+			$this->objReferenciaRendimento->Save();			
+			$this->objReferenciaRendimento->AssociateReferenciaAsUniao ($objReferencia);
 		}
 		
 		public function GetTitle(){

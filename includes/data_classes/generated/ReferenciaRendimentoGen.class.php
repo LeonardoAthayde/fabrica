@@ -16,16 +16,18 @@
 	 * @package My Application
 	 * @subpackage GeneratedDataObjects
 	 * @property integer $Id the value for intId (Read-Only PK)
-	 * @property integer $MoldeId the value for intMoldeId (Not Null)
-	 * @property integer $ReferenciaId the value for intReferenciaId (Not Null)
+	 * @property integer $MoldeId the value for intMoldeId 
+	 * @property integer $ReferenciaId the value for intReferenciaId 
 	 * @property double $Comprimento the value for fltComprimento (Not Null)
 	 * @property integer $Pecas the value for intPecas (Not Null)
 	 * @property double $Peso the value for fltPeso (Not Null)
 	 * @property double $Preco the value for fltPreco (Not Null)
-	 * @property integer $TecidoId the value for intTecidoId (Not Null)
-	 * @property Molde $Molde the value for the Molde object referenced by intMoldeId (Not Null)
-	 * @property Referencia $Referencia the value for the Referencia object referenced by intReferenciaId (Not Null)
-	 * @property Tecido $Tecido the value for the Tecido object referenced by intTecidoId (Not Null)
+	 * @property integer $TecidoId the value for intTecidoId 
+	 * @property Molde $Molde the value for the Molde object referenced by intMoldeId 
+	 * @property Referencia $Referencia the value for the Referencia object referenced by intReferenciaId 
+	 * @property Tecido $Tecido the value for the Tecido object referenced by intTecidoId 
+	 * @property Referencia $_ReferenciaAsUniao the value for the private _objReferenciaAsUniao (Read-Only) if set due to an expansion on the referencia_rendimento_uniao_assn association table
+	 * @property Referencia[] $_ReferenciaAsUniaoArray the value for the private _objReferenciaAsUniaoArray (Read-Only) if set due to an ExpandAsArray on the referencia_rendimento_uniao_assn association table
 	 * @property boolean $__Restored whether or not this object was restored from the database (as opposed to created new)
 	 */
 	class ReferenciaRendimentoGen extends QBaseClass {
@@ -97,6 +99,22 @@
 		protected $intTecidoId;
 		const TecidoIdDefault = null;
 
+
+		/**
+		 * Private member variable that stores a reference to a single ReferenciaAsUniao object
+		 * (of type Referencia), if this ReferenciaRendimento object was restored with
+		 * an expansion on the referencia_rendimento_uniao_assn association table.
+		 * @var Referencia _objReferenciaAsUniao;
+		 */
+		private $_objReferenciaAsUniao;
+
+		/**
+		 * Private member variable that stores a reference to an array of ReferenciaAsUniao objects
+		 * (of type Referencia[]), if this ReferenciaRendimento object was restored with
+		 * an ExpandAsArray on the referencia_rendimento_uniao_assn association table.
+		 * @var Referencia[] _objReferenciaAsUniaoArray;
+		 */
+		private $_objReferenciaAsUniaoArray = array();
 
 		/**
 		 * Protected array of virtual attributes for this object (e.g. extra/other calculated and/or non-object bound
@@ -494,6 +512,38 @@
 			if (!$objDbRow)
 				return null;
 
+			// See if we're doing an array expansion on the previous item
+			$strAlias = $strAliasPrefix . 'id';
+			$strAliasName = array_key_exists($strAlias, $strColumnAliasArray) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			if (($strExpandAsArrayNodes) && ($objPreviousItem) &&
+				($objPreviousItem->intId == $objDbRow->GetColumn($strAliasName, 'Integer'))) {
+
+				// We are.  Now, prepare to check for ExpandAsArray clauses
+				$blnExpandedViaArray = false;
+				if (!$strAliasPrefix)
+					$strAliasPrefix = 'referencia_rendimento__';
+
+				$strAlias = $strAliasPrefix . 'referenciaasuniao__referencia_id__id';
+				$strAliasName = array_key_exists($strAlias, $strColumnAliasArray) ? $strColumnAliasArray[$strAlias] : $strAlias;
+				if ((array_key_exists($strAlias, $strExpandAsArrayNodes)) &&
+					(!is_null($objDbRow->GetColumn($strAliasName)))) {
+					if ($intPreviousChildItemCount = count($objPreviousItem->_objReferenciaAsUniaoArray)) {
+						$objPreviousChildItem = $objPreviousItem->_objReferenciaAsUniaoArray[$intPreviousChildItemCount - 1];
+						$objChildItem = Referencia::InstantiateDbRow($objDbRow, $strAliasPrefix . 'referenciaasuniao__referencia_id__', $strExpandAsArrayNodes, $objPreviousChildItem, $strColumnAliasArray);
+						if ($objChildItem)
+							$objPreviousItem->_objReferenciaAsUniaoArray[] = $objChildItem;
+					} else
+						$objPreviousItem->_objReferenciaAsUniaoArray[] = Referencia::InstantiateDbRow($objDbRow, $strAliasPrefix . 'referenciaasuniao__referencia_id__', $strExpandAsArrayNodes, null, $strColumnAliasArray);
+					$blnExpandedViaArray = true;
+				}
+
+
+				// Either return false to signal array expansion, or check-to-reset the Alias prefix and move on
+				if ($blnExpandedViaArray)
+					return false;
+				else if ($strAliasPrefix == 'referencia_rendimento__')
+					$strAliasPrefix = null;
+			}
 
 			// Create a new instance of the ReferenciaRendimento object
 			$objToReturn = new ReferenciaRendimento();
@@ -547,6 +597,16 @@
 				$objToReturn->objTecido = Tecido::InstantiateDbRow($objDbRow, $strAliasPrefix . 'tecido_id__', $strExpandAsArrayNodes, null, $strColumnAliasArray);
 
 
+
+			// Check for ReferenciaAsUniao Virtual Binding
+			$strAlias = $strAliasPrefix . 'referenciaasuniao__referencia_id__id';
+			$strAliasName = array_key_exists($strAlias, $strColumnAliasArray) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			if (!is_null($objDbRow->GetColumn($strAliasName))) {
+				if (($strExpandAsArrayNodes) && (array_key_exists($strAlias, $strExpandAsArrayNodes)))
+					$objToReturn->_objReferenciaAsUniaoArray[] = Referencia::InstantiateDbRow($objDbRow, $strAliasPrefix . 'referenciaasuniao__referencia_id__', $strExpandAsArrayNodes, null, $strColumnAliasArray);
+				else
+					$objToReturn->_objReferenciaAsUniao = Referencia::InstantiateDbRow($objDbRow, $strAliasPrefix . 'referenciaasuniao__referencia_id__', $strExpandAsArrayNodes, null, $strColumnAliasArray);
+			}
 
 
 			return $objToReturn;
@@ -669,40 +729,6 @@
 			
 		/**
 		 * Load an array of ReferenciaRendimento objects,
-		 * by ReferenciaId Index(es)
-		 * @param integer $intReferenciaId
-		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
-		 * @return ReferenciaRendimento[]
-		*/
-		public static function LoadArrayByReferenciaId($intReferenciaId, $objOptionalClauses = null) {
-			// Call ReferenciaRendimento::QueryArray to perform the LoadArrayByReferenciaId query
-			try {
-				return ReferenciaRendimento::QueryArray(
-					QQ::Equal(QQN::ReferenciaRendimento()->ReferenciaId, $intReferenciaId),
-					$objOptionalClauses
-					);
-			} catch (QCallerException $objExc) {
-				$objExc->IncrementOffset();
-				throw $objExc;
-			}
-		}
-
-		/**
-		 * Count ReferenciaRendimentos
-		 * by ReferenciaId Index(es)
-		 * @param integer $intReferenciaId
-		 * @return int
-		*/
-		public static function CountByReferenciaId($intReferenciaId, $objOptionalClauses = null) {
-			// Call ReferenciaRendimento::QueryCount to perform the CountByReferenciaId query
-			return ReferenciaRendimento::QueryCount(
-				QQ::Equal(QQN::ReferenciaRendimento()->ReferenciaId, $intReferenciaId)
-			, $objOptionalClauses
-			);
-		}
-			
-		/**
-		 * Load an array of ReferenciaRendimento objects,
 		 * by MoldeId Index(es)
 		 * @param integer $intMoldeId
 		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
@@ -734,12 +760,78 @@
 			, $objOptionalClauses
 			);
 		}
+			
+		/**
+		 * Load an array of ReferenciaRendimento objects,
+		 * by ReferenciaId Index(es)
+		 * @param integer $intReferenciaId
+		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
+		 * @return ReferenciaRendimento[]
+		*/
+		public static function LoadArrayByReferenciaId($intReferenciaId, $objOptionalClauses = null) {
+			// Call ReferenciaRendimento::QueryArray to perform the LoadArrayByReferenciaId query
+			try {
+				return ReferenciaRendimento::QueryArray(
+					QQ::Equal(QQN::ReferenciaRendimento()->ReferenciaId, $intReferenciaId),
+					$objOptionalClauses
+					);
+			} catch (QCallerException $objExc) {
+				$objExc->IncrementOffset();
+				throw $objExc;
+			}
+		}
+
+		/**
+		 * Count ReferenciaRendimentos
+		 * by ReferenciaId Index(es)
+		 * @param integer $intReferenciaId
+		 * @return int
+		*/
+		public static function CountByReferenciaId($intReferenciaId, $objOptionalClauses = null) {
+			// Call ReferenciaRendimento::QueryCount to perform the CountByReferenciaId query
+			return ReferenciaRendimento::QueryCount(
+				QQ::Equal(QQN::ReferenciaRendimento()->ReferenciaId, $intReferenciaId)
+			, $objOptionalClauses
+			);
+		}
 
 
 
 		////////////////////////////////////////////////////
 		// INDEX-BASED LOAD METHODS (Array via Many to Many)
 		////////////////////////////////////////////////////
+			/**
+		 * Load an array of Referencia objects for a given ReferenciaAsUniao
+		 * via the referencia_rendimento_uniao_assn table
+		 * @param integer $intReferenciaId
+		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
+		 * @return ReferenciaRendimento[]
+		*/
+		public static function LoadArrayByReferenciaAsUniao($intReferenciaId, $objOptionalClauses = null) {
+			// Call ReferenciaRendimento::QueryArray to perform the LoadArrayByReferenciaAsUniao query
+			try {
+				return ReferenciaRendimento::QueryArray(
+					QQ::Equal(QQN::ReferenciaRendimento()->ReferenciaAsUniao->ReferenciaId, $intReferenciaId),
+					$objOptionalClauses
+				);
+			} catch (QCallerException $objExc) {
+				$objExc->IncrementOffset();
+				throw $objExc;
+			}
+		}
+
+		/**
+		 * Count ReferenciaRendimentos for a given ReferenciaAsUniao
+		 * via the referencia_rendimento_uniao_assn table
+		 * @param integer $intReferenciaId
+		 * @return int
+		*/
+		public static function CountByReferenciaAsUniao($intReferenciaId, $objOptionalClauses = null) {
+			return ReferenciaRendimento::QueryCount(
+				QQ::Equal(QQN::ReferenciaRendimento()->ReferenciaAsUniao->ReferenciaId, $intReferenciaId),
+				$objOptionalClauses
+			);
+		}
 
 
 
@@ -985,12 +1077,12 @@
 					return $this->intId;
 
 				case 'MoldeId':
-					// Gets the value for intMoldeId (Not Null)
+					// Gets the value for intMoldeId 
 					// @return integer
 					return $this->intMoldeId;
 
 				case 'ReferenciaId':
-					// Gets the value for intReferenciaId (Not Null)
+					// Gets the value for intReferenciaId 
 					// @return integer
 					return $this->intReferenciaId;
 
@@ -1015,7 +1107,7 @@
 					return $this->fltPreco;
 
 				case 'TecidoId':
-					// Gets the value for intTecidoId (Not Null)
+					// Gets the value for intTecidoId 
 					// @return integer
 					return $this->intTecidoId;
 
@@ -1024,7 +1116,7 @@
 				// Member Objects
 				///////////////////
 				case 'Molde':
-					// Gets the value for the Molde object referenced by intMoldeId (Not Null)
+					// Gets the value for the Molde object referenced by intMoldeId 
 					// @return Molde
 					try {
 						if ((!$this->objMolde) && (!is_null($this->intMoldeId)))
@@ -1036,7 +1128,7 @@
 					}
 
 				case 'Referencia':
-					// Gets the value for the Referencia object referenced by intReferenciaId (Not Null)
+					// Gets the value for the Referencia object referenced by intReferenciaId 
 					// @return Referencia
 					try {
 						if ((!$this->objReferencia) && (!is_null($this->intReferenciaId)))
@@ -1048,7 +1140,7 @@
 					}
 
 				case 'Tecido':
-					// Gets the value for the Tecido object referenced by intTecidoId (Not Null)
+					// Gets the value for the Tecido object referenced by intTecidoId 
 					// @return Tecido
 					try {
 						if ((!$this->objTecido) && (!is_null($this->intTecidoId)))
@@ -1064,6 +1156,18 @@
 				// Virtual Object References (Many to Many and Reverse References)
 				// (If restored via a "Many-to" expansion)
 				////////////////////////////
+
+				case '_ReferenciaAsUniao':
+					// Gets the value for the private _objReferenciaAsUniao (Read-Only)
+					// if set due to an expansion on the referencia_rendimento_uniao_assn association table
+					// @return Referencia
+					return $this->_objReferenciaAsUniao;
+
+				case '_ReferenciaAsUniaoArray':
+					// Gets the value for the private _objReferenciaAsUniaoArray (Read-Only)
+					// if set due to an ExpandAsArray on the referencia_rendimento_uniao_assn association table
+					// @return Referencia[]
+					return (array) $this->_objReferenciaAsUniaoArray;
 
 
 				case '__Restored':
@@ -1093,7 +1197,7 @@
 				// Member Variables
 				///////////////////
 				case 'MoldeId':
-					// Sets the value for intMoldeId (Not Null)
+					// Sets the value for intMoldeId 
 					// @param integer $mixValue
 					// @return integer
 					try {
@@ -1105,7 +1209,7 @@
 					}
 
 				case 'ReferenciaId':
-					// Sets the value for intReferenciaId (Not Null)
+					// Sets the value for intReferenciaId 
 					// @param integer $mixValue
 					// @return integer
 					try {
@@ -1161,7 +1265,7 @@
 					}
 
 				case 'TecidoId':
-					// Sets the value for intTecidoId (Not Null)
+					// Sets the value for intTecidoId 
 					// @param integer $mixValue
 					// @return integer
 					try {
@@ -1177,7 +1281,7 @@
 				// Member Objects
 				///////////////////
 				case 'Molde':
-					// Sets the value for the Molde object referenced by intMoldeId (Not Null)
+					// Sets the value for the Molde object referenced by intMoldeId 
 					// @param Molde $mixValue
 					// @return Molde
 					if (is_null($mixValue)) {
@@ -1207,7 +1311,7 @@
 					break;
 
 				case 'Referencia':
-					// Sets the value for the Referencia object referenced by intReferenciaId (Not Null)
+					// Sets the value for the Referencia object referenced by intReferenciaId 
 					// @param Referencia $mixValue
 					// @return Referencia
 					if (is_null($mixValue)) {
@@ -1237,7 +1341,7 @@
 					break;
 
 				case 'Tecido':
-					// Sets the value for the Tecido object referenced by intTecidoId (Not Null)
+					// Sets the value for the Tecido object referenced by intTecidoId 
 					// @param Tecido $mixValue
 					// @return Tecido
 					if (is_null($mixValue)) {
@@ -1293,6 +1397,189 @@
 		// ASSOCIATED OBJECTS' METHODS
 		///////////////////////////////
 
+			
+		// Related Many-to-Many Objects' Methods for ReferenciaAsUniao
+		//-------------------------------------------------------------------
+
+		/**
+		 * Gets all many-to-many associated ReferenciasAsUniao as an array of Referencia objects
+		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
+		 * @return Referencia[]
+		*/ 
+		public function GetReferenciaAsUniaoArray($objOptionalClauses = null) {
+			if ((is_null($this->intId)))
+				return array();
+
+			try {
+				return Referencia::LoadArrayByReferenciaRendimentoAsUniao($this->intId, $objOptionalClauses);
+			} catch (QCallerException $objExc) {
+				$objExc->IncrementOffset();
+				throw $objExc;
+			}
+		}
+
+		/**
+		 * Counts all many-to-many associated ReferenciasAsUniao
+		 * @return int
+		*/ 
+		public function CountReferenciasAsUniao() {
+			if ((is_null($this->intId)))
+				return 0;
+
+			return Referencia::CountByReferenciaRendimentoAsUniao($this->intId);
+		}
+
+		/**
+		 * Checks to see if an association exists with a specific ReferenciaAsUniao
+		 * @param Referencia $objReferencia
+		 * @return bool
+		*/
+		public function IsReferenciaAsUniaoAssociated(Referencia $objReferencia) {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call IsReferenciaAsUniaoAssociated on this unsaved ReferenciaRendimento.');
+			if ((is_null($objReferencia->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call IsReferenciaAsUniaoAssociated on this ReferenciaRendimento with an unsaved Referencia.');
+
+			$intRowCount = ReferenciaRendimento::QueryCount(
+				QQ::AndCondition(
+					QQ::Equal(QQN::ReferenciaRendimento()->Id, $this->intId),
+					QQ::Equal(QQN::ReferenciaRendimento()->ReferenciaAsUniao->ReferenciaId, $objReferencia->Id)
+				)
+			);
+
+			return ($intRowCount > 0);
+		}
+
+		/**
+		 * Journals the ReferenciaAsUniao relationship into the Log database.
+		 * Used internally as a helper method.
+		 * @param string $strJournalCommand
+		 */
+		public function JournalReferenciaAsUniaoAssociation($intAssociatedId, $strJournalCommand) {
+			$objDatabase = ReferenciaRendimento::GetDatabase()->JournalingDatabase;
+
+			$objDatabase->NonQuery('
+				INSERT INTO `referencia_rendimento_uniao_assn` (
+					`referencia_rendimento_id`,
+					`referencia_id`,
+					__sys_login_id,
+					__sys_action,
+					__sys_date
+				) VALUES (
+					' . $objDatabase->SqlVariable($this->intId) . ',
+					' . $objDatabase->SqlVariable($intAssociatedId) . ',
+					' . (($objDatabase->JournaledById) ? $objDatabase->JournaledById : 'NULL') . ',
+					' . $objDatabase->SqlVariable($strJournalCommand) . ',
+					NOW()
+				);
+			');
+		}
+
+		/**
+		 * Gets the historical journal for an object's ReferenciaAsUniao relationship from the log database.
+		 * @param integer intId
+		 * @return QDatabaseResult $objResult
+		 */
+		public static function GetJournalReferenciaAsUniaoAssociationForId($intId) {
+			$objDatabase = ReferenciaRendimento::GetDatabase()->JournalingDatabase;
+
+			return $objDatabase->Query('SELECT * FROM referencia_rendimento_uniao_assn WHERE referencia_rendimento_id = ' .
+				$objDatabase->SqlVariable($intId) . ' ORDER BY __sys_date');
+		}
+
+		/**
+		 * Gets the historical journal for this object's ReferenciaAsUniao relationship from the log database.
+		 * @return QDatabaseResult $objResult
+		 */
+		public function GetJournalReferenciaAsUniaoAssociation() {
+			return ReferenciaRendimento::GetJournalReferenciaAsUniaoAssociationForId($this->intId);
+		}
+
+		/**
+		 * Associates a ReferenciaAsUniao
+		 * @param Referencia $objReferencia
+		 * @return void
+		*/ 
+		public function AssociateReferenciaAsUniao(Referencia $objReferencia) {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociateReferenciaAsUniao on this unsaved ReferenciaRendimento.');
+			if ((is_null($objReferencia->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociateReferenciaAsUniao on this ReferenciaRendimento with an unsaved Referencia.');
+
+			// Get the Database Object for this Class
+			$objDatabase = ReferenciaRendimento::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				INSERT INTO `referencia_rendimento_uniao_assn` (
+					`referencia_rendimento_id`,
+					`referencia_id`
+				) VALUES (
+					' . $objDatabase->SqlVariable($this->intId) . ',
+					' . $objDatabase->SqlVariable($objReferencia->Id) . '
+				)
+			');
+
+			// Journaling (if applicable)
+			if ($objDatabase->JournalingDatabase)
+				$this->JournalReferenciaAsUniaoAssociation($objReferencia->Id, 'INSERT');
+		}
+
+		/**
+		 * Unassociates a ReferenciaAsUniao
+		 * @param Referencia $objReferencia
+		 * @return void
+		*/ 
+		public function UnassociateReferenciaAsUniao(Referencia $objReferencia) {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateReferenciaAsUniao on this unsaved ReferenciaRendimento.');
+			if ((is_null($objReferencia->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateReferenciaAsUniao on this ReferenciaRendimento with an unsaved Referencia.');
+
+			// Get the Database Object for this Class
+			$objDatabase = ReferenciaRendimento::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`referencia_rendimento_uniao_assn`
+				WHERE
+					`referencia_rendimento_id` = ' . $objDatabase->SqlVariable($this->intId) . ' AND
+					`referencia_id` = ' . $objDatabase->SqlVariable($objReferencia->Id) . '
+			');
+
+			// Journaling (if applicable)
+			if ($objDatabase->JournalingDatabase)
+				$this->JournalReferenciaAsUniaoAssociation($objReferencia->Id, 'DELETE');
+		}
+
+		/**
+		 * Unassociates all ReferenciasAsUniao
+		 * @return void
+		*/ 
+		public function UnassociateAllReferenciasAsUniao() {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateAllReferenciaAsUniaoArray on this unsaved ReferenciaRendimento.');
+
+			// Get the Database Object for this Class
+			$objDatabase = ReferenciaRendimento::GetDatabase();
+
+			// Journaling (if applicable)
+			if ($objDatabase->JournalingDatabase) {
+				$objResult = $objDatabase->Query('SELECT `referencia_id` AS associated_id FROM `referencia_rendimento_uniao_assn` WHERE `referencia_rendimento_id` = ' . $objDatabase->SqlVariable($this->intId));
+				while ($objRow = $objResult->GetNextRow()) {
+					$this->JournalReferenciaAsUniaoAssociation($objRow->GetColumn('associated_id'), 'DELETE');
+				}
+			}
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`referencia_rendimento_uniao_assn`
+				WHERE
+					`referencia_rendimento_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
 
 
 
@@ -1400,6 +1687,38 @@
 	/////////////////////////////////////
 
 	/**
+	 * @property-read QQNode $ReferenciaId
+	 * @property-read QQNodeReferencia $Referencia
+	 * @property-read QQNodeReferencia $_ChildTableNode
+	 */
+	class QQNodeReferenciaRendimentoReferenciaAsUniao extends QQAssociationNode {
+		protected $strType = 'association';
+		protected $strName = 'referenciaasuniao';
+
+		protected $strTableName = 'referencia_rendimento_uniao_assn';
+		protected $strPrimaryKey = 'referencia_rendimento_id';
+		protected $strClassName = 'Referencia';
+
+		public function __get($strName) {
+			switch ($strName) {
+				case 'ReferenciaId':
+					return new QQNode('referencia_id', 'ReferenciaId', 'integer', $this);
+				case 'Referencia':
+					return new QQNodeReferencia('referencia_id', 'ReferenciaId', 'integer', $this);
+				case '_ChildTableNode':
+					return new QQNodeReferencia('referencia_id', 'ReferenciaId', 'integer', $this);
+				default:
+					try {
+						return parent::__get($strName);
+					} catch (QCallerException $objExc) {
+						$objExc->IncrementOffset();
+						throw $objExc;
+					}
+			}
+		}
+	}
+
+	/**
 	 * @property-read QQNode $Id
 	 * @property-read QQNode $MoldeId
 	 * @property-read QQNodeMolde $Molde
@@ -1411,6 +1730,7 @@
 	 * @property-read QQNode $Preco
 	 * @property-read QQNode $TecidoId
 	 * @property-read QQNodeTecido $Tecido
+	 * @property-read QQNodeReferenciaRendimentoReferenciaAsUniao $ReferenciaAsUniao
 	 */
 	class QQNodeReferenciaRendimento extends QQNode {
 		protected $strTableName = 'referencia_rendimento';
@@ -1440,6 +1760,8 @@
 					return new QQNode('tecido_id', 'TecidoId', 'integer', $this);
 				case 'Tecido':
 					return new QQNodeTecido('tecido_id', 'Tecido', 'integer', $this);
+				case 'ReferenciaAsUniao':
+					return new QQNodeReferenciaRendimentoReferenciaAsUniao($this);
 
 				case '_PrimaryKeyNode':
 					return new QQNode('id', 'Id', 'integer', $this);
@@ -1466,6 +1788,7 @@
 	 * @property-read QQNode $Preco
 	 * @property-read QQNode $TecidoId
 	 * @property-read QQNodeTecido $Tecido
+	 * @property-read QQNodeReferenciaRendimentoReferenciaAsUniao $ReferenciaAsUniao
 	 * @property-read QQNode $_PrimaryKeyNode
 	 */
 	class QQReverseReferenceNodeReferenciaRendimento extends QQReverseReferenceNode {
@@ -1496,6 +1819,8 @@
 					return new QQNode('tecido_id', 'TecidoId', 'integer', $this);
 				case 'Tecido':
 					return new QQNodeTecido('tecido_id', 'Tecido', 'integer', $this);
+				case 'ReferenciaAsUniao':
+					return new QQNodeReferenciaRendimentoReferenciaAsUniao($this);
 
 				case '_PrimaryKeyNode':
 					return new QQNode('id', 'Id', 'integer', $this);

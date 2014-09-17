@@ -30,6 +30,8 @@
 
 		<?php $this->lstCors->RenderWithName(true, "Rows=7"); ?>
 
+		<?php $this->lstReferenciaRendimentosAsUniao->RenderWithName(true, "Rows=7"); ?>
+
 		<?php $this->lstTamanhos->RenderWithName(true, "Rows=7"); ?>
 
 	</div>

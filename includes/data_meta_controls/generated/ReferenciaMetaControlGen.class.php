@@ -28,6 +28,8 @@
 	 * property-read QLabel $TecidoIdLabel
 	 * property QListBox $CorControl
 	 * property-read QLabel $CorLabel
+	 * property QListBox $ReferenciaRendimentoAsUniaoControl
+	 * property-read QLabel $ReferenciaRendimentoAsUniaoLabel
 	 * property QListBox $TamanhoControl
 	 * property-read QLabel $TamanhoLabel
 	 * property-read string $TitleVerb a verb indicating whether or not this is being edited or created
@@ -121,11 +123,15 @@
 		// QListBox Controls (if applicable) to edit Unique ReverseReferences and ManyToMany References
 		protected $lstCors;
 
+		protected $lstReferenciaRendimentosAsUniao;
+
 		protected $lstTamanhos;
 
 
 		// QLabel Controls (if applicable) to view Unique ReverseReferences and ManyToMany References
 		protected $lblCors;
+
+		protected $lblReferenciaRendimentosAsUniao;
 
 		protected $lblTamanhos;
 
@@ -430,6 +436,57 @@
 		}
 
 		/**
+		 * Create and setup QListBox lstReferenciaRendimentosAsUniao
+		 * @param string $strControlId optional ControlId to use
+		 * @param QQCondition $objConditions override the default condition of QQ::All() to the query, itself
+		 * @param QQClause[] $objOptionalClauses additional optional QQClause object or array of QQClause objects for the query
+		 * @return QListBox
+		 */
+		public function lstReferenciaRendimentosAsUniao_Create($strControlId = null, QQCondition $objCondition = null, $objOptionalClauses = null) {
+			$this->lstReferenciaRendimentosAsUniao = new QListBox($this->objParentObject, $strControlId);
+			$this->lstReferenciaRendimentosAsUniao->Name = QApplication::Translate('Referencia Rendimentos As Uniao');
+			$this->lstReferenciaRendimentosAsUniao->SelectionMode = QSelectionMode::Multiple;
+
+			// We need to know which items to "Pre-Select"
+			$objAssociatedArray = $this->objReferencia->GetReferenciaRendimentoAsUniaoArray();
+
+			// Setup and perform the Query
+			if (is_null($objCondition)) $objCondition = QQ::All();
+			$objReferenciaRendimentoCursor = ReferenciaRendimento::QueryCursor($objCondition, $objOptionalClauses);
+
+			// Iterate through the Cursor
+			while ($objReferenciaRendimento = ReferenciaRendimento::InstantiateCursor($objReferenciaRendimentoCursor)) {
+				$objListItem = new QListItem($objReferenciaRendimento->__toString(), $objReferenciaRendimento->Id);
+				foreach ($objAssociatedArray as $objAssociated) {
+					if ($objAssociated->Id == $objReferenciaRendimento->Id)
+						$objListItem->Selected = true;
+				}
+				$this->lstReferenciaRendimentosAsUniao->AddItem($objListItem);
+			}
+
+			// Return the QListControl
+			return $this->lstReferenciaRendimentosAsUniao;
+		}
+
+		/**
+		 * Create and setup QLabel lblReferenciaRendimentosAsUniao
+		 * @param string $strControlId optional ControlId to use
+		 * @param string $strGlue glue to display in between each associated object
+		 * @return QLabel
+		 */
+		public function lblReferenciaRendimentosAsUniao_Create($strControlId = null, $strGlue = ', ') {
+			$this->lblReferenciaRendimentosAsUniao = new QLabel($this->objParentObject, $strControlId);
+			$this->lstReferenciaRendimentosAsUniao->Name = QApplication::Translate('Referencia Rendimentos As Uniao');
+			
+			$objAssociatedArray = $this->objReferencia->GetReferenciaRendimentoAsUniaoArray();
+			$strItems = array();
+			foreach ($objAssociatedArray as $objAssociated)
+				$strItems[] = $objAssociated->__toString();
+			$this->lblReferenciaRendimentosAsUniao->Text = implode($strGlue, $strItems);
+			return $this->lblReferenciaRendimentosAsUniao;
+		}
+
+		/**
 		 * Create and setup QListBox lstTamanhos
 		 * @param string $strControlId optional ControlId to use
 		 * @param QQCondition $objConditions override the default condition of QQ::All() to the query, itself
@@ -548,6 +605,27 @@
 				$this->lblCors->Text = implode($strGlue, $strItems);
 			}
 
+			if ($this->lstReferenciaRendimentosAsUniao) {
+				$this->lstReferenciaRendimentosAsUniao->RemoveAllItems();
+				$objAssociatedArray = $this->objReferencia->GetReferenciaRendimentoAsUniaoArray();
+				$objReferenciaRendimentoArray = ReferenciaRendimento::LoadAll();
+				if ($objReferenciaRendimentoArray) foreach ($objReferenciaRendimentoArray as $objReferenciaRendimento) {
+					$objListItem = new QListItem($objReferenciaRendimento->__toString(), $objReferenciaRendimento->Id);
+					foreach ($objAssociatedArray as $objAssociated) {
+						if ($objAssociated->Id == $objReferenciaRendimento->Id)
+							$objListItem->Selected = true;
+					}
+					$this->lstReferenciaRendimentosAsUniao->AddItem($objListItem);
+				}
+			}
+			if ($this->lblReferenciaRendimentosAsUniao) {
+				$objAssociatedArray = $this->objReferencia->GetReferenciaRendimentoAsUniaoArray();
+				$strItems = array();
+				foreach ($objAssociatedArray as $objAssociated)
+					$strItems[] = $objAssociated->__toString();
+				$this->lblReferenciaRendimentosAsUniao->Text = implode($strGlue, $strItems);
+			}
+
 			if ($this->lstTamanhos) {
 				$this->lstTamanhos->RemoveAllItems();
 				$objAssociatedArray = $this->objReferencia->GetTamanhoArray();
@@ -583,6 +661,16 @@
 				$objSelectedListItems = $this->lstCors->SelectedItems;
 				if ($objSelectedListItems) foreach ($objSelectedListItems as $objListItem) {
 					$this->objReferencia->AssociateCor(Cor::Load($objListItem->Value));
+				}
+			}
+		}
+
+		protected function lstReferenciaRendimentosAsUniao_Update() {
+			if ($this->lstReferenciaRendimentosAsUniao) {
+				$this->objReferencia->UnassociateAllReferenciaRendimentosAsUniao();
+				$objSelectedListItems = $this->lstReferenciaRendimentosAsUniao->SelectedItems;
+				if ($objSelectedListItems) foreach ($objSelectedListItems as $objListItem) {
+					$this->objReferencia->AssociateReferenciaRendimentoAsUniao(ReferenciaRendimento::Load($objListItem->Value));
 				}
 			}
 		}
@@ -624,6 +712,7 @@
 
 				// Finally, update any ManyToManyReferences (if any)
 				$this->lstCors_Update();
+				$this->lstReferenciaRendimentosAsUniao_Update();
 				$this->lstTamanhos_Update();
 			} catch (QCallerException $objExc) {
 				$objExc->IncrementOffset();
@@ -637,6 +726,7 @@
 		 */
 		public function DeleteReferencia() {
 			$this->objReferencia->UnassociateAllCors();
+			$this->objReferencia->UnassociateAllReferenciaRendimentosAsUniao();
 			$this->objReferencia->UnassociateAllTamanhos();
 			$this->objReferencia->Delete();
 		}		
@@ -698,6 +788,12 @@
 				case 'CorLabel':
 					if (!$this->lblCors) return $this->lblCors_Create();
 					return $this->lblCors;
+				case 'ReferenciaRendimentoAsUniaoControl':
+					if (!$this->lstReferenciaRendimentosAsUniao) return $this->lstReferenciaRendimentosAsUniao_Create();
+					return $this->lstReferenciaRendimentosAsUniao;
+				case 'ReferenciaRendimentoAsUniaoLabel':
+					if (!$this->lblReferenciaRendimentosAsUniao) return $this->lblReferenciaRendimentosAsUniao_Create();
+					return $this->lblReferenciaRendimentosAsUniao;
 				case 'TamanhoControl':
 					if (!$this->lstTamanhos) return $this->lstTamanhos_Create();
 					return $this->lstTamanhos;
@@ -738,6 +834,8 @@
 						return ($this->lstTecido = QType::Cast($mixValue, 'QControl'));
 					case 'CorControl':
 						return ($this->lstCors = QType::Cast($mixValue, 'QControl'));
+					case 'ReferenciaRendimentoAsUniaoControl':
+						return ($this->lstReferenciaRendimentosAsUniao = QType::Cast($mixValue, 'QControl'));
 					case 'TamanhoControl':
 						return ($this->lstTamanhos = QType::Cast($mixValue, 'QControl'));
 					default:

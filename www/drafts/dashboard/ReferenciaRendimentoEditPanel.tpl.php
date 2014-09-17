@@ -21,6 +21,8 @@
 
 		<?php $_CONTROL->lstTecido->RenderWithName(); ?>
 
+		<?php $_CONTROL->lstReferenciasAsUniao->RenderWithName(true, "Rows=7"); ?>
+
 	</div>
 
 	<div id="formActions">

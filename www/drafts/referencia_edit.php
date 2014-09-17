@@ -34,6 +34,7 @@
 
 		// Other ListBoxes (if applicable) via Unique ReverseReferences and ManyToMany References
 		protected $lstCors;
+		protected $lstReferenciaRendimentosAsUniao;
 		protected $lstTamanhos;
 
 		// Other Controls
@@ -80,6 +81,7 @@
 			$this->txtModelo = $this->mctReferencia->txtModelo_Create();
 			$this->lstTecido = $this->mctReferencia->lstTecido_Create();
 			$this->lstCors = $this->mctReferencia->lstCors_Create();
+			$this->lstReferenciaRendimentosAsUniao = $this->mctReferencia->lstReferenciaRendimentosAsUniao_Create();
 			$this->lstTamanhos = $this->mctReferencia->lstTamanhos_Create();
 
 			// Create Buttons and Actions on this Form
