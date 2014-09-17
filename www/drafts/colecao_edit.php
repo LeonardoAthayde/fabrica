@@ -4,39 +4,33 @@
 
 	/**
 	 * This is a quick-and-dirty draft QForm object to do Create, Edit, and Delete functionality
-	 * of the Referencia class.  It uses the code-generated
-	 * ReferenciaMetaControl class, which has meta-methods to help with
-	 * easily creating/defining controls to modify the fields of a Referencia columns.
+	 * of the Colecao class.  It uses the code-generated
+	 * ColecaoMetaControl class, which has meta-methods to help with
+	 * easily creating/defining controls to modify the fields of a Colecao columns.
 	 *
 	 * Any display customizations and presentation-tier logic can be implemented
 	 * here by overriding existing or implementing new methods, properties and variables.
 	 * 
 	 * NOTE: This file is overwritten on any code regenerations.  If you want to make
-	 * permanent changes, it is STRONGLY RECOMMENDED to move both referencia_edit.php AND
-	 * referencia_edit.tpl.php out of this Form Drafts directory.
+	 * permanent changes, it is STRONGLY RECOMMENDED to move both colecao_edit.php AND
+	 * colecao_edit.tpl.php out of this Form Drafts directory.
 	 *
 	 * @package My Application
 	 * @subpackage Drafts
 	 */
-	class ReferenciaEditForm extends QForm {
+	class ColecaoEditForm extends QForm {
 	
 		protected $objUsuario;
 	
-		// Local instance of the ReferenciaMetaControl
-		protected $mctReferencia;
+		// Local instance of the ColecaoMetaControl
+		protected $mctColecao;
 
-		// Controls for Referencia's Data Fields
+		// Controls for Colecao's Data Fields
 		protected $lblId;
 		protected $txtNome;
-		protected $lstReferenciaCategoria;
-		protected $txtModelo;
-		protected $lstTecido;
 
 		// Other ListBoxes (if applicable) via Unique ReverseReferences and ManyToMany References
-		protected $lstColecaos;
-		protected $lstCors;
-		protected $lstReferenciaRendimentosAsUniao;
-		protected $lstTamanhos;
+		protected $lstReferencias;
 
 		// Other Controls
 		protected $btnSave;
@@ -71,20 +65,14 @@
 		}		
 
 		protected function Form_Create() {
-			// Use the CreateFromPathInfo shortcut (this can also be done manually using the ReferenciaMetaControl constructor)
+			// Use the CreateFromPathInfo shortcut (this can also be done manually using the ColecaoMetaControl constructor)
 			// MAKE SURE we specify "$this" as the MetaControl's (and thus all subsequent controls') parent
-			$this->mctReferencia = ReferenciaMetaControl::CreateFromPathInfo($this);
+			$this->mctColecao = ColecaoMetaControl::CreateFromPathInfo($this);
 
-			// Call MetaControl's methods to create qcontrols based on Referencia's data fields
-			$this->lblId = $this->mctReferencia->lblId_Create();
-			$this->txtNome = $this->mctReferencia->txtNome_Create();
-			$this->lstReferenciaCategoria = $this->mctReferencia->lstReferenciaCategoria_Create();
-			$this->txtModelo = $this->mctReferencia->txtModelo_Create();
-			$this->lstTecido = $this->mctReferencia->lstTecido_Create();
-			$this->lstColecaos = $this->mctReferencia->lstColecaos_Create();
-			$this->lstCors = $this->mctReferencia->lstCors_Create();
-			$this->lstReferenciaRendimentosAsUniao = $this->mctReferencia->lstReferenciaRendimentosAsUniao_Create();
-			$this->lstTamanhos = $this->mctReferencia->lstTamanhos_Create();
+			// Call MetaControl's methods to create qcontrols based on Colecao's data fields
+			$this->lblId = $this->mctColecao->lblId_Create();
+			$this->txtNome = $this->mctColecao->txtNome_Create();
+			$this->lstReferencias = $this->mctColecao->lstReferencias_Create();
 
 			// Create Buttons and Actions on this Form
 			$this->btnSave = new QButton($this);
@@ -98,9 +86,9 @@
 
 			$this->btnDelete = new QButton($this);
 			$this->btnDelete->Text = QApplication::Translate('Delete');
-			$this->btnDelete->AddAction(new QClickEvent(), new QConfirmAction(QApplication::Translate('Are you SURE you want to DELETE this') . ' ' . QApplication::Translate('Referencia') . '?'));
+			$this->btnDelete->AddAction(new QClickEvent(), new QConfirmAction(QApplication::Translate('Are you SURE you want to DELETE this') . ' ' . QApplication::Translate('Colecao') . '?'));
 			$this->btnDelete->AddAction(new QClickEvent(), new QAjaxAction('btnDelete_Click'));
-			$this->btnDelete->Visible = $this->mctReferencia->EditMode;
+			$this->btnDelete->Visible = $this->mctColecao->EditMode;
 		}
 
 		/**
@@ -132,14 +120,14 @@
 		// Button Event Handlers
 
 		protected function btnSave_Click($strFormId, $strControlId, $strParameter) {
-			// Delegate "Save" processing to the ReferenciaMetaControl
-			$this->mctReferencia->SaveReferencia();
+			// Delegate "Save" processing to the ColecaoMetaControl
+			$this->mctColecao->SaveColecao();
 			$this->RedirectToListPage();
 		}
 
 		protected function btnDelete_Click($strFormId, $strControlId, $strParameter) {
-			// Delegate "Delete" processing to the ReferenciaMetaControl
-			$this->mctReferencia->DeleteReferencia();
+			// Delegate "Delete" processing to the ColecaoMetaControl
+			$this->mctColecao->DeleteColecao();
 			$this->RedirectToListPage();
 		}
 
@@ -150,11 +138,11 @@
 		// Other Methods
 		
 		protected function RedirectToListPage() {
-			QApplication::Redirect(__VIRTUAL_DIRECTORY__ . __FORM_DRAFTS__ . '/referencia_list.php');
+			QApplication::Redirect(__VIRTUAL_DIRECTORY__ . __FORM_DRAFTS__ . '/colecao_list.php');
 		}
 	}
 
 	// Go ahead and run this form object to render the page and its event handlers, implicitly using
-	// referencia_edit.tpl.php as the included HTML template file
-	ReferenciaEditForm::Run('ReferenciaEditForm');
+	// colecao_edit.tpl.php as the included HTML template file
+	ColecaoEditForm::Run('ColecaoEditForm');
 ?>

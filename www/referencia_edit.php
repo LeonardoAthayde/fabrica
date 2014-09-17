@@ -19,6 +19,7 @@
 		protected $lstTecido;
 
 		// Other ListBoxes (if applicable) via Unique ReverseReferences and ManyToMany References
+		protected $lstColecaos;
 		protected $lstReferenciaRendimento;
 		protected $lstCors;
 		protected $lstTamanhos;
@@ -54,6 +55,9 @@
 			$this->lstTamanhos = $this->mctReferencia->lstTamanhos_Create();
 			$this->lstTamanhos->CssClass = 'form-control';
 			$this->lstTamanhos->FontSize = 18;
+			$this->lstColecaos = $this->mctReferencia->lstColecaos_Create();
+			$this->lstColecaos->CssClass = 'form-control';
+			$this->lstColecaos->FontSize = 18;
 			
 			$this->btnAddReferenciaRendimento_Create();
 			$this->dtrReferenciaRendimento_Create();

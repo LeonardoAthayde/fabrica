@@ -1,35 +1,20 @@
-ALTER TABLE  `fluxograma_acoes_tempo` ADD  `tempo_marcado` TIME NOT NULL;
-ALTER TABLE  `fluxograma_acoes_tempo` ADD  `tempo_ajustado` TIME NOT NULL;
+CREATE TABLE IF NOT EXISTS `colecao` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `nome` varchar(30) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
-CREATE TABLE IF NOT EXISTS `referencia_rendimento_uniao_assn` (
+
+
+
+CREATE TABLE IF NOT EXISTS `colecao_referencia_assn` (
+  `colecao_id` int(11) NOT NULL,
   `referencia_id` int(11) NOT NULL,
-  `referencia_rendimento_id` int(11) NOT NULL,
-  KEY `referencia_id` (`referencia_id`),
-  KEY `referencia_rendimento_id` (`referencia_rendimento_id`)
+  KEY `colecao_id` (`colecao_id`),
+  KEY `referencia_id` (`referencia_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
-ALTER TABLE `referencia_rendimento_uniao_assn`
-  ADD CONSTRAINT `referencia_rendimento_uniao_assn_ibfk_2` FOREIGN KEY (`referencia_rendimento_id`) REFERENCES `referencia_rendimento` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `referencia_rendimento_uniao_assn_ibfk_1` FOREIGN KEY (`referencia_id`) REFERENCES `referencia` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
-
-
-
-ALTER TABLE  `referencia_rendimento` CHANGE  `molde_id`  `molde_id` INT( 11 ) NULL ,
-CHANGE  `referencia_id`  `referencia_id` INT( 11 ) NULL ,
-CHANGE  `comprimento`  `comprimento` FLOAT NOT NULL DEFAULT  '-1',
-CHANGE  `pecas`  `pecas` INT( 11 ) NOT NULL DEFAULT  '-1',
-CHANGE  `peso`  `peso` FLOAT NOT NULL DEFAULT  '-1',
-CHANGE  `preco`  `preco` FLOAT NOT NULL DEFAULT  '-1',
-CHANGE  `tecido_id`  `tecido_id` INT( 11 ) NULL
-
-ALTER TABLE  `referencia_rendimento_uniao_assn` ADD UNIQUE (
-`referencia_id` ,
-`referencia_rendimento_id`
-);
-
-
-ALTER TABLE  `referencia_rendimento` DROP FOREIGN KEY  `referencia_rendimento_ibfk_3` ;
-
-
-deletar campo "referencia_id" da tabela referencia_rendimento
+ALTER TABLE `colecao_referencia_assn`
+  ADD CONSTRAINT `colecao_referencia_assn_ibfk_2` FOREIGN KEY (`referencia_id`) REFERENCES `referencia` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `colecao_referencia_assn_ibfk_1` FOREIGN KEY (`colecao_id`) REFERENCES `colecao` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;

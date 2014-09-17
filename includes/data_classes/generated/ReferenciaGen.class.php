@@ -22,6 +22,8 @@
 	 * @property integer $TecidoId the value for intTecidoId (Not Null)
 	 * @property ReferenciaCategoria $ReferenciaCategoria the value for the ReferenciaCategoria object referenced by intReferenciaCategoriaId (Not Null)
 	 * @property Tecido $Tecido the value for the Tecido object referenced by intTecidoId (Not Null)
+	 * @property Colecao $_Colecao the value for the private _objColecao (Read-Only) if set due to an expansion on the colecao_referencia_assn association table
+	 * @property Colecao[] $_ColecaoArray the value for the private _objColecaoArray (Read-Only) if set due to an ExpandAsArray on the colecao_referencia_assn association table
 	 * @property Cor $_Cor the value for the private _objCor (Read-Only) if set due to an expansion on the referencia_cor_assn association table
 	 * @property Cor[] $_CorArray the value for the private _objCorArray (Read-Only) if set due to an ExpandAsArray on the referencia_cor_assn association table
 	 * @property ReferenciaRendimento $_ReferenciaRendimentoAsUniao the value for the private _objReferenciaRendimentoAsUniao (Read-Only) if set due to an expansion on the referencia_rendimento_uniao_assn association table
@@ -79,6 +81,22 @@
 		protected $intTecidoId;
 		const TecidoIdDefault = null;
 
+
+		/**
+		 * Private member variable that stores a reference to a single Colecao object
+		 * (of type Colecao), if this Referencia object was restored with
+		 * an expansion on the colecao_referencia_assn association table.
+		 * @var Colecao _objColecao;
+		 */
+		private $_objColecao;
+
+		/**
+		 * Private member variable that stores a reference to an array of Colecao objects
+		 * (of type Colecao[]), if this Referencia object was restored with
+		 * an ExpandAsArray on the colecao_referencia_assn association table.
+		 * @var Colecao[] _objColecaoArray;
+		 */
+		private $_objColecaoArray = array();
 
 		/**
 		 * Private member variable that stores a reference to a single Cor object
@@ -538,6 +556,20 @@
 				if (!$strAliasPrefix)
 					$strAliasPrefix = 'referencia__';
 
+				$strAlias = $strAliasPrefix . 'colecao__colecao_id__id';
+				$strAliasName = array_key_exists($strAlias, $strColumnAliasArray) ? $strColumnAliasArray[$strAlias] : $strAlias;
+				if ((array_key_exists($strAlias, $strExpandAsArrayNodes)) &&
+					(!is_null($objDbRow->GetColumn($strAliasName)))) {
+					if ($intPreviousChildItemCount = count($objPreviousItem->_objColecaoArray)) {
+						$objPreviousChildItem = $objPreviousItem->_objColecaoArray[$intPreviousChildItemCount - 1];
+						$objChildItem = Colecao::InstantiateDbRow($objDbRow, $strAliasPrefix . 'colecao__colecao_id__', $strExpandAsArrayNodes, $objPreviousChildItem, $strColumnAliasArray);
+						if ($objChildItem)
+							$objPreviousItem->_objColecaoArray[] = $objChildItem;
+					} else
+						$objPreviousItem->_objColecaoArray[] = Colecao::InstantiateDbRow($objDbRow, $strAliasPrefix . 'colecao__colecao_id__', $strExpandAsArrayNodes, null, $strColumnAliasArray);
+					$blnExpandedViaArray = true;
+				}
+
 				$strAlias = $strAliasPrefix . 'cor__cor_id__id';
 				$strAliasName = array_key_exists($strAlias, $strColumnAliasArray) ? $strColumnAliasArray[$strAlias] : $strAlias;
 				if ((array_key_exists($strAlias, $strExpandAsArrayNodes)) &&
@@ -642,6 +674,16 @@
 				$objToReturn->objTecido = Tecido::InstantiateDbRow($objDbRow, $strAliasPrefix . 'tecido_id__', $strExpandAsArrayNodes, null, $strColumnAliasArray);
 
 
+
+			// Check for Colecao Virtual Binding
+			$strAlias = $strAliasPrefix . 'colecao__colecao_id__id';
+			$strAliasName = array_key_exists($strAlias, $strColumnAliasArray) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			if (!is_null($objDbRow->GetColumn($strAliasName))) {
+				if (($strExpandAsArrayNodes) && (array_key_exists($strAlias, $strExpandAsArrayNodes)))
+					$objToReturn->_objColecaoArray[] = Colecao::InstantiateDbRow($objDbRow, $strAliasPrefix . 'colecao__colecao_id__', $strExpandAsArrayNodes, null, $strColumnAliasArray);
+				else
+					$objToReturn->_objColecao = Colecao::InstantiateDbRow($objDbRow, $strAliasPrefix . 'colecao__colecao_id__', $strExpandAsArrayNodes, null, $strColumnAliasArray);
+			}
 
 			// Check for Cor Virtual Binding
 			$strAlias = $strAliasPrefix . 'cor__cor_id__id';
@@ -896,6 +938,38 @@
 		////////////////////////////////////////////////////
 		// INDEX-BASED LOAD METHODS (Array via Many to Many)
 		////////////////////////////////////////////////////
+			/**
+		 * Load an array of Colecao objects for a given Colecao
+		 * via the colecao_referencia_assn table
+		 * @param integer $intColecaoId
+		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
+		 * @return Referencia[]
+		*/
+		public static function LoadArrayByColecao($intColecaoId, $objOptionalClauses = null) {
+			// Call Referencia::QueryArray to perform the LoadArrayByColecao query
+			try {
+				return Referencia::QueryArray(
+					QQ::Equal(QQN::Referencia()->Colecao->ColecaoId, $intColecaoId),
+					$objOptionalClauses
+				);
+			} catch (QCallerException $objExc) {
+				$objExc->IncrementOffset();
+				throw $objExc;
+			}
+		}
+
+		/**
+		 * Count Referencias for a given Colecao
+		 * via the colecao_referencia_assn table
+		 * @param integer $intColecaoId
+		 * @return int
+		*/
+		public static function CountByColecao($intColecaoId, $objOptionalClauses = null) {
+			return Referencia::QueryCount(
+				QQ::Equal(QQN::Referencia()->Colecao->ColecaoId, $intColecaoId),
+				$objOptionalClauses
+			);
+		}
 			/**
 		 * Load an array of Cor objects for a given Cor
 		 * via the referencia_cor_assn table
@@ -1271,6 +1345,18 @@
 				// Virtual Object References (Many to Many and Reverse References)
 				// (If restored via a "Many-to" expansion)
 				////////////////////////////
+
+				case '_Colecao':
+					// Gets the value for the private _objColecao (Read-Only)
+					// if set due to an expansion on the colecao_referencia_assn association table
+					// @return Colecao
+					return $this->_objColecao;
+
+				case '_ColecaoArray':
+					// Gets the value for the private _objColecaoArray (Read-Only)
+					// if set due to an ExpandAsArray on the colecao_referencia_assn association table
+					// @return Colecao[]
+					return (array) $this->_objColecaoArray;
 
 				case '_Cor':
 					// Gets the value for the private _objCor (Read-Only)
@@ -1666,6 +1752,189 @@
 			');
 		}
 
+			
+		// Related Many-to-Many Objects' Methods for Colecao
+		//-------------------------------------------------------------------
+
+		/**
+		 * Gets all many-to-many associated Colecaos as an array of Colecao objects
+		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
+		 * @return Colecao[]
+		*/ 
+		public function GetColecaoArray($objOptionalClauses = null) {
+			if ((is_null($this->intId)))
+				return array();
+
+			try {
+				return Colecao::LoadArrayByReferencia($this->intId, $objOptionalClauses);
+			} catch (QCallerException $objExc) {
+				$objExc->IncrementOffset();
+				throw $objExc;
+			}
+		}
+
+		/**
+		 * Counts all many-to-many associated Colecaos
+		 * @return int
+		*/ 
+		public function CountColecaos() {
+			if ((is_null($this->intId)))
+				return 0;
+
+			return Colecao::CountByReferencia($this->intId);
+		}
+
+		/**
+		 * Checks to see if an association exists with a specific Colecao
+		 * @param Colecao $objColecao
+		 * @return bool
+		*/
+		public function IsColecaoAssociated(Colecao $objColecao) {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call IsColecaoAssociated on this unsaved Referencia.');
+			if ((is_null($objColecao->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call IsColecaoAssociated on this Referencia with an unsaved Colecao.');
+
+			$intRowCount = Referencia::QueryCount(
+				QQ::AndCondition(
+					QQ::Equal(QQN::Referencia()->Id, $this->intId),
+					QQ::Equal(QQN::Referencia()->Colecao->ColecaoId, $objColecao->Id)
+				)
+			);
+
+			return ($intRowCount > 0);
+		}
+
+		/**
+		 * Journals the Colecao relationship into the Log database.
+		 * Used internally as a helper method.
+		 * @param string $strJournalCommand
+		 */
+		public function JournalColecaoAssociation($intAssociatedId, $strJournalCommand) {
+			$objDatabase = Referencia::GetDatabase()->JournalingDatabase;
+
+			$objDatabase->NonQuery('
+				INSERT INTO `colecao_referencia_assn` (
+					`referencia_id`,
+					`colecao_id`,
+					__sys_login_id,
+					__sys_action,
+					__sys_date
+				) VALUES (
+					' . $objDatabase->SqlVariable($this->intId) . ',
+					' . $objDatabase->SqlVariable($intAssociatedId) . ',
+					' . (($objDatabase->JournaledById) ? $objDatabase->JournaledById : 'NULL') . ',
+					' . $objDatabase->SqlVariable($strJournalCommand) . ',
+					NOW()
+				);
+			');
+		}
+
+		/**
+		 * Gets the historical journal for an object's Colecao relationship from the log database.
+		 * @param integer intId
+		 * @return QDatabaseResult $objResult
+		 */
+		public static function GetJournalColecaoAssociationForId($intId) {
+			$objDatabase = Referencia::GetDatabase()->JournalingDatabase;
+
+			return $objDatabase->Query('SELECT * FROM colecao_referencia_assn WHERE referencia_id = ' .
+				$objDatabase->SqlVariable($intId) . ' ORDER BY __sys_date');
+		}
+
+		/**
+		 * Gets the historical journal for this object's Colecao relationship from the log database.
+		 * @return QDatabaseResult $objResult
+		 */
+		public function GetJournalColecaoAssociation() {
+			return Referencia::GetJournalColecaoAssociationForId($this->intId);
+		}
+
+		/**
+		 * Associates a Colecao
+		 * @param Colecao $objColecao
+		 * @return void
+		*/ 
+		public function AssociateColecao(Colecao $objColecao) {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociateColecao on this unsaved Referencia.');
+			if ((is_null($objColecao->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociateColecao on this Referencia with an unsaved Colecao.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Referencia::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				INSERT INTO `colecao_referencia_assn` (
+					`referencia_id`,
+					`colecao_id`
+				) VALUES (
+					' . $objDatabase->SqlVariable($this->intId) . ',
+					' . $objDatabase->SqlVariable($objColecao->Id) . '
+				)
+			');
+
+			// Journaling (if applicable)
+			if ($objDatabase->JournalingDatabase)
+				$this->JournalColecaoAssociation($objColecao->Id, 'INSERT');
+		}
+
+		/**
+		 * Unassociates a Colecao
+		 * @param Colecao $objColecao
+		 * @return void
+		*/ 
+		public function UnassociateColecao(Colecao $objColecao) {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateColecao on this unsaved Referencia.');
+			if ((is_null($objColecao->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateColecao on this Referencia with an unsaved Colecao.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Referencia::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`colecao_referencia_assn`
+				WHERE
+					`referencia_id` = ' . $objDatabase->SqlVariable($this->intId) . ' AND
+					`colecao_id` = ' . $objDatabase->SqlVariable($objColecao->Id) . '
+			');
+
+			// Journaling (if applicable)
+			if ($objDatabase->JournalingDatabase)
+				$this->JournalColecaoAssociation($objColecao->Id, 'DELETE');
+		}
+
+		/**
+		 * Unassociates all Colecaos
+		 * @return void
+		*/ 
+		public function UnassociateAllColecaos() {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateAllColecaoArray on this unsaved Referencia.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Referencia::GetDatabase();
+
+			// Journaling (if applicable)
+			if ($objDatabase->JournalingDatabase) {
+				$objResult = $objDatabase->Query('SELECT `colecao_id` AS associated_id FROM `colecao_referencia_assn` WHERE `referencia_id` = ' . $objDatabase->SqlVariable($this->intId));
+				while ($objRow = $objResult->GetNextRow()) {
+					$this->JournalColecaoAssociation($objRow->GetColumn('associated_id'), 'DELETE');
+				}
+			}
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`colecao_referencia_assn`
+				WHERE
+					`referencia_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
 			
 		// Related Many-to-Many Objects' Methods for Cor
 		//-------------------------------------------------------------------
@@ -2307,6 +2576,38 @@
 	/////////////////////////////////////
 
 	/**
+	 * @property-read QQNode $ColecaoId
+	 * @property-read QQNodeColecao $Colecao
+	 * @property-read QQNodeColecao $_ChildTableNode
+	 */
+	class QQNodeReferenciaColecao extends QQAssociationNode {
+		protected $strType = 'association';
+		protected $strName = 'colecao';
+
+		protected $strTableName = 'colecao_referencia_assn';
+		protected $strPrimaryKey = 'referencia_id';
+		protected $strClassName = 'Colecao';
+
+		public function __get($strName) {
+			switch ($strName) {
+				case 'ColecaoId':
+					return new QQNode('colecao_id', 'ColecaoId', 'integer', $this);
+				case 'Colecao':
+					return new QQNodeColecao('colecao_id', 'ColecaoId', 'integer', $this);
+				case '_ChildTableNode':
+					return new QQNodeColecao('colecao_id', 'ColecaoId', 'integer', $this);
+				default:
+					try {
+						return parent::__get($strName);
+					} catch (QCallerException $objExc) {
+						$objExc->IncrementOffset();
+						throw $objExc;
+					}
+			}
+		}
+	}
+
+	/**
 	 * @property-read QQNode $CorId
 	 * @property-read QQNodeCor $Cor
 	 * @property-read QQNodeCor $_ChildTableNode
@@ -2410,6 +2711,7 @@
 	 * @property-read QQNode $Modelo
 	 * @property-read QQNode $TecidoId
 	 * @property-read QQNodeTecido $Tecido
+	 * @property-read QQNodeReferenciaColecao $Colecao
 	 * @property-read QQNodeReferenciaCor $Cor
 	 * @property-read QQNodeReferenciaReferenciaRendimentoAsUniao $ReferenciaRendimentoAsUniao
 	 * @property-read QQNodeReferenciaTamanho $Tamanho
@@ -2435,6 +2737,8 @@
 					return new QQNode('tecido_id', 'TecidoId', 'integer', $this);
 				case 'Tecido':
 					return new QQNodeTecido('tecido_id', 'Tecido', 'integer', $this);
+				case 'Colecao':
+					return new QQNodeReferenciaColecao($this);
 				case 'Cor':
 					return new QQNodeReferenciaCor($this);
 				case 'ReferenciaRendimentoAsUniao':
@@ -2465,6 +2769,7 @@
 	 * @property-read QQNode $Modelo
 	 * @property-read QQNode $TecidoId
 	 * @property-read QQNodeTecido $Tecido
+	 * @property-read QQNodeReferenciaColecao $Colecao
 	 * @property-read QQNodeReferenciaCor $Cor
 	 * @property-read QQNodeReferenciaReferenciaRendimentoAsUniao $ReferenciaRendimentoAsUniao
 	 * @property-read QQNodeReferenciaTamanho $Tamanho
@@ -2491,6 +2796,8 @@
 					return new QQNode('tecido_id', 'TecidoId', 'integer', $this);
 				case 'Tecido':
 					return new QQNodeTecido('tecido_id', 'Tecido', 'integer', $this);
+				case 'Colecao':
+					return new QQNodeReferenciaColecao($this);
 				case 'Cor':
 					return new QQNodeReferenciaCor($this);
 				case 'ReferenciaRendimentoAsUniao':

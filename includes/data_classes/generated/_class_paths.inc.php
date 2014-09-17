@@ -20,6 +20,13 @@
 		QApplicationBase::$ClassFile['balancopecasmetacontrol'] = __DATA_META_CONTROLS__ . '/BalancoPecasMetaControl.class.php';
 		QApplicationBase::$ClassFile['balancopecasdatagrid'] = __DATA_META_CONTROLS__ . '/BalancoPecasDataGrid.class.php';
 
+	// ClassPaths for the Colecao class
+		QApplicationBase::$ClassFile['colecao'] = __DATA_CLASSES__ . '/Colecao.class.php';
+		QApplicationBase::$ClassFile['qqnodecolecao'] = __DATA_CLASSES__ . '/Colecao.class.php';
+		QApplicationBase::$ClassFile['qqreversereferencenodecolecao'] = __DATA_CLASSES__ . '/Colecao.class.php';
+		QApplicationBase::$ClassFile['colecaometacontrol'] = __DATA_META_CONTROLS__ . '/ColecaoMetaControl.class.php';
+		QApplicationBase::$ClassFile['colecaodatagrid'] = __DATA_META_CONTROLS__ . '/ColecaoDataGrid.class.php';
+
 	// ClassPaths for the Comando class
 		QApplicationBase::$ClassFile['comando'] = __DATA_CLASSES__ . '/Comando.class.php';
 		QApplicationBase::$ClassFile['qqnodecomando'] = __DATA_CLASSES__ . '/Comando.class.php';

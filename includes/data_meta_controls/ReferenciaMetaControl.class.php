@@ -124,6 +124,7 @@
 				// Finally, update any ManyToManyReferences (if any)
 				$this->lstCors_Update();
 				$this->lstTamanhos_Update();
+				$this->lstColecaos_Update();
 			} catch (QCallerException $objExc) {
 				$objExc->IncrementOffset();
 				throw $objExc;

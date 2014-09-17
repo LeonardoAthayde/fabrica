@@ -26,6 +26,8 @@
 	 * property-read QLabel $ModeloLabel
 	 * property QListBox $TecidoIdControl
 	 * property-read QLabel $TecidoIdLabel
+	 * property QListBox $ColecaoControl
+	 * property-read QLabel $ColecaoLabel
 	 * property QListBox $CorControl
 	 * property-read QLabel $CorLabel
 	 * property QListBox $ReferenciaRendimentoAsUniaoControl
@@ -121,6 +123,8 @@
 
 
 		// QListBox Controls (if applicable) to edit Unique ReverseReferences and ManyToMany References
+		protected $lstColecaos;
+
 		protected $lstCors;
 
 		protected $lstReferenciaRendimentosAsUniao;
@@ -129,6 +133,8 @@
 
 
 		// QLabel Controls (if applicable) to view Unique ReverseReferences and ManyToMany References
+		protected $lblColecaos;
+
 		protected $lblCors;
 
 		protected $lblReferenciaRendimentosAsUniao;
@@ -385,6 +391,57 @@
 		}
 
 		/**
+		 * Create and setup QListBox lstColecaos
+		 * @param string $strControlId optional ControlId to use
+		 * @param QQCondition $objConditions override the default condition of QQ::All() to the query, itself
+		 * @param QQClause[] $objOptionalClauses additional optional QQClause object or array of QQClause objects for the query
+		 * @return QListBox
+		 */
+		public function lstColecaos_Create($strControlId = null, QQCondition $objCondition = null, $objOptionalClauses = null) {
+			$this->lstColecaos = new QListBox($this->objParentObject, $strControlId);
+			$this->lstColecaos->Name = QApplication::Translate('Colecaos');
+			$this->lstColecaos->SelectionMode = QSelectionMode::Multiple;
+
+			// We need to know which items to "Pre-Select"
+			$objAssociatedArray = $this->objReferencia->GetColecaoArray();
+
+			// Setup and perform the Query
+			if (is_null($objCondition)) $objCondition = QQ::All();
+			$objColecaoCursor = Colecao::QueryCursor($objCondition, $objOptionalClauses);
+
+			// Iterate through the Cursor
+			while ($objColecao = Colecao::InstantiateCursor($objColecaoCursor)) {
+				$objListItem = new QListItem($objColecao->__toString(), $objColecao->Id);
+				foreach ($objAssociatedArray as $objAssociated) {
+					if ($objAssociated->Id == $objColecao->Id)
+						$objListItem->Selected = true;
+				}
+				$this->lstColecaos->AddItem($objListItem);
+			}
+
+			// Return the QListControl
+			return $this->lstColecaos;
+		}
+
+		/**
+		 * Create and setup QLabel lblColecaos
+		 * @param string $strControlId optional ControlId to use
+		 * @param string $strGlue glue to display in between each associated object
+		 * @return QLabel
+		 */
+		public function lblColecaos_Create($strControlId = null, $strGlue = ', ') {
+			$this->lblColecaos = new QLabel($this->objParentObject, $strControlId);
+			$this->lstColecaos->Name = QApplication::Translate('Colecaos');
+			
+			$objAssociatedArray = $this->objReferencia->GetColecaoArray();
+			$strItems = array();
+			foreach ($objAssociatedArray as $objAssociated)
+				$strItems[] = $objAssociated->__toString();
+			$this->lblColecaos->Text = implode($strGlue, $strItems);
+			return $this->lblColecaos;
+		}
+
+		/**
 		 * Create and setup QListBox lstCors
 		 * @param string $strControlId optional ControlId to use
 		 * @param QQCondition $objConditions override the default condition of QQ::All() to the query, itself
@@ -584,6 +641,27 @@
 			}
 			if ($this->lblTecidoId) $this->lblTecidoId->Text = ($this->objReferencia->Tecido) ? $this->objReferencia->Tecido->__toString() : null;
 
+			if ($this->lstColecaos) {
+				$this->lstColecaos->RemoveAllItems();
+				$objAssociatedArray = $this->objReferencia->GetColecaoArray();
+				$objColecaoArray = Colecao::LoadAll();
+				if ($objColecaoArray) foreach ($objColecaoArray as $objColecao) {
+					$objListItem = new QListItem($objColecao->__toString(), $objColecao->Id);
+					foreach ($objAssociatedArray as $objAssociated) {
+						if ($objAssociated->Id == $objColecao->Id)
+							$objListItem->Selected = true;
+					}
+					$this->lstColecaos->AddItem($objListItem);
+				}
+			}
+			if ($this->lblColecaos) {
+				$objAssociatedArray = $this->objReferencia->GetColecaoArray();
+				$strItems = array();
+				foreach ($objAssociatedArray as $objAssociated)
+					$strItems[] = $objAssociated->__toString();
+				$this->lblColecaos->Text = implode($strGlue, $strItems);
+			}
+
 			if ($this->lstCors) {
 				$this->lstCors->RemoveAllItems();
 				$objAssociatedArray = $this->objReferencia->GetCorArray();
@@ -655,6 +733,16 @@
 		// PROTECTED UPDATE METHODS for ManyToManyReferences (if any)
 		///////////////////////////////////////////////
 
+		protected function lstColecaos_Update() {
+			if ($this->lstColecaos) {
+				$this->objReferencia->UnassociateAllColecaos();
+				$objSelectedListItems = $this->lstColecaos->SelectedItems;
+				if ($objSelectedListItems) foreach ($objSelectedListItems as $objListItem) {
+					$this->objReferencia->AssociateColecao(Colecao::Load($objListItem->Value));
+				}
+			}
+		}
+
 		protected function lstCors_Update() {
 			if ($this->lstCors) {
 				$this->objReferencia->UnassociateAllCors();
@@ -711,6 +799,7 @@
 				$this->objReferencia->Save();
 
 				// Finally, update any ManyToManyReferences (if any)
+				$this->lstColecaos_Update();
 				$this->lstCors_Update();
 				$this->lstReferenciaRendimentosAsUniao_Update();
 				$this->lstTamanhos_Update();
@@ -725,6 +814,7 @@
 		 * It will also unassociate itself from any ManyToManyReferences.
 		 */
 		public function DeleteReferencia() {
+			$this->objReferencia->UnassociateAllColecaos();
 			$this->objReferencia->UnassociateAllCors();
 			$this->objReferencia->UnassociateAllReferenciaRendimentosAsUniao();
 			$this->objReferencia->UnassociateAllTamanhos();
@@ -782,6 +872,12 @@
 				case 'TecidoIdLabel':
 					if (!$this->lblTecidoId) return $this->lblTecidoId_Create();
 					return $this->lblTecidoId;
+				case 'ColecaoControl':
+					if (!$this->lstColecaos) return $this->lstColecaos_Create();
+					return $this->lstColecaos;
+				case 'ColecaoLabel':
+					if (!$this->lblColecaos) return $this->lblColecaos_Create();
+					return $this->lblColecaos;
 				case 'CorControl':
 					if (!$this->lstCors) return $this->lstCors_Create();
 					return $this->lstCors;
@@ -832,6 +928,8 @@
 						return ($this->txtModelo = QType::Cast($mixValue, 'QControl'));
 					case 'TecidoIdControl':
 						return ($this->lstTecido = QType::Cast($mixValue, 'QControl'));
+					case 'ColecaoControl':
+						return ($this->lstColecaos = QType::Cast($mixValue, 'QControl'));
 					case 'CorControl':
 						return ($this->lstCors = QType::Cast($mixValue, 'QControl'));
 					case 'ReferenciaRendimentoAsUniaoControl':

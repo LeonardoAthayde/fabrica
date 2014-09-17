@@ -1,5 +1,5 @@
 <?php
-	// This is the HTML template include file (.tpl.php) for referenciaEditPanel.
+	// This is the HTML template include file (.tpl.php) for colecaoEditPanel.
 	// Remember that this is a DRAFT.  It is MEANT to be altered/modified.
 	// Be sure to move this out of the drafts/dashboard subdirectory before modifying to ensure that subsequent 
 	// code re-generations do not overwrite your changes.
@@ -9,19 +9,7 @@
 
 		<?php $_CONTROL->txtNome->RenderWithName(); ?>
 
-		<?php $_CONTROL->lstReferenciaCategoria->RenderWithName(); ?>
-
-		<?php $_CONTROL->txtModelo->RenderWithName(); ?>
-
-		<?php $_CONTROL->lstTecido->RenderWithName(); ?>
-
-		<?php $_CONTROL->lstColecaos->RenderWithName(true, "Rows=7"); ?>
-
-		<?php $_CONTROL->lstCors->RenderWithName(true, "Rows=7"); ?>
-
-		<?php $_CONTROL->lstReferenciaRendimentosAsUniao->RenderWithName(true, "Rows=7"); ?>
-
-		<?php $_CONTROL->lstTamanhos->RenderWithName(true, "Rows=7"); ?>
+		<?php $_CONTROL->lstReferencias->RenderWithName(true, "Rows=7"); ?>
 
 	</div>
 

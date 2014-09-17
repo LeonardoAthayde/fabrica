@@ -19,6 +19,12 @@
 			return new QQNodeBalancoPecas('balanco_pecas', null, null);
 		}
 		/**
+		 * @return QQNodeColecao
+		 */
+		static public function Colecao() {
+			return new QQNodeColecao('colecao', null, null);
+		}
+		/**
 		 * @return QQNodeComando
 		 */
 		static public function Comando() {
