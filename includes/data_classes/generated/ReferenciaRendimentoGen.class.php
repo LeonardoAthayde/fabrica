@@ -17,14 +17,12 @@
 	 * @subpackage GeneratedDataObjects
 	 * @property integer $Id the value for intId (Read-Only PK)
 	 * @property integer $MoldeId the value for intMoldeId 
-	 * @property integer $ReferenciaId the value for intReferenciaId 
 	 * @property double $Comprimento the value for fltComprimento (Not Null)
 	 * @property integer $Pecas the value for intPecas (Not Null)
 	 * @property double $Peso the value for fltPeso (Not Null)
 	 * @property double $Preco the value for fltPreco (Not Null)
 	 * @property integer $TecidoId the value for intTecidoId 
 	 * @property Molde $Molde the value for the Molde object referenced by intMoldeId 
-	 * @property Referencia $Referencia the value for the Referencia object referenced by intReferenciaId 
 	 * @property Tecido $Tecido the value for the Tecido object referenced by intTecidoId 
 	 * @property Referencia $_ReferenciaAsUniao the value for the private _objReferenciaAsUniao (Read-Only) if set due to an expansion on the referencia_rendimento_uniao_assn association table
 	 * @property Referencia[] $_ReferenciaAsUniaoArray the value for the private _objReferenciaAsUniaoArray (Read-Only) if set due to an ExpandAsArray on the referencia_rendimento_uniao_assn association table
@@ -50,14 +48,6 @@
 		 */
 		protected $intMoldeId;
 		const MoldeIdDefault = null;
-
-
-		/**
-		 * Protected member variable that maps to the database column referencia_rendimento.referencia_id
-		 * @var integer intReferenciaId
-		 */
-		protected $intReferenciaId;
-		const ReferenciaIdDefault = null;
 
 
 		/**
@@ -147,16 +137,6 @@
 		 * @var Molde objMolde
 		 */
 		protected $objMolde;
-
-		/**
-		 * Protected member variable that contains the object pointed by the reference
-		 * in the database column referencia_rendimento.referencia_id.
-		 *
-		 * NOTE: Always use the Referencia property getter to correctly retrieve this Referencia object.
-		 * (Because this class implements late binding, this variable reference MAY be null.)
-		 * @var Referencia objReferencia
-		 */
-		protected $objReferencia;
 
 		/**
 		 * Protected member variable that contains the object pointed by the reference
@@ -480,7 +460,6 @@
 
 			$objBuilder->AddSelectItem($strTableName, 'id', $strAliasPrefix . 'id');
 			$objBuilder->AddSelectItem($strTableName, 'molde_id', $strAliasPrefix . 'molde_id');
-			$objBuilder->AddSelectItem($strTableName, 'referencia_id', $strAliasPrefix . 'referencia_id');
 			$objBuilder->AddSelectItem($strTableName, 'comprimento', $strAliasPrefix . 'comprimento');
 			$objBuilder->AddSelectItem($strTableName, 'pecas', $strAliasPrefix . 'pecas');
 			$objBuilder->AddSelectItem($strTableName, 'peso', $strAliasPrefix . 'peso');
@@ -553,8 +532,6 @@
 			$objToReturn->intId = $objDbRow->GetColumn($strAliasName, 'Integer');
 			$strAliasName = array_key_exists($strAliasPrefix . 'molde_id', $strColumnAliasArray) ? $strColumnAliasArray[$strAliasPrefix . 'molde_id'] : $strAliasPrefix . 'molde_id';
 			$objToReturn->intMoldeId = $objDbRow->GetColumn($strAliasName, 'Integer');
-			$strAliasName = array_key_exists($strAliasPrefix . 'referencia_id', $strColumnAliasArray) ? $strColumnAliasArray[$strAliasPrefix . 'referencia_id'] : $strAliasPrefix . 'referencia_id';
-			$objToReturn->intReferenciaId = $objDbRow->GetColumn($strAliasName, 'Integer');
 			$strAliasName = array_key_exists($strAliasPrefix . 'comprimento', $strColumnAliasArray) ? $strColumnAliasArray[$strAliasPrefix . 'comprimento'] : $strAliasPrefix . 'comprimento';
 			$objToReturn->fltComprimento = $objDbRow->GetColumn($strAliasName, 'Float');
 			$strAliasName = array_key_exists($strAliasPrefix . 'pecas', $strColumnAliasArray) ? $strColumnAliasArray[$strAliasPrefix . 'pecas'] : $strAliasPrefix . 'pecas';
@@ -583,12 +560,6 @@
 			$strAliasName = array_key_exists($strAlias, $strColumnAliasArray) ? $strColumnAliasArray[$strAlias] : $strAlias;
 			if (!is_null($objDbRow->GetColumn($strAliasName)))
 				$objToReturn->objMolde = Molde::InstantiateDbRow($objDbRow, $strAliasPrefix . 'molde_id__', $strExpandAsArrayNodes, null, $strColumnAliasArray);
-
-			// Check for Referencia Early Binding
-			$strAlias = $strAliasPrefix . 'referencia_id__id';
-			$strAliasName = array_key_exists($strAlias, $strColumnAliasArray) ? $strColumnAliasArray[$strAlias] : $strAlias;
-			if (!is_null($objDbRow->GetColumn($strAliasName)))
-				$objToReturn->objReferencia = Referencia::InstantiateDbRow($objDbRow, $strAliasPrefix . 'referencia_id__', $strExpandAsArrayNodes, null, $strColumnAliasArray);
 
 			// Check for Tecido Early Binding
 			$strAlias = $strAliasPrefix . 'tecido_id__id';
@@ -760,40 +731,6 @@
 			, $objOptionalClauses
 			);
 		}
-			
-		/**
-		 * Load an array of ReferenciaRendimento objects,
-		 * by ReferenciaId Index(es)
-		 * @param integer $intReferenciaId
-		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
-		 * @return ReferenciaRendimento[]
-		*/
-		public static function LoadArrayByReferenciaId($intReferenciaId, $objOptionalClauses = null) {
-			// Call ReferenciaRendimento::QueryArray to perform the LoadArrayByReferenciaId query
-			try {
-				return ReferenciaRendimento::QueryArray(
-					QQ::Equal(QQN::ReferenciaRendimento()->ReferenciaId, $intReferenciaId),
-					$objOptionalClauses
-					);
-			} catch (QCallerException $objExc) {
-				$objExc->IncrementOffset();
-				throw $objExc;
-			}
-		}
-
-		/**
-		 * Count ReferenciaRendimentos
-		 * by ReferenciaId Index(es)
-		 * @param integer $intReferenciaId
-		 * @return int
-		*/
-		public static function CountByReferenciaId($intReferenciaId, $objOptionalClauses = null) {
-			// Call ReferenciaRendimento::QueryCount to perform the CountByReferenciaId query
-			return ReferenciaRendimento::QueryCount(
-				QQ::Equal(QQN::ReferenciaRendimento()->ReferenciaId, $intReferenciaId)
-			, $objOptionalClauses
-			);
-		}
 
 
 
@@ -858,7 +795,6 @@
 					$objDatabase->NonQuery('
 						INSERT INTO `referencia_rendimento` (
 							`molde_id`,
-							`referencia_id`,
 							`comprimento`,
 							`pecas`,
 							`peso`,
@@ -866,7 +802,6 @@
 							`tecido_id`
 						) VALUES (
 							' . $objDatabase->SqlVariable($this->intMoldeId) . ',
-							' . $objDatabase->SqlVariable($this->intReferenciaId) . ',
 							' . $objDatabase->SqlVariable($this->fltComprimento) . ',
 							' . $objDatabase->SqlVariable($this->intPecas) . ',
 							' . $objDatabase->SqlVariable($this->fltPeso) . ',
@@ -892,7 +827,6 @@
 							`referencia_rendimento`
 						SET
 							`molde_id` = ' . $objDatabase->SqlVariable($this->intMoldeId) . ',
-							`referencia_id` = ' . $objDatabase->SqlVariable($this->intReferenciaId) . ',
 							`comprimento` = ' . $objDatabase->SqlVariable($this->fltComprimento) . ',
 							`pecas` = ' . $objDatabase->SqlVariable($this->intPecas) . ',
 							`peso` = ' . $objDatabase->SqlVariable($this->fltPeso) . ',
@@ -983,7 +917,6 @@
 
 			// Update $this's local variables to match
 			$this->MoldeId = $objReloaded->MoldeId;
-			$this->ReferenciaId = $objReloaded->ReferenciaId;
 			$this->fltComprimento = $objReloaded->fltComprimento;
 			$this->intPecas = $objReloaded->intPecas;
 			$this->fltPeso = $objReloaded->fltPeso;
@@ -1003,7 +936,6 @@
 				INSERT INTO `referencia_rendimento` (
 					`id`,
 					`molde_id`,
-					`referencia_id`,
 					`comprimento`,
 					`pecas`,
 					`peso`,
@@ -1015,7 +947,6 @@
 				) VALUES (
 					' . $objDatabase->SqlVariable($this->intId) . ',
 					' . $objDatabase->SqlVariable($this->intMoldeId) . ',
-					' . $objDatabase->SqlVariable($this->intReferenciaId) . ',
 					' . $objDatabase->SqlVariable($this->fltComprimento) . ',
 					' . $objDatabase->SqlVariable($this->intPecas) . ',
 					' . $objDatabase->SqlVariable($this->fltPeso) . ',
@@ -1081,11 +1012,6 @@
 					// @return integer
 					return $this->intMoldeId;
 
-				case 'ReferenciaId':
-					// Gets the value for intReferenciaId 
-					// @return integer
-					return $this->intReferenciaId;
-
 				case 'Comprimento':
 					// Gets the value for fltComprimento (Not Null)
 					// @return double
@@ -1122,18 +1048,6 @@
 						if ((!$this->objMolde) && (!is_null($this->intMoldeId)))
 							$this->objMolde = Molde::Load($this->intMoldeId);
 						return $this->objMolde;
-					} catch (QCallerException $objExc) {
-						$objExc->IncrementOffset();
-						throw $objExc;
-					}
-
-				case 'Referencia':
-					// Gets the value for the Referencia object referenced by intReferenciaId 
-					// @return Referencia
-					try {
-						if ((!$this->objReferencia) && (!is_null($this->intReferenciaId)))
-							$this->objReferencia = Referencia::Load($this->intReferenciaId);
-						return $this->objReferencia;
 					} catch (QCallerException $objExc) {
 						$objExc->IncrementOffset();
 						throw $objExc;
@@ -1203,18 +1117,6 @@
 					try {
 						$this->objMolde = null;
 						return ($this->intMoldeId = QType::Cast($mixValue, QType::Integer));
-					} catch (QCallerException $objExc) {
-						$objExc->IncrementOffset();
-						throw $objExc;
-					}
-
-				case 'ReferenciaId':
-					// Sets the value for intReferenciaId 
-					// @param integer $mixValue
-					// @return integer
-					try {
-						$this->objReferencia = null;
-						return ($this->intReferenciaId = QType::Cast($mixValue, QType::Integer));
 					} catch (QCallerException $objExc) {
 						$objExc->IncrementOffset();
 						throw $objExc;
@@ -1304,36 +1206,6 @@
 						// Update Local Member Variables
 						$this->objMolde = $mixValue;
 						$this->intMoldeId = $mixValue->Id;
-
-						// Return $mixValue
-						return $mixValue;
-					}
-					break;
-
-				case 'Referencia':
-					// Sets the value for the Referencia object referenced by intReferenciaId 
-					// @param Referencia $mixValue
-					// @return Referencia
-					if (is_null($mixValue)) {
-						$this->intReferenciaId = null;
-						$this->objReferencia = null;
-						return null;
-					} else {
-						// Make sure $mixValue actually is a Referencia object
-						try {
-							$mixValue = QType::Cast($mixValue, 'Referencia');
-						} catch (QInvalidCastException $objExc) {
-							$objExc->IncrementOffset();
-							throw $objExc;
-						} 
-
-						// Make sure $mixValue is a SAVED Referencia object
-						if (is_null($mixValue->Id))
-							throw new QCallerException('Unable to set an unsaved Referencia for this ReferenciaRendimento');
-
-						// Update Local Member Variables
-						$this->objReferencia = $mixValue;
-						$this->intReferenciaId = $mixValue->Id;
 
 						// Return $mixValue
 						return $mixValue;
@@ -1592,7 +1464,6 @@
 			$strToReturn = '<complexType name="ReferenciaRendimento"><sequence>';
 			$strToReturn .= '<element name="Id" type="xsd:int"/>';
 			$strToReturn .= '<element name="Molde" type="xsd1:Molde"/>';
-			$strToReturn .= '<element name="Referencia" type="xsd1:Referencia"/>';
 			$strToReturn .= '<element name="Comprimento" type="xsd:float"/>';
 			$strToReturn .= '<element name="Pecas" type="xsd:int"/>';
 			$strToReturn .= '<element name="Peso" type="xsd:float"/>';
@@ -1607,7 +1478,6 @@
 			if (!array_key_exists('ReferenciaRendimento', $strComplexTypeArray)) {
 				$strComplexTypeArray['ReferenciaRendimento'] = ReferenciaRendimento::GetSoapComplexTypeXml();
 				Molde::AlterSoapComplexTypeArray($strComplexTypeArray);
-				Referencia::AlterSoapComplexTypeArray($strComplexTypeArray);
 				Tecido::AlterSoapComplexTypeArray($strComplexTypeArray);
 			}
 		}
@@ -1628,9 +1498,6 @@
 			if ((property_exists($objSoapObject, 'Molde')) &&
 				($objSoapObject->Molde))
 				$objToReturn->Molde = Molde::GetObjectFromSoapObject($objSoapObject->Molde);
-			if ((property_exists($objSoapObject, 'Referencia')) &&
-				($objSoapObject->Referencia))
-				$objToReturn->Referencia = Referencia::GetObjectFromSoapObject($objSoapObject->Referencia);
 			if (property_exists($objSoapObject, 'Comprimento'))
 				$objToReturn->fltComprimento = $objSoapObject->Comprimento;
 			if (property_exists($objSoapObject, 'Pecas'))
@@ -1664,10 +1531,6 @@
 				$objObject->objMolde = Molde::GetSoapObjectFromObject($objObject->objMolde, false);
 			else if (!$blnBindRelatedObjects)
 				$objObject->intMoldeId = null;
-			if ($objObject->objReferencia)
-				$objObject->objReferencia = Referencia::GetSoapObjectFromObject($objObject->objReferencia, false);
-			else if (!$blnBindRelatedObjects)
-				$objObject->intReferenciaId = null;
 			if ($objObject->objTecido)
 				$objObject->objTecido = Tecido::GetSoapObjectFromObject($objObject->objTecido, false);
 			else if (!$blnBindRelatedObjects)
@@ -1722,8 +1585,6 @@
 	 * @property-read QQNode $Id
 	 * @property-read QQNode $MoldeId
 	 * @property-read QQNodeMolde $Molde
-	 * @property-read QQNode $ReferenciaId
-	 * @property-read QQNodeReferencia $Referencia
 	 * @property-read QQNode $Comprimento
 	 * @property-read QQNode $Pecas
 	 * @property-read QQNode $Peso
@@ -1744,10 +1605,6 @@
 					return new QQNode('molde_id', 'MoldeId', 'integer', $this);
 				case 'Molde':
 					return new QQNodeMolde('molde_id', 'Molde', 'integer', $this);
-				case 'ReferenciaId':
-					return new QQNode('referencia_id', 'ReferenciaId', 'integer', $this);
-				case 'Referencia':
-					return new QQNodeReferencia('referencia_id', 'Referencia', 'integer', $this);
 				case 'Comprimento':
 					return new QQNode('comprimento', 'Comprimento', 'double', $this);
 				case 'Pecas':
@@ -1780,8 +1637,6 @@
 	 * @property-read QQNode $Id
 	 * @property-read QQNode $MoldeId
 	 * @property-read QQNodeMolde $Molde
-	 * @property-read QQNode $ReferenciaId
-	 * @property-read QQNodeReferencia $Referencia
 	 * @property-read QQNode $Comprimento
 	 * @property-read QQNode $Pecas
 	 * @property-read QQNode $Peso
@@ -1803,10 +1658,6 @@
 					return new QQNode('molde_id', 'MoldeId', 'integer', $this);
 				case 'Molde':
 					return new QQNodeMolde('molde_id', 'Molde', 'integer', $this);
-				case 'ReferenciaId':
-					return new QQNode('referencia_id', 'ReferenciaId', 'integer', $this);
-				case 'Referencia':
-					return new QQNodeReferencia('referencia_id', 'Referencia', 'integer', $this);
 				case 'Comprimento':
 					return new QQNode('comprimento', 'Comprimento', 'double', $this);
 				case 'Pecas':

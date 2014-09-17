@@ -22,8 +22,6 @@
 
 		<?php $this->lstMolde->RenderWithName(); ?>
 
-		<?php $this->lstReferencia->RenderWithName(); ?>
-
 		<?php $this->txtComprimento->RenderWithName(); ?>
 
 		<?php $this->txtPecas->RenderWithName(); ?>

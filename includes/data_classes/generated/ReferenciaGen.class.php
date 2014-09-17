@@ -30,8 +30,6 @@
 	 * @property Tamanho[] $_TamanhoArray the value for the private _objTamanhoArray (Read-Only) if set due to an ExpandAsArray on the referencia_tamanho_assn association table
 	 * @property FluxogramaItem $_FluxogramaItem the value for the private _objFluxogramaItem (Read-Only) if set due to an expansion on the fluxograma_item.referencia_id reverse relationship
 	 * @property FluxogramaItem[] $_FluxogramaItemArray the value for the private _objFluxogramaItemArray (Read-Only) if set due to an ExpandAsArray on the fluxograma_item.referencia_id reverse relationship
-	 * @property ReferenciaRendimento $_ReferenciaRendimento the value for the private _objReferenciaRendimento (Read-Only) if set due to an expansion on the referencia_rendimento.referencia_id reverse relationship
-	 * @property ReferenciaRendimento[] $_ReferenciaRendimentoArray the value for the private _objReferenciaRendimentoArray (Read-Only) if set due to an ExpandAsArray on the referencia_rendimento.referencia_id reverse relationship
 	 * @property boolean $__Restored whether or not this object was restored from the database (as opposed to created new)
 	 */
 	class ReferenciaGen extends QBaseClass {
@@ -145,22 +143,6 @@
 		 * @var FluxogramaItem[] _objFluxogramaItemArray;
 		 */
 		private $_objFluxogramaItemArray = array();
-
-		/**
-		 * Private member variable that stores a reference to a single ReferenciaRendimento object
-		 * (of type ReferenciaRendimento), if this Referencia object was restored with
-		 * an expansion on the referencia_rendimento association table.
-		 * @var ReferenciaRendimento _objReferenciaRendimento;
-		 */
-		private $_objReferenciaRendimento;
-
-		/**
-		 * Private member variable that stores a reference to an array of ReferenciaRendimento objects
-		 * (of type ReferenciaRendimento[]), if this Referencia object was restored with
-		 * an ExpandAsArray on the referencia_rendimento association table.
-		 * @var ReferenciaRendimento[] _objReferenciaRendimentoArray;
-		 */
-		private $_objReferenciaRendimentoArray = array();
 
 		/**
 		 * Protected array of virtual attributes for this object (e.g. extra/other calculated and/or non-object bound
@@ -613,20 +595,6 @@
 					$blnExpandedViaArray = true;
 				}
 
-				$strAlias = $strAliasPrefix . 'referenciarendimento__id';
-				$strAliasName = array_key_exists($strAlias, $strColumnAliasArray) ? $strColumnAliasArray[$strAlias] : $strAlias;
-				if ((array_key_exists($strAlias, $strExpandAsArrayNodes)) &&
-					(!is_null($objDbRow->GetColumn($strAliasName)))) {
-					if ($intPreviousChildItemCount = count($objPreviousItem->_objReferenciaRendimentoArray)) {
-						$objPreviousChildItem = $objPreviousItem->_objReferenciaRendimentoArray[$intPreviousChildItemCount - 1];
-						$objChildItem = ReferenciaRendimento::InstantiateDbRow($objDbRow, $strAliasPrefix . 'referenciarendimento__', $strExpandAsArrayNodes, $objPreviousChildItem, $strColumnAliasArray);
-						if ($objChildItem)
-							$objPreviousItem->_objReferenciaRendimentoArray[] = $objChildItem;
-					} else
-						$objPreviousItem->_objReferenciaRendimentoArray[] = ReferenciaRendimento::InstantiateDbRow($objDbRow, $strAliasPrefix . 'referenciarendimento__', $strExpandAsArrayNodes, null, $strColumnAliasArray);
-					$blnExpandedViaArray = true;
-				}
-
 				// Either return false to signal array expansion, or check-to-reset the Alias prefix and move on
 				if ($blnExpandedViaArray)
 					return false;
@@ -714,16 +682,6 @@
 					$objToReturn->_objFluxogramaItemArray[] = FluxogramaItem::InstantiateDbRow($objDbRow, $strAliasPrefix . 'fluxogramaitem__', $strExpandAsArrayNodes, null, $strColumnAliasArray);
 				else
 					$objToReturn->_objFluxogramaItem = FluxogramaItem::InstantiateDbRow($objDbRow, $strAliasPrefix . 'fluxogramaitem__', $strExpandAsArrayNodes, null, $strColumnAliasArray);
-			}
-
-			// Check for ReferenciaRendimento Virtual Binding
-			$strAlias = $strAliasPrefix . 'referenciarendimento__id';
-			$strAliasName = array_key_exists($strAlias, $strColumnAliasArray) ? $strColumnAliasArray[$strAlias] : $strAlias;
-			if (!is_null($objDbRow->GetColumn($strAliasName))) {
-				if (($strExpandAsArrayNodes) && (array_key_exists($strAlias, $strExpandAsArrayNodes)))
-					$objToReturn->_objReferenciaRendimentoArray[] = ReferenciaRendimento::InstantiateDbRow($objDbRow, $strAliasPrefix . 'referenciarendimento__', $strExpandAsArrayNodes, null, $strColumnAliasArray);
-				else
-					$objToReturn->_objReferenciaRendimento = ReferenciaRendimento::InstantiateDbRow($objDbRow, $strAliasPrefix . 'referenciarendimento__', $strExpandAsArrayNodes, null, $strColumnAliasArray);
 			}
 
 			return $objToReturn;
@@ -1362,18 +1320,6 @@
 					// @return FluxogramaItem[]
 					return (array) $this->_objFluxogramaItemArray;
 
-				case '_ReferenciaRendimento':
-					// Gets the value for the private _objReferenciaRendimento (Read-Only)
-					// if set due to an expansion on the referencia_rendimento.referencia_id reverse relationship
-					// @return ReferenciaRendimento
-					return $this->_objReferenciaRendimento;
-
-				case '_ReferenciaRendimentoArray':
-					// Gets the value for the private _objReferenciaRendimentoArray (Read-Only)
-					// if set due to an ExpandAsArray on the referencia_rendimento.referencia_id reverse relationship
-					// @return ReferenciaRendimento[]
-					return (array) $this->_objReferenciaRendimentoArray;
-
 
 				case '__Restored':
 					return $this->__blnRestored;
@@ -1715,188 +1661,6 @@
 			$objDatabase->NonQuery('
 				DELETE FROM
 					`fluxograma_item`
-				WHERE
-					`referencia_id` = ' . $objDatabase->SqlVariable($this->intId) . '
-			');
-		}
-
-			
-		
-		// Related Objects' Methods for ReferenciaRendimento
-		//-------------------------------------------------------------------
-
-		/**
-		 * Gets all associated ReferenciaRendimentos as an array of ReferenciaRendimento objects
-		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
-		 * @return ReferenciaRendimento[]
-		*/ 
-		public function GetReferenciaRendimentoArray($objOptionalClauses = null) {
-			if ((is_null($this->intId)))
-				return array();
-
-			try {
-				return ReferenciaRendimento::LoadArrayByReferenciaId($this->intId, $objOptionalClauses);
-			} catch (QCallerException $objExc) {
-				$objExc->IncrementOffset();
-				throw $objExc;
-			}
-		}
-
-		/**
-		 * Counts all associated ReferenciaRendimentos
-		 * @return int
-		*/ 
-		public function CountReferenciaRendimentos() {
-			if ((is_null($this->intId)))
-				return 0;
-
-			return ReferenciaRendimento::CountByReferenciaId($this->intId);
-		}
-
-		/**
-		 * Associates a ReferenciaRendimento
-		 * @param ReferenciaRendimento $objReferenciaRendimento
-		 * @return void
-		*/ 
-		public function AssociateReferenciaRendimento(ReferenciaRendimento $objReferenciaRendimento) {
-			if ((is_null($this->intId)))
-				throw new QUndefinedPrimaryKeyException('Unable to call AssociateReferenciaRendimento on this unsaved Referencia.');
-			if ((is_null($objReferenciaRendimento->Id)))
-				throw new QUndefinedPrimaryKeyException('Unable to call AssociateReferenciaRendimento on this Referencia with an unsaved ReferenciaRendimento.');
-
-			// Get the Database Object for this Class
-			$objDatabase = Referencia::GetDatabase();
-
-			// Perform the SQL Query
-			$objDatabase->NonQuery('
-				UPDATE
-					`referencia_rendimento`
-				SET
-					`referencia_id` = ' . $objDatabase->SqlVariable($this->intId) . '
-				WHERE
-					`id` = ' . $objDatabase->SqlVariable($objReferenciaRendimento->Id) . '
-			');
-
-			// Journaling (if applicable)
-			if ($objDatabase->JournalingDatabase) {
-				$objReferenciaRendimento->ReferenciaId = $this->intId;
-				$objReferenciaRendimento->Journal('UPDATE');
-			}
-		}
-
-		/**
-		 * Unassociates a ReferenciaRendimento
-		 * @param ReferenciaRendimento $objReferenciaRendimento
-		 * @return void
-		*/ 
-		public function UnassociateReferenciaRendimento(ReferenciaRendimento $objReferenciaRendimento) {
-			if ((is_null($this->intId)))
-				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateReferenciaRendimento on this unsaved Referencia.');
-			if ((is_null($objReferenciaRendimento->Id)))
-				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateReferenciaRendimento on this Referencia with an unsaved ReferenciaRendimento.');
-
-			// Get the Database Object for this Class
-			$objDatabase = Referencia::GetDatabase();
-
-			// Perform the SQL Query
-			$objDatabase->NonQuery('
-				UPDATE
-					`referencia_rendimento`
-				SET
-					`referencia_id` = null
-				WHERE
-					`id` = ' . $objDatabase->SqlVariable($objReferenciaRendimento->Id) . ' AND
-					`referencia_id` = ' . $objDatabase->SqlVariable($this->intId) . '
-			');
-
-			// Journaling
-			if ($objDatabase->JournalingDatabase) {
-				$objReferenciaRendimento->ReferenciaId = null;
-				$objReferenciaRendimento->Journal('UPDATE');
-			}
-		}
-
-		/**
-		 * Unassociates all ReferenciaRendimentos
-		 * @return void
-		*/ 
-		public function UnassociateAllReferenciaRendimentos() {
-			if ((is_null($this->intId)))
-				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateReferenciaRendimento on this unsaved Referencia.');
-
-			// Get the Database Object for this Class
-			$objDatabase = Referencia::GetDatabase();
-
-			// Journaling
-			if ($objDatabase->JournalingDatabase) {
-				foreach (ReferenciaRendimento::LoadArrayByReferenciaId($this->intId) as $objReferenciaRendimento) {
-					$objReferenciaRendimento->ReferenciaId = null;
-					$objReferenciaRendimento->Journal('UPDATE');
-				}
-			}
-
-			// Perform the SQL Query
-			$objDatabase->NonQuery('
-				UPDATE
-					`referencia_rendimento`
-				SET
-					`referencia_id` = null
-				WHERE
-					`referencia_id` = ' . $objDatabase->SqlVariable($this->intId) . '
-			');
-		}
-
-		/**
-		 * Deletes an associated ReferenciaRendimento
-		 * @param ReferenciaRendimento $objReferenciaRendimento
-		 * @return void
-		*/ 
-		public function DeleteAssociatedReferenciaRendimento(ReferenciaRendimento $objReferenciaRendimento) {
-			if ((is_null($this->intId)))
-				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateReferenciaRendimento on this unsaved Referencia.');
-			if ((is_null($objReferenciaRendimento->Id)))
-				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateReferenciaRendimento on this Referencia with an unsaved ReferenciaRendimento.');
-
-			// Get the Database Object for this Class
-			$objDatabase = Referencia::GetDatabase();
-
-			// Perform the SQL Query
-			$objDatabase->NonQuery('
-				DELETE FROM
-					`referencia_rendimento`
-				WHERE
-					`id` = ' . $objDatabase->SqlVariable($objReferenciaRendimento->Id) . ' AND
-					`referencia_id` = ' . $objDatabase->SqlVariable($this->intId) . '
-			');
-
-			// Journaling
-			if ($objDatabase->JournalingDatabase) {
-				$objReferenciaRendimento->Journal('DELETE');
-			}
-		}
-
-		/**
-		 * Deletes all associated ReferenciaRendimentos
-		 * @return void
-		*/ 
-		public function DeleteAllReferenciaRendimentos() {
-			if ((is_null($this->intId)))
-				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateReferenciaRendimento on this unsaved Referencia.');
-
-			// Get the Database Object for this Class
-			$objDatabase = Referencia::GetDatabase();
-
-			// Journaling
-			if ($objDatabase->JournalingDatabase) {
-				foreach (ReferenciaRendimento::LoadArrayByReferenciaId($this->intId) as $objReferenciaRendimento) {
-					$objReferenciaRendimento->Journal('DELETE');
-				}
-			}
-
-			// Perform the SQL Query
-			$objDatabase->NonQuery('
-				DELETE FROM
-					`referencia_rendimento`
 				WHERE
 					`referencia_id` = ' . $objDatabase->SqlVariable($this->intId) . '
 			');
@@ -2650,7 +2414,6 @@
 	 * @property-read QQNodeReferenciaReferenciaRendimentoAsUniao $ReferenciaRendimentoAsUniao
 	 * @property-read QQNodeReferenciaTamanho $Tamanho
 	 * @property-read QQReverseReferenceNodeFluxogramaItem $FluxogramaItem
-	 * @property-read QQReverseReferenceNodeReferenciaRendimento $ReferenciaRendimento
 	 */
 	class QQNodeReferencia extends QQNode {
 		protected $strTableName = 'referencia';
@@ -2680,8 +2443,6 @@
 					return new QQNodeReferenciaTamanho($this);
 				case 'FluxogramaItem':
 					return new QQReverseReferenceNodeFluxogramaItem($this, 'fluxogramaitem', 'reverse_reference', 'referencia_id');
-				case 'ReferenciaRendimento':
-					return new QQReverseReferenceNodeReferenciaRendimento($this, 'referenciarendimento', 'reverse_reference', 'referencia_id');
 
 				case '_PrimaryKeyNode':
 					return new QQNode('id', 'Id', 'integer', $this);
@@ -2708,7 +2469,6 @@
 	 * @property-read QQNodeReferenciaReferenciaRendimentoAsUniao $ReferenciaRendimentoAsUniao
 	 * @property-read QQNodeReferenciaTamanho $Tamanho
 	 * @property-read QQReverseReferenceNodeFluxogramaItem $FluxogramaItem
-	 * @property-read QQReverseReferenceNodeReferenciaRendimento $ReferenciaRendimento
 	 * @property-read QQNode $_PrimaryKeyNode
 	 */
 	class QQReverseReferenceNodeReferencia extends QQReverseReferenceNode {
@@ -2739,8 +2499,6 @@
 					return new QQNodeReferenciaTamanho($this);
 				case 'FluxogramaItem':
 					return new QQReverseReferenceNodeFluxogramaItem($this, 'fluxogramaitem', 'reverse_reference', 'referencia_id');
-				case 'ReferenciaRendimento':
-					return new QQReverseReferenceNodeReferenciaRendimento($this, 'referenciarendimento', 'reverse_reference', 'referencia_id');
 
 				case '_PrimaryKeyNode':
 					return new QQNode('id', 'Id', 'integer', $this);

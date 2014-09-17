@@ -22,7 +22,6 @@
 		// Controls for ReferenciaRendimento's Data Fields
 		public $lblId;
 		public $lstMolde;
-		public $lstReferencia;
 		public $txtComprimento;
 		public $txtPecas;
 		public $txtPeso;
@@ -60,7 +59,6 @@
 			// Call MetaControl's methods to create qcontrols based on ReferenciaRendimento's data fields
 			$this->lblId = $this->mctReferenciaRendimento->lblId_Create();
 			$this->lstMolde = $this->mctReferenciaRendimento->lstMolde_Create();
-			$this->lstReferencia = $this->mctReferenciaRendimento->lstReferencia_Create();
 			$this->txtComprimento = $this->mctReferenciaRendimento->txtComprimento_Create();
 			$this->txtPecas = $this->mctReferenciaRendimento->txtPecas_Create();
 			$this->txtPeso = $this->mctReferenciaRendimento->txtPeso_Create();

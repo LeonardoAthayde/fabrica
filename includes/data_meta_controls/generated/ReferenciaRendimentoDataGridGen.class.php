@@ -296,8 +296,6 @@
 				case 'Id': return QQN::ReferenciaRendimento()->Id;
 				case 'MoldeId': return QQN::ReferenciaRendimento()->MoldeId;
 				case 'Molde': return QQN::ReferenciaRendimento()->Molde;
-				case 'ReferenciaId': return QQN::ReferenciaRendimento()->ReferenciaId;
-				case 'Referencia': return QQN::ReferenciaRendimento()->Referencia;
 				case 'Comprimento': return QQN::ReferenciaRendimento()->Comprimento;
 				case 'Pecas': return QQN::ReferenciaRendimento()->Pecas;
 				case 'Peso': return QQN::ReferenciaRendimento()->Peso;

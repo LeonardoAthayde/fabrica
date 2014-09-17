@@ -20,8 +20,6 @@
 	 * property-read QLabel $IdLabel
 	 * property QListBox $MoldeIdControl
 	 * property-read QLabel $MoldeIdLabel
-	 * property QListBox $ReferenciaIdControl
-	 * property-read QLabel $ReferenciaIdLabel
 	 * property QFloatTextBox $ComprimentoControl
 	 * property-read QLabel $ComprimentoLabel
 	 * property QIntegerTextBox $PecasControl
@@ -78,12 +76,6 @@
 		protected $lstMolde;
 
         /**
-         * @var QListBox lstReferencia;
-         * @access protected
-         */
-		protected $lstReferencia;
-
-        /**
          * @var QFloatTextBox txtComprimento;
          * @access protected
          */
@@ -120,12 +112,6 @@
          * @access protected
          */
 		protected $lblMoldeId;
-
-        /**
-         * @var QLabel lblReferenciaId
-         * @access protected
-         */
-		protected $lblReferenciaId;
 
         /**
          * @var QLabel lblComprimento
@@ -312,46 +298,6 @@
 			$this->lblMoldeId->Name = QApplication::Translate('Molde');
 			$this->lblMoldeId->Text = ($this->objReferenciaRendimento->Molde) ? $this->objReferenciaRendimento->Molde->__toString() : null;
 			return $this->lblMoldeId;
-		}
-
-		/**
-		 * Create and setup QListBox lstReferencia
-		 * @param string $strControlId optional ControlId to use
-		 * @param QQCondition $objConditions override the default condition of QQ::All() to the query, itself
-		 * @param QQClause[] $objOptionalClauses additional optional QQClause object or array of QQClause objects for the query
-		 * @return QListBox
-		 */
-		public function lstReferencia_Create($strControlId = null, QQCondition $objCondition = null, $objOptionalClauses = null) {
-			$this->lstReferencia = new QListBox($this->objParentObject, $strControlId);
-			$this->lstReferencia->Name = QApplication::Translate('Referencia');
-			$this->lstReferencia->AddItem(QApplication::Translate('- Select One -'), null);
-
-			// Setup and perform the Query
-			if (is_null($objCondition)) $objCondition = QQ::All();
-			$objReferenciaCursor = Referencia::QueryCursor($objCondition, $objOptionalClauses);
-
-			// Iterate through the Cursor
-			while ($objReferencia = Referencia::InstantiateCursor($objReferenciaCursor)) {
-				$objListItem = new QListItem($objReferencia->__toString(), $objReferencia->Id);
-				if (($this->objReferenciaRendimento->Referencia) && ($this->objReferenciaRendimento->Referencia->Id == $objReferencia->Id))
-					$objListItem->Selected = true;
-				$this->lstReferencia->AddItem($objListItem);
-			}
-
-			// Return the QListBox
-			return $this->lstReferencia;
-		}
-
-		/**
-		 * Create and setup QLabel lblReferenciaId
-		 * @param string $strControlId optional ControlId to use
-		 * @return QLabel
-		 */
-		public function lblReferenciaId_Create($strControlId = null) {
-			$this->lblReferenciaId = new QLabel($this->objParentObject, $strControlId);
-			$this->lblReferenciaId->Name = QApplication::Translate('Referencia');
-			$this->lblReferenciaId->Text = ($this->objReferenciaRendimento->Referencia) ? $this->objReferenciaRendimento->Referencia->__toString() : null;
-			return $this->lblReferenciaId;
 		}
 
 		/**
@@ -583,19 +529,6 @@
 			}
 			if ($this->lblMoldeId) $this->lblMoldeId->Text = ($this->objReferenciaRendimento->Molde) ? $this->objReferenciaRendimento->Molde->__toString() : null;
 
-			if ($this->lstReferencia) {
-					$this->lstReferencia->RemoveAllItems();
-				$this->lstReferencia->AddItem(QApplication::Translate('- Select One -'), null);
-				$objReferenciaArray = Referencia::LoadAll();
-				if ($objReferenciaArray) foreach ($objReferenciaArray as $objReferencia) {
-					$objListItem = new QListItem($objReferencia->__toString(), $objReferencia->Id);
-					if (($this->objReferenciaRendimento->Referencia) && ($this->objReferenciaRendimento->Referencia->Id == $objReferencia->Id))
-						$objListItem->Selected = true;
-					$this->lstReferencia->AddItem($objListItem);
-				}
-			}
-			if ($this->lblReferenciaId) $this->lblReferenciaId->Text = ($this->objReferenciaRendimento->Referencia) ? $this->objReferenciaRendimento->Referencia->__toString() : null;
-
 			if ($this->txtComprimento) $this->txtComprimento->Text = $this->objReferenciaRendimento->Comprimento;
 			if ($this->lblComprimento) $this->lblComprimento->Text = $this->objReferenciaRendimento->Comprimento;
 
@@ -676,7 +609,6 @@
 			try {
 				// Update any fields for controls that have been created
 				if ($this->lstMolde) $this->objReferenciaRendimento->MoldeId = $this->lstMolde->SelectedValue;
-				if ($this->lstReferencia) $this->objReferenciaRendimento->ReferenciaId = $this->lstReferencia->SelectedValue;
 				if ($this->txtComprimento) $this->objReferenciaRendimento->Comprimento = $this->txtComprimento->Text;
 				if ($this->txtPecas) $this->objReferenciaRendimento->Pecas = $this->txtPecas->Text;
 				if ($this->txtPeso) $this->objReferenciaRendimento->Peso = $this->txtPeso->Text;
@@ -738,12 +670,6 @@
 				case 'MoldeIdLabel':
 					if (!$this->lblMoldeId) return $this->lblMoldeId_Create();
 					return $this->lblMoldeId;
-				case 'ReferenciaIdControl':
-					if (!$this->lstReferencia) return $this->lstReferencia_Create();
-					return $this->lstReferencia;
-				case 'ReferenciaIdLabel':
-					if (!$this->lblReferenciaId) return $this->lblReferenciaId_Create();
-					return $this->lblReferenciaId;
 				case 'ComprimentoControl':
 					if (!$this->txtComprimento) return $this->txtComprimento_Create();
 					return $this->txtComprimento;
@@ -806,8 +732,6 @@
 						return ($this->lblId = QType::Cast($mixValue, 'QControl'));
 					case 'MoldeIdControl':
 						return ($this->lstMolde = QType::Cast($mixValue, 'QControl'));
-					case 'ReferenciaIdControl':
-						return ($this->lstReferencia = QType::Cast($mixValue, 'QControl'));
 					case 'ComprimentoControl':
 						return ($this->txtComprimento = QType::Cast($mixValue, 'QControl'));
 					case 'PecasControl':

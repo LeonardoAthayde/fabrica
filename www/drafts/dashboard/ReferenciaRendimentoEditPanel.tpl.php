@@ -9,8 +9,6 @@
 
 		<?php $_CONTROL->lstMolde->RenderWithName(); ?>
 
-		<?php $_CONTROL->lstReferencia->RenderWithName(); ?>
-
 		<?php $_CONTROL->txtComprimento->RenderWithName(); ?>
 
 		<?php $_CONTROL->txtPecas->RenderWithName(); ?>
