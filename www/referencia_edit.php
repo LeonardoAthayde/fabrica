@@ -102,15 +102,19 @@
 			$this->btnAddReferenciaRendimento->AddAction(new QClickEvent(), new QTerminateAction());
 		}
 		
-		protected function btnAddReferenciaRendimento_Click($strFormId, $strControlId, $strParameter){				
-				$objReferenciaRendimento = new ReferenciaRendimento();
-				$objReferenciaRendimento->Comprimento = 1;
-				$objReferenciaRendimento->Pecas = 1;
-				$objReferenciaRendimento->Peso = 1;
-				$objReferenciaRendimento->Preco = 1;
-				$objReferenciaRendimento->Save();
-				$objReferenciaRendimento->AssociateReferenciaAsUniao($this->mctReferencia->Referencia);
-				$this->dtrReferenciaRendimento->Refresh();
+		protected function btnAddReferenciaRendimento_Click($strFormId, $strControlId, $strParameter){
+			$this->mctReferencia->SaveReferencia();
+			$objReferencia = $this->mctReferencia->Referencia;
+			$_SESSION['referencia_list'] = $objReferencia->ReferenciaCategoria->Nome.$objReferencia->Modelo;
+			
+			$objReferenciaRendimento = new ReferenciaRendimento();
+			$objReferenciaRendimento->Comprimento = 1;
+			$objReferenciaRendimento->Pecas = 1;
+			$objReferenciaRendimento->Peso = 1;
+			$objReferenciaRendimento->Preco = 1;
+			$objReferenciaRendimento->Save();
+			$objReferenciaRendimento->AssociateReferenciaAsUniao($this->mctReferencia->Referencia);
+			$this->dtrReferenciaRendimento->Refresh();
 		}
 		
 		

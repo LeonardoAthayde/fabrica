@@ -63,7 +63,7 @@
 				if($objReferenciaRendimento->Molde)
 					$strToReturn.= $objReferenciaRendimento->Molde->Nome.' ('.$objReferenciaRendimento->Tecido->Nome.' - '.number_format ($objReferenciaRendimento->Peso, 3).'Kg) '.number_format ($objReferenciaRendimento->Preco,2).' R$<br>';
 				else
-					$strToReturn.= '('.$objReferenciaRendimento->Tecido->Nome.' - '.number_format ($objReferenciaRendimento->Peso, 3).'Kg) '.number_format ($objReferenciaRendimento->Preco,2).' R$<br>';
+					$strToReturn.= '('.(($objReferenciaRendimento->Tecido)?$objReferenciaRendimento->Tecido->Nome:'').' - '.number_format ($objReferenciaRendimento->Peso, 3).'Kg) '.number_format ($objReferenciaRendimento->Preco,2).' R$<br>';
 			return substr($strToReturn, 0, strlen($strToReturn)-4);
 		}
 		
