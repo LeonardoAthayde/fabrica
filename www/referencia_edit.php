@@ -103,10 +103,11 @@
 		}
 		
 		protected function btnAddReferenciaRendimento_Click($strFormId, $strControlId, $strParameter){
-			$this->mctReferencia->SaveReferencia();
-			$objReferencia = $this->mctReferencia->Referencia;
-			$_SESSION['referencia_list'] = $objReferencia->ReferenciaCategoria->Nome.$objReferencia->Modelo;
-			
+			if(!$this->mctReferencia->Referencia->Id){
+				$this->mctReferencia->SaveReferencia();
+				$objReferencia = $this->mctReferencia->Referencia;
+				$_SESSION['referencia_list'] = $objReferencia->ReferenciaCategoria->Nome.$objReferencia->Modelo;
+			}
 			$objReferenciaRendimento = new ReferenciaRendimento();
 			$objReferenciaRendimento->Comprimento = 1;
 			$objReferenciaRendimento->Pecas = 1;
