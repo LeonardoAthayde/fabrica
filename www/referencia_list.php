@@ -77,11 +77,22 @@
 		protected function DefaultWaitIcon_Create(){
 			$this->objDefaultWaitIcon = new QWaitIcon($this);
 			$this->objDefaultWaitIcon->Text = '
-				<div class="progress progress-striped active">
+				<div class="modal" style="display:block; overflow: auto;">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h4 class="modal-title">Carregando...</h4>
+			</div>
+			<div class="modal-body">
+				<div class="progress progress-striped active" style="margin: 0px;">
 					<div class="progress-bar"  role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
 						<span class="sr-only">100% Complete</span>
 					</div>
-				</div>';			
+				</div>
+			</div>
+		</div>
+	</div>
+</div>';			
 		}
 		
 		protected function txtPesquisar_Create(){

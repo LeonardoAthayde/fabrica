@@ -53,7 +53,7 @@
 					$this->lstMolde->AddItem($objMolde->Nome, $objMolde->Id, true);
 				else
 					$this->lstMolde->AddItem($objMolde->Nome, $objMolde->Id);
-			$this->lstMolde->AddAction(new QClickEvent(), new QAjaxControlAction($this, 'lstMolde_Change'));
+			$this->lstMolde->AddAction(new QChangeEvent(), new QAjaxControlAction($this, 'lstMolde_Change'));
 		}
 		
 		
