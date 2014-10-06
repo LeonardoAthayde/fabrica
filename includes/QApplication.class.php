@@ -26,6 +26,9 @@
 			} else if (file_exists($strFilePath = sprintf('%s/control/referencia_edit/%s.class.php', __DOCROOT__, $strClassName))) {
 				require($strFilePath);
 				return true;
+			} else if (file_exists($strFilePath = sprintf('%s/relatorio/%s.php', __DOCROOT__, $strClassName))) {
+				require($strFilePath);
+				return true;
 			} 	
 			
 			// First use the Qcodo Autoloader
