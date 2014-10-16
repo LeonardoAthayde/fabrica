@@ -8,28 +8,28 @@
 
 		$pdf->SetMargins(PDF_MARGIN_LEFT, 10, PDF_MARGIN_RIGHT);
 
-		$pdf->SetFont('dejavusans', '', 7);
+		$pdf->SetFont('dejavusans', '', 9);
 
 		$strDia = QDateTime::Now()->format('d');
 		$strMes = QDateTime::Now()->format('m');
 		$strAno = QDateTime::Now()->format('Y');
 		
-		$html = ' <div style="border:1px solid #000;">'
-			. '<table>'
-			. '<tr style="line-height: 20px; height: 20px;" ><td width="35%">CORTADEIRA: _______________________</td><td>INICIO: '.$strDia.'/'.$strMes.'/'.$strAno.'</td><td>FIM: ____/____/_______</td><td>CC/OPN: '.$objComando->Numero.'</td></tr>'
-			. '<tr style="line-height: 20px; height: 20px;" ><td>LARGURA DOS ENFESTOS: _____________</td><td>COMP. DOS RISCOS: _____________</td><td width="40%">PRAZO DE ENTREGA AO CLIENTE: ____/____/_______</td></tr>'
-			. '<tr style="line-height: 20px; height: 20px;" ><td>APROVADO POR: _______________________</td><td>APROVEITAMENTO: _____________%</td><td>QUANTIDADE DE PEÇAS: _______________</td></tr>'
-			. '</table></div><br>';
+		$html = ' <div style="border:1px solid #000; line-height:20px;">'
+			.'&nbsp;CORTADEIRA: _______________________ &nbsp;&nbsp;&nbsp;&nbsp;INICIO: '.$strDia.'/'.$strMes.'/'.$strAno.' &nbsp;&nbsp;&nbsp;&nbsp;FIM: ____/____/_______ CC/OPN: '.$objComando->Numero.'<br>'
+			.'&nbsp;LARGURA DOS ENFESTOS: _________ &nbsp;&nbsp;&nbsp;COMP. DO RISCOS: __________ &nbsp;&nbsp;&nbsp;PRAZO DE ENTREGA: ____/____/_______<br>'
+			.'&nbsp;APROVADO: _______________________ &nbsp;&nbsp;&nbsp;APROVEITAMENTO: _____________% &nbsp;&nbsp;&nbsp;PEÇAS: _______________<br>'
+			. '&nbsp;PESO FOLHA: ___________________ Kg'
+			.'&nbsp;</div><br>';
 
 		$html.='<table border="1" cellspacing="0" cellpadding="4">'
-			.'<tr><th width="4%">ID</th><th width="20%">TECIDO</th><th width="20%">COR</th><th width="10%">PED.</th><th width="10%">REAL</th><th width="18%">PREVISÃO DE GASTO</th><th width="18%">GASTO REAL</th></tr>';
+			.'<tr><th width="4%">ID</th><th width="20%">TECIDO</th><th width="20%">COR</th><th width="10%">PED.</th><th width="10%">REAL</th><th width="18%">PREVISÃO</th><th width="18%">GASTO REAL</th></tr>';
 		foreach ($objComando->GetComandoPecaArray() as $i => $objComandoPeca)
 			$html.= '<tr><td>'.($i+1).'</td><td>'.$objComandoPeca->Tecido->Nome.'</td><td>'.$objComandoPeca->Cor->Nome.'</td><td>'.$objComandoPeca->QuantidadePanos.'</td><td></td><td>'.number_format($objComandoPeca->Peso, 3).' Kg</td><td></td></tr>';			
 		
 		$html.='</table><br>';
 			
 		$html.='<br><table border="1" cellspacing="0" cellpadding="4">'
-			.'<tr><th width="4%">ID</th><th width="4%">PÇ.</th><th width="23%">ANTES</th><th width="23%">DEPOIS</th><th width="23%">CAN.</th><th width="23%">GASTOS</th></tr>';
+			.'<tr><th width="4%">ID</th><th width="4%">PÇ</th><th width="23%">ANTES</th><th width="23%">DEPOIS</th><th width="23%">CAN.</th><th width="23%">GASTOS</th></tr>';
 		for($i = 0; $i < 6; $i++)
 			$html.= '<tr><td></td><td></td><td></td><td></td><td></td><td></td></tr>';
 		
@@ -92,26 +92,32 @@
 		$html.='</table><br>';
 
 		$html.= '<div style="border:1px solid #000; line-height: 15px;">'
-			. 'OBSERVAÇÃO CORTADEIRA:<br> _______________________________________________________________________________'
+			. 'OBSERVAÇÃO CORTADEIRA:<br> '
 			. '______________________________________________________________________________________________________'
 			. '______________________________________________________________________________________________________'
 			. '______________________________________________________________________________________________________'
-			. '__________________________________________________'
+			. '______________________________________________________________________________________________________'
+			. '______________________________________________________________________________________________________'
+			. '______________________________________________________________________________________________________'		
+			. '________________________________________________________________'		
 			.'</div>';
 
 		$html.= '<div style="border:1px solid #000; line-height: 15px;">'
-			. 'OBSERVAÇÃO PCP:<br> _______________________________________________________________________________'
+			. 'OBSERVAÇÃO PCP:<br>'
 			. '______________________________________________________________________________________________________'
 			. '______________________________________________________________________________________________________'
 			. '______________________________________________________________________________________________________'
-			. '__________________________________________________'
+			. '______________________________________________________________________________________________________'
+			. '______________________________________________________________________________________________________'
+			. '______________________________________________________________________________________________________'		
+			. '________________________________________________________________'			
 			.'</div><br>';
 
 		$html.='<br><table border="1" cellspacing="0" cellpadding="4">'
 			.'<tr><th colspan="9">COR/REF</th></tr>'
 			.'<tr><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th></tr>';
-			for($i = 0; $i < 6; $i++)
-			$html.= '<tr><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th></tr>';
+			foreach ($objComando->GetComandoPecaArray() as $i => $objComandoPeca)
+				$html.= '<tr><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th></tr>';
 
 		$html.= '<tr><th>TOTAL</th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th></tr>';
 		$html.='</table><br>';
