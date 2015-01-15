@@ -35,61 +35,50 @@
 		
 		$html.='</table><br>';
 
-		$objArrayComandoRiscoGrupamentoReferencia = ComandoRisco::QueryArray(QQ::AndCondition(
-			QQ::Equal(QQN::ComandoRisco()->ComandoId, $objComando->Id)), 
-			QQ::Clause(QQ::GroupBy(QQN::ComandoRisco()->Referencia)));
 		
-		//$objArrayReferencias = 
+		/////////////////////////////
+		$objArrayComandoItem = ComandoItem::LoadArrayByComandoId($objComando->Id);
 		
 		$html.='<br><table border="1" cellspacing="0" cellpadding="4">'
 			.'<tr><th colspan="2" width="58%"></th><th colspan="7" width="42%">TAMANHOS</th></tr>'
-			.'<tr><th width="15%">REF.</th><th width="28%">MOLDES</th><th width="15%">TEC.</th><th width="6%">PP</th><th width="6%">P</th><th width="6%">M</th><th width="6%">G</th><th width="6%">GG</th><th width="6%">EG</th><th width="6%">U</th></tr>';
-		//for($i = 0; $i < 6; $i++)
-		foreach ($objArrayComandoRiscoGrupamentoReferencia as $objComandoRiscoGrupamentoReferencia){
-			$objArrayComandoRiscoGrupamentoMolde = ComandoRisco::QueryArray(
-				QQ::AndCondition(
-					QQ::Equal(QQN::ComandoRisco()->ComandoId, $objComando->Id),
-					QQ::Equal(QQN::ComandoRisco()->Referencia, $objComandoRiscoGrupamentoReferencia->Referencia)),
-				QQ::Clause(
-					QQ::GroupBy(QQN::ComandoRisco()->MoldeId)));
-			
+			.'<tr><th width="15%">REF.</th><th width="28%">MOLDES</th><th width="15%">TEC.</th><th width="6%">PP</th><th width="6%">P</th><th width="6%">M</th><th width="6%">G</th><th width="6%">GG</th><th width="6%">EG</th><th width="6%">U</th></tr>';		
+		
+		foreach ($objArrayComandoItem as $objComandoItem){
+			// pegar moldes
+			$objArrayComandoRiscoMolde = ComandoRisco::LoadArrayByComandoItemId($objComandoItem->Id, QQ::Clause(QQ::GroupBy(QQN::ComandoRisco()->MoldeId)));
 			$strMoldes = '';
-			foreach ($objArrayComandoRiscoGrupamentoMolde as $objComandoRiscoGrupamentoMolde)
-				$strMoldes.= '(<small>'.$objComandoRiscoGrupamentoMolde->Molde->Nome.'</small>) ';
-				
-			$objArrayComandoRiscoGrupamentoSize = $objArrayComandoRiscoGrupamentoSize = ComandoRisco::QueryArray(
-				QQ::AndCondition(
-					QQ::Equal(QQN::ComandoRisco()->ComandoId, $objComando->Id),
-					QQ::Equal(QQN::ComandoRisco()->Referencia, $objComandoRiscoGrupamentoReferencia->Referencia)),
-
-				QQ::Clause(
-					QQ::GroupBy(QQN::ComandoRisco()->TamanhoId)));
+			foreach ($objArrayComandoRiscoMolde as $objComandoRiscoMolde)
+				$strMoldes.= '(<small>'.$objComandoRiscoMolde->Molde->Nome.'</small>) ';
+			
+			// pegar tamanho
 			$intPP = '';
 			$intP = '';
 			$intM = '';
 			$intG = '';
 			$intGG = '';
-			$intEG = '';
-			foreach ($objArrayComandoRiscoGrupamentoSize as $objComandoRiscoGrupamentoSize){
-				if($objComandoRiscoGrupamentoSize->Tamanho->Valor == 'PP')
-					$intPP = $objComandoRiscoGrupamentoSize->QuantidadeRisco;
-				if($objComandoRiscoGrupamentoSize->Tamanho->Valor == 'P')
-					$intP = $objComandoRiscoGrupamentoSize->QuantidadeRisco;
-				if($objComandoRiscoGrupamentoSize->Tamanho->Valor == 'M')
-					$intM = $objComandoRiscoGrupamentoSize->QuantidadeRisco;
-				if($objComandoRiscoGrupamentoSize->Tamanho->Valor == 'G')
-					$intG = $objComandoRiscoGrupamentoSize->QuantidadeRisco;
-				if($objComandoRiscoGrupamentoSize->Tamanho->Valor == 'GG')
-					$intGG = $objComandoRiscoGrupamentoSize->QuantidadeRisco;
-				if($objComandoRiscoGrupamentoSize->Tamanho->Valor == 'EG')
-					$intEG = $objComandoRiscoGrupamentoSize->QuantidadeRisco;
-			}
+			$intEG = '';			
+			$objArrayComandoRiscoSize = ComandoRisco::LoadArrayByComandoItemId($objComandoItem->Id, QQ::Clause(QQ::GroupBy(QQN::ComandoRisco()->TamanhoId)));
+			foreach ($objArrayComandoRiscoSize as $objComandoRiscoSize){
+				if($objComandoRiscoSize->Tamanho->Valor == 'PP')
+					$intPP = $objComandoRiscoSize->QuantidadeRisco;
+				if($objComandoRiscoSize->Tamanho->Valor == 'P')
+					$intP = $objComandoRiscoSize->QuantidadeRisco;
+				if($objComandoRiscoSize->Tamanho->Valor == 'M')
+					$intM = $objComandoRiscoSize->QuantidadeRisco;
+				if($objComandoRiscoSize->Tamanho->Valor == 'G')
+					$intG = $objComandoRiscoSize->QuantidadeRisco;
+				if($objComandoRiscoSize->Tamanho->Valor == 'GG')
+					$intGG = $objComandoRiscoSize->QuantidadeRisco;
+				if($objComandoRiscoSize->Tamanho->Valor == 'EG')
+					$intEG = $objComandoRiscoSize->QuantidadeRisco;
+			}			
 			
-			$html.= '<tr><td>'.$objComandoRiscoGrupamentoReferencia->Referencia.'</td><td>'.$strMoldes.'</td><td></td><td>'.$intPP.'</td><td>'.$intP.'</td><td>'.$intM.'</td><td>'.$intG.'</td><td>'.$intGG.'</td><td>'.$intEG.'</td><td></td></tr>';
-		
-			
+			$html.= '<tr><td>'.$objComandoItem->Referencia.'</td><td>'.$strMoldes.'</td><td></td><td>'.$intPP.'</td><td>'.$intP.'</td><td>'.$intM.'</td><td>'.$intG.'</td><td>'.$intGG.'</td><td>'.$intEG.'</td><td></td></tr>';
 		}
+		
 		$html.='</table><br>';
+		////////////////////////////
+		
 
 		$html.= '<div style="border:1px solid #000; line-height: 15px;">'
 			. 'OBSERVAÇÃO CORTADEIRA:<br> '
@@ -113,7 +102,7 @@
 			. '________________________________________________________________'			
 			.'</div><br>';
 
-		$html.='<br><table border="1" cellspacing="0" cellpadding="4">'
+		/*$html.='<br><table border="1" cellspacing="0" cellpadding="4">'
 			.'<tr><th colspan="9">COR/REF</th></tr>'
 			.'<tr><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th></tr>';
 			foreach ($objComando->GetComandoPecaArray() as $i => $objComandoPeca)
@@ -121,7 +110,7 @@
 
 		$html.= '<tr><th>TOTAL</th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th></tr>';
 		$html.='</table><br>';
-
+*/
 
 		$html.= '<div style="border:1px solid #000; line-height: 15px;">'
 			. 'AVALIAÇÂO:<br> _______________________________________________________________________________'

@@ -34,6 +34,13 @@
 		QApplicationBase::$ClassFile['comandometacontrol'] = __DATA_META_CONTROLS__ . '/ComandoMetaControl.class.php';
 		QApplicationBase::$ClassFile['comandodatagrid'] = __DATA_META_CONTROLS__ . '/ComandoDataGrid.class.php';
 
+	// ClassPaths for the ComandoItem class
+		QApplicationBase::$ClassFile['comandoitem'] = __DATA_CLASSES__ . '/ComandoItem.class.php';
+		QApplicationBase::$ClassFile['qqnodecomandoitem'] = __DATA_CLASSES__ . '/ComandoItem.class.php';
+		QApplicationBase::$ClassFile['qqreversereferencenodecomandoitem'] = __DATA_CLASSES__ . '/ComandoItem.class.php';
+		QApplicationBase::$ClassFile['comandoitemmetacontrol'] = __DATA_META_CONTROLS__ . '/ComandoItemMetaControl.class.php';
+		QApplicationBase::$ClassFile['comandoitemdatagrid'] = __DATA_META_CONTROLS__ . '/ComandoItemDataGrid.class.php';
+
 	// ClassPaths for the ComandoPeca class
 		QApplicationBase::$ClassFile['comandopeca'] = __DATA_CLASSES__ . '/ComandoPeca.class.php';
 		QApplicationBase::$ClassFile['qqnodecomandopeca'] = __DATA_CLASSES__ . '/ComandoPeca.class.php';

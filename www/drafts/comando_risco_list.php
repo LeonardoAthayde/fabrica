@@ -75,6 +75,7 @@
 			// Create the Other Columns (note that you can use strings for comando_risco's properties, or you
 			// can traverse down QQN::comando_risco() to display fields that are down the hierarchy)
 			$this->dtgComandoRiscos->MetaAddColumn('Id');
+			$this->dtgComandoRiscos->MetaAddColumn(QQN::ComandoRisco()->ComandoItem);
 			$this->dtgComandoRiscos->MetaAddColumn(QQN::ComandoRisco()->Comando);
 			$this->dtgComandoRiscos->MetaAddColumn('Referencia');
 			$this->dtgComandoRiscos->MetaAddColumn(QQN::ComandoRisco()->Molde);

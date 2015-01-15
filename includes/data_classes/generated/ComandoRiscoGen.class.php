@@ -16,11 +16,13 @@
 	 * @package My Application
 	 * @subpackage GeneratedDataObjects
 	 * @property integer $Id the value for intId (Read-Only PK)
+	 * @property integer $ComandoItemId the value for intComandoItemId (Not Null)
 	 * @property integer $ComandoId the value for intComandoId (Not Null)
 	 * @property string $Referencia the value for strReferencia (Not Null)
 	 * @property integer $MoldeId the value for intMoldeId (Not Null)
 	 * @property integer $TamanhoId the value for intTamanhoId (Not Null)
 	 * @property integer $QuantidadeRisco the value for intQuantidadeRisco (Not Null)
+	 * @property ComandoItem $ComandoItem the value for the ComandoItem object referenced by intComandoItemId (Not Null)
 	 * @property Comando $Comando the value for the Comando object referenced by intComandoId (Not Null)
 	 * @property Molde $Molde the value for the Molde object referenced by intMoldeId (Not Null)
 	 * @property Tamanho $Tamanho the value for the Tamanho object referenced by intTamanhoId (Not Null)
@@ -43,6 +45,14 @@
 		 */
 		protected $intId;
 		const IdDefault = null;
+
+
+		/**
+		 * Protected member variable that maps to the database column comando_risco.comando_item_id
+		 * @var integer intComandoItemId
+		 */
+		protected $intComandoItemId;
+		const ComandoItemIdDefault = null;
 
 
 		/**
@@ -139,6 +149,16 @@
 		///////////////////////////////
 		// PROTECTED MEMBER OBJECTS
 		///////////////////////////////
+
+		/**
+		 * Protected member variable that contains the object pointed by the reference
+		 * in the database column comando_risco.comando_item_id.
+		 *
+		 * NOTE: Always use the ComandoItem property getter to correctly retrieve this ComandoItem object.
+		 * (Because this class implements late binding, this variable reference MAY be null.)
+		 * @var ComandoItem objComandoItem
+		 */
+		protected $objComandoItem;
 
 		/**
 		 * Protected member variable that contains the object pointed by the reference
@@ -499,6 +519,7 @@
 			}
 
 			$objBuilder->AddSelectItem($strTableName, 'id', $strAliasPrefix . 'id');
+			$objBuilder->AddSelectItem($strTableName, 'comando_item_id', $strAliasPrefix . 'comando_item_id');
 			$objBuilder->AddSelectItem($strTableName, 'comando_id', $strAliasPrefix . 'comando_id');
 			$objBuilder->AddSelectItem($strTableName, 'referencia', $strAliasPrefix . 'referencia');
 			$objBuilder->AddSelectItem($strTableName, 'molde_id', $strAliasPrefix . 'molde_id');
@@ -583,6 +604,8 @@
 
 			$strAliasName = array_key_exists($strAliasPrefix . 'id', $strColumnAliasArray) ? $strColumnAliasArray[$strAliasPrefix . 'id'] : $strAliasPrefix . 'id';
 			$objToReturn->intId = $objDbRow->GetColumn($strAliasName, 'Integer');
+			$strAliasName = array_key_exists($strAliasPrefix . 'comando_item_id', $strColumnAliasArray) ? $strColumnAliasArray[$strAliasPrefix . 'comando_item_id'] : $strAliasPrefix . 'comando_item_id';
+			$objToReturn->intComandoItemId = $objDbRow->GetColumn($strAliasName, 'Integer');
 			$strAliasName = array_key_exists($strAliasPrefix . 'comando_id', $strColumnAliasArray) ? $strColumnAliasArray[$strAliasPrefix . 'comando_id'] : $strAliasPrefix . 'comando_id';
 			$objToReturn->intComandoId = $objDbRow->GetColumn($strAliasName, 'Integer');
 			$strAliasName = array_key_exists($strAliasPrefix . 'referencia', $strColumnAliasArray) ? $strColumnAliasArray[$strAliasPrefix . 'referencia'] : $strAliasPrefix . 'referencia';
@@ -605,6 +628,12 @@
 			// Prepare to Check for Early/Virtual Binding
 			if (!$strAliasPrefix)
 				$strAliasPrefix = 'comando_risco__';
+
+			// Check for ComandoItem Early Binding
+			$strAlias = $strAliasPrefix . 'comando_item_id__id';
+			$strAliasName = array_key_exists($strAlias, $strColumnAliasArray) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			if (!is_null($objDbRow->GetColumn($strAliasName)))
+				$objToReturn->objComandoItem = ComandoItem::InstantiateDbRow($objDbRow, $strAliasPrefix . 'comando_item_id__', $strExpandAsArrayNodes, null, $strColumnAliasArray);
 
 			// Check for Comando Early Binding
 			$strAlias = $strAliasPrefix . 'comando_id__id';
@@ -844,6 +873,40 @@
 			, $objOptionalClauses
 			);
 		}
+			
+		/**
+		 * Load an array of ComandoRisco objects,
+		 * by ComandoItemId Index(es)
+		 * @param integer $intComandoItemId
+		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
+		 * @return ComandoRisco[]
+		*/
+		public static function LoadArrayByComandoItemId($intComandoItemId, $objOptionalClauses = null) {
+			// Call ComandoRisco::QueryArray to perform the LoadArrayByComandoItemId query
+			try {
+				return ComandoRisco::QueryArray(
+					QQ::Equal(QQN::ComandoRisco()->ComandoItemId, $intComandoItemId),
+					$objOptionalClauses
+					);
+			} catch (QCallerException $objExc) {
+				$objExc->IncrementOffset();
+				throw $objExc;
+			}
+		}
+
+		/**
+		 * Count ComandoRiscos
+		 * by ComandoItemId Index(es)
+		 * @param integer $intComandoItemId
+		 * @return int
+		*/
+		public static function CountByComandoItemId($intComandoItemId, $objOptionalClauses = null) {
+			// Call ComandoRisco::QueryCount to perform the CountByComandoItemId query
+			return ComandoRisco::QueryCount(
+				QQ::Equal(QQN::ComandoRisco()->ComandoItemId, $intComandoItemId)
+			, $objOptionalClauses
+			);
+		}
 
 
 
@@ -875,12 +938,14 @@
 					// Perform an INSERT query
 					$objDatabase->NonQuery('
 						INSERT INTO `comando_risco` (
+							`comando_item_id`,
 							`comando_id`,
 							`referencia`,
 							`molde_id`,
 							`tamanho_id`,
 							`quantidade_risco`
 						) VALUES (
+							' . $objDatabase->SqlVariable($this->intComandoItemId) . ',
 							' . $objDatabase->SqlVariable($this->intComandoId) . ',
 							' . $objDatabase->SqlVariable($this->strReferencia) . ',
 							' . $objDatabase->SqlVariable($this->intMoldeId) . ',
@@ -905,6 +970,7 @@
 						UPDATE
 							`comando_risco`
 						SET
+							`comando_item_id` = ' . $objDatabase->SqlVariable($this->intComandoItemId) . ',
 							`comando_id` = ' . $objDatabase->SqlVariable($this->intComandoId) . ',
 							`referencia` = ' . $objDatabase->SqlVariable($this->strReferencia) . ',
 							`molde_id` = ' . $objDatabase->SqlVariable($this->intMoldeId) . ',
@@ -1023,6 +1089,7 @@
 			$objReloaded = ComandoRisco::Load($this->intId);
 
 			// Update $this's local variables to match
+			$this->ComandoItemId = $objReloaded->ComandoItemId;
 			$this->ComandoId = $objReloaded->ComandoId;
 			$this->strReferencia = $objReloaded->strReferencia;
 			$this->MoldeId = $objReloaded->MoldeId;
@@ -1041,6 +1108,7 @@
 			$objDatabase->NonQuery('
 				INSERT INTO `comando_risco` (
 					`id`,
+					`comando_item_id`,
 					`comando_id`,
 					`referencia`,
 					`molde_id`,
@@ -1051,6 +1119,7 @@
 					__sys_date
 				) VALUES (
 					' . $objDatabase->SqlVariable($this->intId) . ',
+					' . $objDatabase->SqlVariable($this->intComandoItemId) . ',
 					' . $objDatabase->SqlVariable($this->intComandoId) . ',
 					' . $objDatabase->SqlVariable($this->strReferencia) . ',
 					' . $objDatabase->SqlVariable($this->intMoldeId) . ',
@@ -1111,6 +1180,11 @@
 					// @return integer
 					return $this->intId;
 
+				case 'ComandoItemId':
+					// Gets the value for intComandoItemId (Not Null)
+					// @return integer
+					return $this->intComandoItemId;
+
 				case 'ComandoId':
 					// Gets the value for intComandoId (Not Null)
 					// @return integer
@@ -1140,6 +1214,18 @@
 				///////////////////
 				// Member Objects
 				///////////////////
+				case 'ComandoItem':
+					// Gets the value for the ComandoItem object referenced by intComandoItemId (Not Null)
+					// @return ComandoItem
+					try {
+						if ((!$this->objComandoItem) && (!is_null($this->intComandoItemId)))
+							$this->objComandoItem = ComandoItem::Load($this->intComandoItemId);
+						return $this->objComandoItem;
+					} catch (QCallerException $objExc) {
+						$objExc->IncrementOffset();
+						throw $objExc;
+					}
+
 				case 'Comando':
 					// Gets the value for the Comando object referenced by intComandoId (Not Null)
 					// @return Comando
@@ -1251,6 +1337,18 @@
 				///////////////////
 				// Member Variables
 				///////////////////
+				case 'ComandoItemId':
+					// Sets the value for intComandoItemId (Not Null)
+					// @param integer $mixValue
+					// @return integer
+					try {
+						$this->objComandoItem = null;
+						return ($this->intComandoItemId = QType::Cast($mixValue, QType::Integer));
+					} catch (QCallerException $objExc) {
+						$objExc->IncrementOffset();
+						throw $objExc;
+					}
+
 				case 'ComandoId':
 					// Sets the value for intComandoId (Not Null)
 					// @param integer $mixValue
@@ -1313,6 +1411,36 @@
 				///////////////////
 				// Member Objects
 				///////////////////
+				case 'ComandoItem':
+					// Sets the value for the ComandoItem object referenced by intComandoItemId (Not Null)
+					// @param ComandoItem $mixValue
+					// @return ComandoItem
+					if (is_null($mixValue)) {
+						$this->intComandoItemId = null;
+						$this->objComandoItem = null;
+						return null;
+					} else {
+						// Make sure $mixValue actually is a ComandoItem object
+						try {
+							$mixValue = QType::Cast($mixValue, 'ComandoItem');
+						} catch (QInvalidCastException $objExc) {
+							$objExc->IncrementOffset();
+							throw $objExc;
+						} 
+
+						// Make sure $mixValue is a SAVED ComandoItem object
+						if (is_null($mixValue->Id))
+							throw new QCallerException('Unable to set an unsaved ComandoItem for this ComandoRisco');
+
+						// Update Local Member Variables
+						$this->objComandoItem = $mixValue;
+						$this->intComandoItemId = $mixValue->Id;
+
+						// Return $mixValue
+						return $mixValue;
+					}
+					break;
+
 				case 'Comando':
 					// Sets the value for the Comando object referenced by intComandoId (Not Null)
 					// @param Comando $mixValue
@@ -1842,6 +1970,7 @@
 		public static function GetSoapComplexTypeXml() {
 			$strToReturn = '<complexType name="ComandoRisco"><sequence>';
 			$strToReturn .= '<element name="Id" type="xsd:int"/>';
+			$strToReturn .= '<element name="ComandoItem" type="xsd1:ComandoItem"/>';
 			$strToReturn .= '<element name="Comando" type="xsd1:Comando"/>';
 			$strToReturn .= '<element name="Referencia" type="xsd:string"/>';
 			$strToReturn .= '<element name="Molde" type="xsd1:Molde"/>';
@@ -1855,6 +1984,7 @@
 		public static function AlterSoapComplexTypeArray(&$strComplexTypeArray) {
 			if (!array_key_exists('ComandoRisco', $strComplexTypeArray)) {
 				$strComplexTypeArray['ComandoRisco'] = ComandoRisco::GetSoapComplexTypeXml();
+				ComandoItem::AlterSoapComplexTypeArray($strComplexTypeArray);
 				Comando::AlterSoapComplexTypeArray($strComplexTypeArray);
 				Molde::AlterSoapComplexTypeArray($strComplexTypeArray);
 				Tamanho::AlterSoapComplexTypeArray($strComplexTypeArray);
@@ -1874,6 +2004,9 @@
 			$objToReturn = new ComandoRisco();
 			if (property_exists($objSoapObject, 'Id'))
 				$objToReturn->intId = $objSoapObject->Id;
+			if ((property_exists($objSoapObject, 'ComandoItem')) &&
+				($objSoapObject->ComandoItem))
+				$objToReturn->ComandoItem = ComandoItem::GetObjectFromSoapObject($objSoapObject->ComandoItem);
 			if ((property_exists($objSoapObject, 'Comando')) &&
 				($objSoapObject->Comando))
 				$objToReturn->Comando = Comando::GetObjectFromSoapObject($objSoapObject->Comando);
@@ -1905,6 +2038,10 @@
 		}
 
 		public static function GetSoapObjectFromObject($objObject, $blnBindRelatedObjects) {
+			if ($objObject->objComandoItem)
+				$objObject->objComandoItem = ComandoItem::GetSoapObjectFromObject($objObject->objComandoItem, false);
+			else if (!$blnBindRelatedObjects)
+				$objObject->intComandoItemId = null;
 			if ($objObject->objComando)
 				$objObject->objComando = Comando::GetSoapObjectFromObject($objObject->objComando, false);
 			else if (!$blnBindRelatedObjects)
@@ -1933,6 +2070,8 @@
 
 	/**
 	 * @property-read QQNode $Id
+	 * @property-read QQNode $ComandoItemId
+	 * @property-read QQNodeComandoItem $ComandoItem
 	 * @property-read QQNode $ComandoId
 	 * @property-read QQNodeComando $Comando
 	 * @property-read QQNode $Referencia
@@ -1953,6 +2092,10 @@
 			switch ($strName) {
 				case 'Id':
 					return new QQNode('id', 'Id', 'integer', $this);
+				case 'ComandoItemId':
+					return new QQNode('comando_item_id', 'ComandoItemId', 'integer', $this);
+				case 'ComandoItem':
+					return new QQNodeComandoItem('comando_item_id', 'ComandoItem', 'integer', $this);
 				case 'ComandoId':
 					return new QQNode('comando_id', 'ComandoId', 'integer', $this);
 				case 'Comando':
@@ -1991,6 +2134,8 @@
 	
 	/**
 	 * @property-read QQNode $Id
+	 * @property-read QQNode $ComandoItemId
+	 * @property-read QQNodeComandoItem $ComandoItem
 	 * @property-read QQNode $ComandoId
 	 * @property-read QQNodeComando $Comando
 	 * @property-read QQNode $Referencia
@@ -2012,6 +2157,10 @@
 			switch ($strName) {
 				case 'Id':
 					return new QQNode('id', 'Id', 'integer', $this);
+				case 'ComandoItemId':
+					return new QQNode('comando_item_id', 'ComandoItemId', 'integer', $this);
+				case 'ComandoItem':
+					return new QQNodeComandoItem('comando_item_id', 'ComandoItem', 'integer', $this);
 				case 'ComandoId':
 					return new QQNode('comando_id', 'ComandoId', 'integer', $this);
 				case 'Comando':

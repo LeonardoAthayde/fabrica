@@ -1,3 +1,36 @@
+CREATE TABLE IF NOT EXISTS `comando_item` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `comando_id` int(11) NOT NULL,
+  `referencia` varchar(6) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+ALTER TABLE  `comando_item` ADD INDEX (  `comando_id` );
+
+ALTER TABLE  `comando_item` ADD FOREIGN KEY (  `comando_id` ) REFERENCES  `fabrica3`.`comando` (
+`id`
+) ON DELETE CASCADE ON UPDATE CASCADE ;
+
+ALTER TABLE  `comando_risco` ADD  `comando_item_id` INT NOT NULL AFTER  `id`;
+
+ALTER TABLE  `comando_risco` ADD INDEX (  `comando_item_id` );
+
+INSERT INTO  `fabrica3`.`comando_item` (
+`id` ,
+`comando_id` ,
+`referencia`
+)
+VALUES (
+0 ,  '1',  'xxxxxx';
+
+ALTER TABLE  `comando_risco` ADD FOREIGN KEY (  `comando_item_id` ) REFERENCES  `fabrica3`.`comando_item` (
+`id`
+) ON DELETE CASCADE ON UPDATE CASCADE ;
+
+=========================================================================================
+
+
+
 CREATE TABLE IF NOT EXISTS `colecao` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `nome` varchar(30) NOT NULL,

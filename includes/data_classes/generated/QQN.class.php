@@ -31,6 +31,12 @@
 			return new QQNodeComando('comando', null, null);
 		}
 		/**
+		 * @return QQNodeComandoItem
+		 */
+		static public function ComandoItem() {
+			return new QQNodeComandoItem('comando_item', null, null);
+		}
+		/**
 		 * @return QQNodeComandoPeca
 		 */
 		static public function ComandoPeca() {

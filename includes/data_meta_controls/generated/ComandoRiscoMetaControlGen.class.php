@@ -18,6 +18,8 @@
 	 * property-read ComandoRisco $ComandoRisco the actual ComandoRisco data class being edited
 	 * property QLabel $IdControl
 	 * property-read QLabel $IdLabel
+	 * property QListBox $ComandoItemIdControl
+	 * property-read QLabel $ComandoItemIdLabel
 	 * property QListBox $ComandoIdControl
 	 * property-read QLabel $ComandoIdLabel
 	 * property QTextBox $ReferenciaControl
@@ -68,6 +70,12 @@
 		protected $lblId;
 
         /**
+         * @var QListBox lstComandoItem;
+         * @access protected
+         */
+		protected $lstComandoItem;
+
+        /**
          * @var QListBox lstComando;
          * @access protected
          */
@@ -99,6 +107,12 @@
 
 
 		// Controls that allow the viewing of ComandoRisco's individual data fields
+        /**
+         * @var QLabel lblComandoItemId
+         * @access protected
+         */
+		protected $lblComandoItemId;
+
         /**
          * @var QLabel lblComandoId
          * @access protected
@@ -252,6 +266,49 @@
 			else
 				$this->lblId->Text = 'N/A';
 			return $this->lblId;
+		}
+
+		/**
+		 * Create and setup QListBox lstComandoItem
+		 * @param string $strControlId optional ControlId to use
+		 * @param QQCondition $objConditions override the default condition of QQ::All() to the query, itself
+		 * @param QQClause[] $objOptionalClauses additional optional QQClause object or array of QQClause objects for the query
+		 * @return QListBox
+		 */
+		public function lstComandoItem_Create($strControlId = null, QQCondition $objCondition = null, $objOptionalClauses = null) {
+			$this->lstComandoItem = new QListBox($this->objParentObject, $strControlId);
+			$this->lstComandoItem->Name = QApplication::Translate('Comando Item');
+			$this->lstComandoItem->Required = true;
+			if (!$this->blnEditMode)
+				$this->lstComandoItem->AddItem(QApplication::Translate('- Select One -'), null);
+
+			// Setup and perform the Query
+			if (is_null($objCondition)) $objCondition = QQ::All();
+			$objComandoItemCursor = ComandoItem::QueryCursor($objCondition, $objOptionalClauses);
+
+			// Iterate through the Cursor
+			while ($objComandoItem = ComandoItem::InstantiateCursor($objComandoItemCursor)) {
+				$objListItem = new QListItem($objComandoItem->__toString(), $objComandoItem->Id);
+				if (($this->objComandoRisco->ComandoItem) && ($this->objComandoRisco->ComandoItem->Id == $objComandoItem->Id))
+					$objListItem->Selected = true;
+				$this->lstComandoItem->AddItem($objListItem);
+			}
+
+			// Return the QListBox
+			return $this->lstComandoItem;
+		}
+
+		/**
+		 * Create and setup QLabel lblComandoItemId
+		 * @param string $strControlId optional ControlId to use
+		 * @return QLabel
+		 */
+		public function lblComandoItemId_Create($strControlId = null) {
+			$this->lblComandoItemId = new QLabel($this->objParentObject, $strControlId);
+			$this->lblComandoItemId->Name = QApplication::Translate('Comando Item');
+			$this->lblComandoItemId->Text = ($this->objComandoRisco->ComandoItem) ? $this->objComandoRisco->ComandoItem->__toString() : null;
+			$this->lblComandoItemId->Required = true;
+			return $this->lblComandoItemId;
 		}
 
 		/**
@@ -495,6 +552,20 @@
 
 			if ($this->lblId) if ($this->blnEditMode) $this->lblId->Text = $this->objComandoRisco->Id;
 
+			if ($this->lstComandoItem) {
+					$this->lstComandoItem->RemoveAllItems();
+				if (!$this->blnEditMode)
+					$this->lstComandoItem->AddItem(QApplication::Translate('- Select One -'), null);
+				$objComandoItemArray = ComandoItem::LoadAll();
+				if ($objComandoItemArray) foreach ($objComandoItemArray as $objComandoItem) {
+					$objListItem = new QListItem($objComandoItem->__toString(), $objComandoItem->Id);
+					if (($this->objComandoRisco->ComandoItem) && ($this->objComandoRisco->ComandoItem->Id == $objComandoItem->Id))
+						$objListItem->Selected = true;
+					$this->lstComandoItem->AddItem($objListItem);
+				}
+			}
+			if ($this->lblComandoItemId) $this->lblComandoItemId->Text = ($this->objComandoRisco->ComandoItem) ? $this->objComandoRisco->ComandoItem->__toString() : null;
+
 			if ($this->lstComando) {
 					$this->lstComando->RemoveAllItems();
 				if (!$this->blnEditMode)
@@ -584,6 +655,7 @@
 		public function SaveComandoRisco() {
 			try {
 				// Update any fields for controls that have been created
+				if ($this->lstComandoItem) $this->objComandoRisco->ComandoItemId = $this->lstComandoItem->SelectedValue;
 				if ($this->lstComando) $this->objComandoRisco->ComandoId = $this->lstComando->SelectedValue;
 				if ($this->txtReferencia) $this->objComandoRisco->Referencia = $this->txtReferencia->Text;
 				if ($this->lstMolde) $this->objComandoRisco->MoldeId = $this->lstMolde->SelectedValue;
@@ -638,6 +710,12 @@
 				case 'IdLabel':
 					if (!$this->lblId) return $this->lblId_Create();
 					return $this->lblId;
+				case 'ComandoItemIdControl':
+					if (!$this->lstComandoItem) return $this->lstComandoItem_Create();
+					return $this->lstComandoItem;
+				case 'ComandoItemIdLabel':
+					if (!$this->lblComandoItemId) return $this->lblComandoItemId_Create();
+					return $this->lblComandoItemId;
 				case 'ComandoIdControl':
 					if (!$this->lstComando) return $this->lstComando_Create();
 					return $this->lstComando;
@@ -698,6 +776,8 @@
 					// Controls that point to ComandoRisco fields
 					case 'IdControl':
 						return ($this->lblId = QType::Cast($mixValue, 'QControl'));
+					case 'ComandoItemIdControl':
+						return ($this->lstComandoItem = QType::Cast($mixValue, 'QControl'));
 					case 'ComandoIdControl':
 						return ($this->lstComando = QType::Cast($mixValue, 'QControl'));
 					case 'ReferenciaControl':

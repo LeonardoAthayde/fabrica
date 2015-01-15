@@ -1,39 +1,36 @@
 <?php
 	/**
-	 * The abstract ComandoGen class defined here is
+	 * The abstract ComandoItemGen class defined here is
 	 * code-generated and contains all the basic CRUD-type functionality as well as
 	 * basic methods to handle relationships and index-based loading.
 	 *
-	 * To use, you should use the Comando subclass which
-	 * extends this ComandoGen class.
+	 * To use, you should use the ComandoItem subclass which
+	 * extends this ComandoItemGen class.
 	 *
 	 * Because subsequent re-code generations will overwrite any changes to this
 	 * file, you should leave this file unaltered to prevent yourself from losing
 	 * any information or code changes.  All customizations should be done by
 	 * overriding existing or implementing new methods, properties and variables
-	 * in the Comando class.
+	 * in the ComandoItem class.
 	 * 
 	 * @package My Application
 	 * @subpackage GeneratedDataObjects
 	 * @property integer $Id the value for intId (Read-Only PK)
-	 * @property string $Numero the value for strNumero (Unique)
-	 * @property QDateTime $Date the value for dttDate (Not Null)
-	 * @property ComandoItem $_ComandoItem the value for the private _objComandoItem (Read-Only) if set due to an expansion on the comando_item.comando_id reverse relationship
-	 * @property ComandoItem[] $_ComandoItemArray the value for the private _objComandoItemArray (Read-Only) if set due to an ExpandAsArray on the comando_item.comando_id reverse relationship
-	 * @property ComandoPeca $_ComandoPeca the value for the private _objComandoPeca (Read-Only) if set due to an expansion on the comando_peca.comando_id reverse relationship
-	 * @property ComandoPeca[] $_ComandoPecaArray the value for the private _objComandoPecaArray (Read-Only) if set due to an ExpandAsArray on the comando_peca.comando_id reverse relationship
-	 * @property ComandoRisco $_ComandoRisco the value for the private _objComandoRisco (Read-Only) if set due to an expansion on the comando_risco.comando_id reverse relationship
-	 * @property ComandoRisco[] $_ComandoRiscoArray the value for the private _objComandoRiscoArray (Read-Only) if set due to an ExpandAsArray on the comando_risco.comando_id reverse relationship
+	 * @property integer $ComandoId the value for intComandoId (Not Null)
+	 * @property string $Referencia the value for strReferencia (Not Null)
+	 * @property Comando $Comando the value for the Comando object referenced by intComandoId (Not Null)
+	 * @property ComandoRisco $_ComandoRisco the value for the private _objComandoRisco (Read-Only) if set due to an expansion on the comando_risco.comando_item_id reverse relationship
+	 * @property ComandoRisco[] $_ComandoRiscoArray the value for the private _objComandoRiscoArray (Read-Only) if set due to an ExpandAsArray on the comando_risco.comando_item_id reverse relationship
 	 * @property boolean $__Restored whether or not this object was restored from the database (as opposed to created new)
 	 */
-	class ComandoGen extends QBaseClass {
+	class ComandoItemGen extends QBaseClass {
 
 		///////////////////////////////////////////////////////////////////////
 		// PROTECTED MEMBER VARIABLES and TEXT FIELD MAXLENGTHS (if applicable)
 		///////////////////////////////////////////////////////////////////////
 		
 		/**
-		 * Protected member variable that maps to the database PK Identity column comando.id
+		 * Protected member variable that maps to the database PK Identity column comando_item.id
 		 * @var integer intId
 		 */
 		protected $intId;
@@ -41,57 +38,25 @@
 
 
 		/**
-		 * Protected member variable that maps to the database column comando.numero
-		 * @var string strNumero
+		 * Protected member variable that maps to the database column comando_item.comando_id
+		 * @var integer intComandoId
 		 */
-		protected $strNumero;
-		const NumeroMaxLength = 150;
-		const NumeroDefault = null;
+		protected $intComandoId;
+		const ComandoIdDefault = null;
 
 
 		/**
-		 * Protected member variable that maps to the database column comando.date
-		 * @var QDateTime dttDate
+		 * Protected member variable that maps to the database column comando_item.referencia
+		 * @var string strReferencia
 		 */
-		protected $dttDate;
-		const DateDefault = null;
+		protected $strReferencia;
+		const ReferenciaMaxLength = 6;
+		const ReferenciaDefault = null;
 
-
-		/**
-		 * Private member variable that stores a reference to a single ComandoItem object
-		 * (of type ComandoItem), if this Comando object was restored with
-		 * an expansion on the comando_item association table.
-		 * @var ComandoItem _objComandoItem;
-		 */
-		private $_objComandoItem;
-
-		/**
-		 * Private member variable that stores a reference to an array of ComandoItem objects
-		 * (of type ComandoItem[]), if this Comando object was restored with
-		 * an ExpandAsArray on the comando_item association table.
-		 * @var ComandoItem[] _objComandoItemArray;
-		 */
-		private $_objComandoItemArray = array();
-
-		/**
-		 * Private member variable that stores a reference to a single ComandoPeca object
-		 * (of type ComandoPeca), if this Comando object was restored with
-		 * an expansion on the comando_peca association table.
-		 * @var ComandoPeca _objComandoPeca;
-		 */
-		private $_objComandoPeca;
-
-		/**
-		 * Private member variable that stores a reference to an array of ComandoPeca objects
-		 * (of type ComandoPeca[]), if this Comando object was restored with
-		 * an ExpandAsArray on the comando_peca association table.
-		 * @var ComandoPeca[] _objComandoPecaArray;
-		 */
-		private $_objComandoPecaArray = array();
 
 		/**
 		 * Private member variable that stores a reference to a single ComandoRisco object
-		 * (of type ComandoRisco), if this Comando object was restored with
+		 * (of type ComandoRisco), if this ComandoItem object was restored with
 		 * an expansion on the comando_risco association table.
 		 * @var ComandoRisco _objComandoRisco;
 		 */
@@ -99,7 +64,7 @@
 
 		/**
 		 * Private member variable that stores a reference to an array of ComandoRisco objects
-		 * (of type ComandoRisco[]), if this Comando object was restored with
+		 * (of type ComandoRisco[]), if this ComandoItem object was restored with
 		 * an ExpandAsArray on the comando_risco association table.
 		 * @var ComandoRisco[] _objComandoRiscoArray;
 		 */
@@ -127,6 +92,16 @@
 		// PROTECTED MEMBER OBJECTS
 		///////////////////////////////
 
+		/**
+		 * Protected member variable that contains the object pointed by the reference
+		 * in the database column comando_item.comando_id.
+		 *
+		 * NOTE: Always use the Comando property getter to correctly retrieve this Comando object.
+		 * (Because this class implements late binding, this variable reference MAY be null.)
+		 * @var Comando objComando
+		 */
+		protected $objComando;
+
 
 
 
@@ -144,26 +119,26 @@
 		}
 
 		/**
-		 * Load a Comando from PK Info
+		 * Load a ComandoItem from PK Info
 		 * @param integer $intId
-		 * @return Comando
+		 * @return ComandoItem
 		 */
 		public static function Load($intId) {
 			// Use QuerySingle to Perform the Query
-			return Comando::QuerySingle(
-				QQ::Equal(QQN::Comando()->Id, $intId)
+			return ComandoItem::QuerySingle(
+				QQ::Equal(QQN::ComandoItem()->Id, $intId)
 			);
 		}
 
 		/**
-		 * Load all Comandos
+		 * Load all ComandoItems
 		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
-		 * @return Comando[]
+		 * @return ComandoItem[]
 		 */
 		public static function LoadAll($objOptionalClauses = null) {
-			// Call Comando::QueryArray to perform the LoadAll query
+			// Call ComandoItem::QueryArray to perform the LoadAll query
 			try {
-				return Comando::QueryArray(QQ::All(), $objOptionalClauses);
+				return ComandoItem::QueryArray(QQ::All(), $objOptionalClauses);
 			} catch (QCallerException $objExc) {
 				$objExc->IncrementOffset();
 				throw $objExc;
@@ -171,12 +146,12 @@
 		}
 
 		/**
-		 * Count all Comandos
+		 * Count all ComandoItems
 		 * @return int
 		 */
 		public static function CountAll() {
-			// Call Comando::QueryCount to perform the CountAll query
-			return Comando::QueryCount(QQ::All());
+			// Call ComandoItem::QueryCount to perform the CountAll query
+			return ComandoItem::QueryCount(QQ::All());
 		}
 
 
@@ -198,12 +173,12 @@
 		 */
 		protected static function BuildQueryStatement(&$objQueryBuilder, QQCondition $objConditions, $objOptionalClauses, $mixParameterArray, $blnCountOnly) {
 			// Get the Database Object for this Class
-			$objDatabase = Comando::GetDatabase();
+			$objDatabase = ComandoItem::GetDatabase();
 
-			// Create/Build out the QueryBuilder object with Comando-specific SELET and FROM fields
-			$objQueryBuilder = new QQueryBuilder($objDatabase, 'comando');
-			Comando::GetSelectFields($objQueryBuilder);
-			$objQueryBuilder->AddFromItem('comando');
+			// Create/Build out the QueryBuilder object with ComandoItem-specific SELET and FROM fields
+			$objQueryBuilder = new QQueryBuilder($objDatabase, 'comando_item');
+			ComandoItem::GetSelectFields($objQueryBuilder);
+			$objQueryBuilder->AddFromItem('comando_item');
 
 			// Set "CountOnly" option (if applicable)
 			if ($blnCountOnly)
@@ -250,17 +225,17 @@
 		}
 
 		/**
-		 * Static Qcodo Query method to query for a single Comando object.
+		 * Static Qcodo Query method to query for a single ComandoItem object.
 		 * Uses BuildQueryStatment to perform most of the work.
 		 * @param QQCondition $objConditions any conditions on the query, itself
 		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
 		 * @param mixed[] $mixParameterArray a array of name-value pairs to perform PrepareStatement with
-		 * @return Comando the queried object
+		 * @return ComandoItem the queried object
 		 */
 		public static function QuerySingle(QQCondition $objConditions, $objOptionalClauses = null, $mixParameterArray = null) {
 			// Get the Query Statement
 			try {
-				$strQuery = Comando::BuildQueryStatement($objQueryBuilder, $objConditions, $objOptionalClauses, $mixParameterArray, false);
+				$strQuery = ComandoItem::BuildQueryStatement($objQueryBuilder, $objConditions, $objOptionalClauses, $mixParameterArray, false);
 			} catch (QCallerException $objExc) {
 				$objExc->IncrementOffset();
 				throw $objExc;
@@ -269,13 +244,13 @@
 			// Perform the Query
 			$objDbResult = $objQueryBuilder->Database->Query($strQuery);
 
-			// Instantiate a new Comando object and return it
+			// Instantiate a new ComandoItem object and return it
 
 			// Do we have to expand anything?
 			if ($objQueryBuilder->ExpandAsArrayNodes) {
 				$objToReturn = array();
 				while ($objDbRow = $objDbResult->GetNextRow()) {
-					$objItem = Comando::InstantiateDbRow($objDbRow, null, $objQueryBuilder->ExpandAsArrayNodes, $objToReturn, $objQueryBuilder->ColumnAliasArray);
+					$objItem = ComandoItem::InstantiateDbRow($objDbRow, null, $objQueryBuilder->ExpandAsArrayNodes, $objToReturn, $objQueryBuilder->ColumnAliasArray);
 					if ($objItem) $objToReturn[] = $objItem;
 				}
 
@@ -289,22 +264,22 @@
 				// No expands just return the first row
 				$objDbRow = $objDbResult->GetNextRow();
 				if (is_null($objDbRow)) return null;
-				return Comando::InstantiateDbRow($objDbRow, null, null, null, $objQueryBuilder->ColumnAliasArray);
+				return ComandoItem::InstantiateDbRow($objDbRow, null, null, null, $objQueryBuilder->ColumnAliasArray);
 			}
 		}
 
 		/**
-		 * Static Qcodo Query method to query for an array of Comando objects.
+		 * Static Qcodo Query method to query for an array of ComandoItem objects.
 		 * Uses BuildQueryStatment to perform most of the work.
 		 * @param QQCondition $objConditions any conditions on the query, itself
 		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
 		 * @param mixed[] $mixParameterArray a array of name-value pairs to perform PrepareStatement with
-		 * @return Comando[] the queried objects as an array
+		 * @return ComandoItem[] the queried objects as an array
 		 */
 		public static function QueryArray(QQCondition $objConditions, $objOptionalClauses = null, $mixParameterArray = null) {
 			// Get the Query Statement
 			try {
-				$strQuery = Comando::BuildQueryStatement($objQueryBuilder, $objConditions, $objOptionalClauses, $mixParameterArray, false);
+				$strQuery = ComandoItem::BuildQueryStatement($objQueryBuilder, $objConditions, $objOptionalClauses, $mixParameterArray, false);
 			} catch (QCallerException $objExc) {
 				$objExc->IncrementOffset();
 				throw $objExc;
@@ -312,7 +287,7 @@
 
 			// Perform the Query and Instantiate the Array Result
 			$objDbResult = $objQueryBuilder->Database->Query($strQuery);
-			return Comando::InstantiateDbResult($objDbResult, $objQueryBuilder->ExpandAsArrayNodes, $objQueryBuilder->ColumnAliasArray);
+			return ComandoItem::InstantiateDbResult($objDbResult, $objQueryBuilder->ExpandAsArrayNodes, $objQueryBuilder->ColumnAliasArray);
 		}
 
 		/**
@@ -326,7 +301,7 @@
 		public static function QueryCursor(QQCondition $objConditions, $objOptionalClauses = null, $mixParameterArray = null) {
 			// Get the query statement
 			try {
-				$strQuery = Comando::BuildQueryStatement($objQueryBuilder, $objConditions, $objOptionalClauses, $mixParameterArray, false);
+				$strQuery = ComandoItem::BuildQueryStatement($objQueryBuilder, $objConditions, $objOptionalClauses, $mixParameterArray, false);
 			} catch (QCallerException $objExc) {
 				$objExc->IncrementOffset();
 				throw $objExc;
@@ -341,7 +316,7 @@
 		}
 
 		/**
-		 * Static Qcodo Query method to query for a count of Comando objects.
+		 * Static Qcodo Query method to query for a count of ComandoItem objects.
 		 * Uses BuildQueryStatment to perform most of the work.
 		 * @param QQCondition $objConditions any conditions on the query, itself
 		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
@@ -351,7 +326,7 @@
 		public static function QueryCount(QQCondition $objConditions, $objOptionalClauses = null, $mixParameterArray = null) {
 			// Get the Query Statement
 			try {
-				$strQuery = Comando::BuildQueryStatement($objQueryBuilder, $objConditions, $objOptionalClauses, $mixParameterArray, true);
+				$strQuery = ComandoItem::BuildQueryStatement($objQueryBuilder, $objConditions, $objOptionalClauses, $mixParameterArray, true);
 			} catch (QCallerException $objExc) {
 				$objExc->IncrementOffset();
 				throw $objExc;
@@ -382,15 +357,15 @@
 
 /*		public static function QueryArrayCached($strConditions, $mixParameterArray = null) {
 			// Get the Database Object for this Class
-			$objDatabase = Comando::GetDatabase();
+			$objDatabase = ComandoItem::GetDatabase();
 
 			// Lookup the QCache for This Query Statement
-			$objCache = new QCache('query', 'comando_' . serialize($strConditions));
+			$objCache = new QCache('query', 'comando_item_' . serialize($strConditions));
 			if (!($strQuery = $objCache->GetData())) {
-				// Not Found -- Go ahead and Create/Build out a new QueryBuilder object with Comando-specific fields
+				// Not Found -- Go ahead and Create/Build out a new QueryBuilder object with ComandoItem-specific fields
 				$objQueryBuilder = new QQueryBuilder($objDatabase);
-				Comando::GetSelectFields($objQueryBuilder);
-				Comando::GetFromFields($objQueryBuilder);
+				ComandoItem::GetSelectFields($objQueryBuilder);
+				ComandoItem::GetFromFields($objQueryBuilder);
 
 				// Ensure the Passed-in Conditions is a string
 				try {
@@ -420,11 +395,11 @@
 
 			// Perform the Query and Instantiate the Array Result
 			$objDbResult = $objDatabase->Query($strQuery);
-			return Comando::InstantiateDbResult($objDbResult);
+			return ComandoItem::InstantiateDbResult($objDbResult);
 		}*/
 
 		/**
-		 * Updates a QQueryBuilder with the SELECT fields for this Comando
+		 * Updates a QQueryBuilder with the SELECT fields for this ComandoItem
 		 * @param QQueryBuilder $objBuilder the Query Builder object to update
 		 * @param string $strPrefix optional prefix to add to the SELECT fields
 		 */
@@ -433,13 +408,13 @@
 				$strTableName = $strPrefix;
 				$strAliasPrefix = $strPrefix . '__';
 			} else {
-				$strTableName = 'comando';
+				$strTableName = 'comando_item';
 				$strAliasPrefix = '';
 			}
 
 			$objBuilder->AddSelectItem($strTableName, 'id', $strAliasPrefix . 'id');
-			$objBuilder->AddSelectItem($strTableName, 'numero', $strAliasPrefix . 'numero');
-			$objBuilder->AddSelectItem($strTableName, 'date', $strAliasPrefix . 'date');
+			$objBuilder->AddSelectItem($strTableName, 'comando_id', $strAliasPrefix . 'comando_id');
+			$objBuilder->AddSelectItem($strTableName, 'referencia', $strAliasPrefix . 'referencia');
 		}
 
 
@@ -450,16 +425,16 @@
 		///////////////////////////////
 
 		/**
-		 * Instantiate a Comando from a Database Row.
+		 * Instantiate a ComandoItem from a Database Row.
 		 * Takes in an optional strAliasPrefix, used in case another Object::InstantiateDbRow
-		 * is calling this Comando::InstantiateDbRow in order to perform
+		 * is calling this ComandoItem::InstantiateDbRow in order to perform
 		 * early binding on referenced objects.
 		 * @param QDatabaseRowBase $objDbRow
 		 * @param string $strAliasPrefix
 		 * @param string $strExpandAsArrayNodes
 		 * @param QBaseClass $objPreviousItem
 		 * @param string[] $strColumnAliasArray
-		 * @return Comando
+		 * @return ComandoItem
 		*/
 		public static function InstantiateDbRow($objDbRow, $strAliasPrefix = null, $strExpandAsArrayNodes = null, $objPreviousItem = null, $strColumnAliasArray = array()) {
 			// If blank row, return null
@@ -475,36 +450,8 @@
 				// We are.  Now, prepare to check for ExpandAsArray clauses
 				$blnExpandedViaArray = false;
 				if (!$strAliasPrefix)
-					$strAliasPrefix = 'comando__';
+					$strAliasPrefix = 'comando_item__';
 
-
-				$strAlias = $strAliasPrefix . 'comandoitem__id';
-				$strAliasName = array_key_exists($strAlias, $strColumnAliasArray) ? $strColumnAliasArray[$strAlias] : $strAlias;
-				if ((array_key_exists($strAlias, $strExpandAsArrayNodes)) &&
-					(!is_null($objDbRow->GetColumn($strAliasName)))) {
-					if ($intPreviousChildItemCount = count($objPreviousItem->_objComandoItemArray)) {
-						$objPreviousChildItem = $objPreviousItem->_objComandoItemArray[$intPreviousChildItemCount - 1];
-						$objChildItem = ComandoItem::InstantiateDbRow($objDbRow, $strAliasPrefix . 'comandoitem__', $strExpandAsArrayNodes, $objPreviousChildItem, $strColumnAliasArray);
-						if ($objChildItem)
-							$objPreviousItem->_objComandoItemArray[] = $objChildItem;
-					} else
-						$objPreviousItem->_objComandoItemArray[] = ComandoItem::InstantiateDbRow($objDbRow, $strAliasPrefix . 'comandoitem__', $strExpandAsArrayNodes, null, $strColumnAliasArray);
-					$blnExpandedViaArray = true;
-				}
-
-				$strAlias = $strAliasPrefix . 'comandopeca__id';
-				$strAliasName = array_key_exists($strAlias, $strColumnAliasArray) ? $strColumnAliasArray[$strAlias] : $strAlias;
-				if ((array_key_exists($strAlias, $strExpandAsArrayNodes)) &&
-					(!is_null($objDbRow->GetColumn($strAliasName)))) {
-					if ($intPreviousChildItemCount = count($objPreviousItem->_objComandoPecaArray)) {
-						$objPreviousChildItem = $objPreviousItem->_objComandoPecaArray[$intPreviousChildItemCount - 1];
-						$objChildItem = ComandoPeca::InstantiateDbRow($objDbRow, $strAliasPrefix . 'comandopeca__', $strExpandAsArrayNodes, $objPreviousChildItem, $strColumnAliasArray);
-						if ($objChildItem)
-							$objPreviousItem->_objComandoPecaArray[] = $objChildItem;
-					} else
-						$objPreviousItem->_objComandoPecaArray[] = ComandoPeca::InstantiateDbRow($objDbRow, $strAliasPrefix . 'comandopeca__', $strExpandAsArrayNodes, null, $strColumnAliasArray);
-					$blnExpandedViaArray = true;
-				}
 
 				$strAlias = $strAliasPrefix . 'comandorisco__id';
 				$strAliasName = array_key_exists($strAlias, $strColumnAliasArray) ? $strColumnAliasArray[$strAlias] : $strAlias;
@@ -523,20 +470,20 @@
 				// Either return false to signal array expansion, or check-to-reset the Alias prefix and move on
 				if ($blnExpandedViaArray)
 					return false;
-				else if ($strAliasPrefix == 'comando__')
+				else if ($strAliasPrefix == 'comando_item__')
 					$strAliasPrefix = null;
 			}
 
-			// Create a new instance of the Comando object
-			$objToReturn = new Comando();
+			// Create a new instance of the ComandoItem object
+			$objToReturn = new ComandoItem();
 			$objToReturn->__blnRestored = true;
 
 			$strAliasName = array_key_exists($strAliasPrefix . 'id', $strColumnAliasArray) ? $strColumnAliasArray[$strAliasPrefix . 'id'] : $strAliasPrefix . 'id';
 			$objToReturn->intId = $objDbRow->GetColumn($strAliasName, 'Integer');
-			$strAliasName = array_key_exists($strAliasPrefix . 'numero', $strColumnAliasArray) ? $strColumnAliasArray[$strAliasPrefix . 'numero'] : $strAliasPrefix . 'numero';
-			$objToReturn->strNumero = $objDbRow->GetColumn($strAliasName, 'VarChar');
-			$strAliasName = array_key_exists($strAliasPrefix . 'date', $strColumnAliasArray) ? $strColumnAliasArray[$strAliasPrefix . 'date'] : $strAliasPrefix . 'date';
-			$objToReturn->dttDate = $objDbRow->GetColumn($strAliasName, 'Date');
+			$strAliasName = array_key_exists($strAliasPrefix . 'comando_id', $strColumnAliasArray) ? $strColumnAliasArray[$strAliasPrefix . 'comando_id'] : $strAliasPrefix . 'comando_id';
+			$objToReturn->intComandoId = $objDbRow->GetColumn($strAliasName, 'Integer');
+			$strAliasName = array_key_exists($strAliasPrefix . 'referencia', $strColumnAliasArray) ? $strColumnAliasArray[$strAliasPrefix . 'referencia'] : $strAliasPrefix . 'referencia';
+			$objToReturn->strReferencia = $objDbRow->GetColumn($strAliasName, 'VarChar');
 
 			// Instantiate Virtual Attributes
 			foreach ($objDbRow->GetColumnNameArray() as $strColumnName => $mixValue) {
@@ -548,30 +495,16 @@
 
 			// Prepare to Check for Early/Virtual Binding
 			if (!$strAliasPrefix)
-				$strAliasPrefix = 'comando__';
+				$strAliasPrefix = 'comando_item__';
 
-
-
-
-			// Check for ComandoItem Virtual Binding
-			$strAlias = $strAliasPrefix . 'comandoitem__id';
+			// Check for Comando Early Binding
+			$strAlias = $strAliasPrefix . 'comando_id__id';
 			$strAliasName = array_key_exists($strAlias, $strColumnAliasArray) ? $strColumnAliasArray[$strAlias] : $strAlias;
-			if (!is_null($objDbRow->GetColumn($strAliasName))) {
-				if (($strExpandAsArrayNodes) && (array_key_exists($strAlias, $strExpandAsArrayNodes)))
-					$objToReturn->_objComandoItemArray[] = ComandoItem::InstantiateDbRow($objDbRow, $strAliasPrefix . 'comandoitem__', $strExpandAsArrayNodes, null, $strColumnAliasArray);
-				else
-					$objToReturn->_objComandoItem = ComandoItem::InstantiateDbRow($objDbRow, $strAliasPrefix . 'comandoitem__', $strExpandAsArrayNodes, null, $strColumnAliasArray);
-			}
+			if (!is_null($objDbRow->GetColumn($strAliasName)))
+				$objToReturn->objComando = Comando::InstantiateDbRow($objDbRow, $strAliasPrefix . 'comando_id__', $strExpandAsArrayNodes, null, $strColumnAliasArray);
 
-			// Check for ComandoPeca Virtual Binding
-			$strAlias = $strAliasPrefix . 'comandopeca__id';
-			$strAliasName = array_key_exists($strAlias, $strColumnAliasArray) ? $strColumnAliasArray[$strAlias] : $strAlias;
-			if (!is_null($objDbRow->GetColumn($strAliasName))) {
-				if (($strExpandAsArrayNodes) && (array_key_exists($strAlias, $strExpandAsArrayNodes)))
-					$objToReturn->_objComandoPecaArray[] = ComandoPeca::InstantiateDbRow($objDbRow, $strAliasPrefix . 'comandopeca__', $strExpandAsArrayNodes, null, $strColumnAliasArray);
-				else
-					$objToReturn->_objComandoPeca = ComandoPeca::InstantiateDbRow($objDbRow, $strAliasPrefix . 'comandopeca__', $strExpandAsArrayNodes, null, $strColumnAliasArray);
-			}
+
+
 
 			// Check for ComandoRisco Virtual Binding
 			$strAlias = $strAliasPrefix . 'comandorisco__id';
@@ -587,11 +520,11 @@
 		}
 
 		/**
-		 * Instantiate an array of Comandos from a Database Result
+		 * Instantiate an array of ComandoItems from a Database Result
 		 * @param QDatabaseResultBase $objDbResult
 		 * @param string $strExpandAsArrayNodes
 		 * @param string[] $strColumnAliasArray
-		 * @return Comando[]
+		 * @return ComandoItem[]
 		 */
 		public static function InstantiateDbResult(QDatabaseResultBase $objDbResult, $strExpandAsArrayNodes = null, $strColumnAliasArray = null) {
 			$objToReturn = array();
@@ -607,7 +540,7 @@
 			if ($strExpandAsArrayNodes) {
 				$objLastRowItem = null;
 				while ($objDbRow = $objDbResult->GetNextRow()) {
-					$objItem = Comando::InstantiateDbRow($objDbRow, null, $strExpandAsArrayNodes, $objLastRowItem, $strColumnAliasArray);
+					$objItem = ComandoItem::InstantiateDbRow($objDbRow, null, $strExpandAsArrayNodes, $objLastRowItem, $strColumnAliasArray);
 					if ($objItem) {
 						$objToReturn[] = $objItem;
 						$objLastRowItem = $objItem;
@@ -615,18 +548,18 @@
 				}
 			} else {
 				while ($objDbRow = $objDbResult->GetNextRow())
-					$objToReturn[] = Comando::InstantiateDbRow($objDbRow, null, null, null, $strColumnAliasArray);
+					$objToReturn[] = ComandoItem::InstantiateDbRow($objDbRow, null, null, null, $strColumnAliasArray);
 			}
 
 			return $objToReturn;
 		}
 
 		/**
-		 * Instantiate a single Comando object from a query cursor (e.g. a DB ResultSet).
+		 * Instantiate a single ComandoItem object from a query cursor (e.g. a DB ResultSet).
 		 * Cursor is automatically moved to the "next row" of the result set.
 		 * Will return NULL if no cursor or if the cursor has no more rows in the resultset.
 		 * @param QDatabaseResultBase $objDbResult cursor resource
-		 * @return Comando next row resulting from the query
+		 * @return ComandoItem next row resulting from the query
 		 */
 		public static function InstantiateCursor(QDatabaseResultBase $objDbResult) {
 			// If blank resultset, then return empty result
@@ -644,7 +577,7 @@
 			$strExpandAsArrayNodes = $objDbResult->QueryBuilder->ExpandAsArrayNodes;
 
 			// Load up the return result with a row and return it
-			return Comando::InstantiateDbRow($objDbRow, null, $strExpandAsArrayNodes, null, $strColumnAliasArray);
+			return ComandoItem::InstantiateDbRow($objDbRow, null, $strExpandAsArrayNodes, null, $strColumnAliasArray);
 		}
 
 
@@ -655,27 +588,48 @@
 		///////////////////////////////////////////////////
 			
 		/**
-		 * Load a single Comando object,
+		 * Load a single ComandoItem object,
 		 * by Id Index(es)
 		 * @param integer $intId
-		 * @return Comando
+		 * @return ComandoItem
 		*/
 		public static function LoadById($intId, $objOptionalClauses = null) {
-			return Comando::QuerySingle(
-				QQ::Equal(QQN::Comando()->Id, $intId)
+			return ComandoItem::QuerySingle(
+				QQ::Equal(QQN::ComandoItem()->Id, $intId)
 			, $objOptionalClauses
 			);
 		}
 			
 		/**
-		 * Load a single Comando object,
-		 * by Numero Index(es)
-		 * @param string $strNumero
-		 * @return Comando
+		 * Load an array of ComandoItem objects,
+		 * by ComandoId Index(es)
+		 * @param integer $intComandoId
+		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
+		 * @return ComandoItem[]
 		*/
-		public static function LoadByNumero($strNumero, $objOptionalClauses = null) {
-			return Comando::QuerySingle(
-				QQ::Equal(QQN::Comando()->Numero, $strNumero)
+		public static function LoadArrayByComandoId($intComandoId, $objOptionalClauses = null) {
+			// Call ComandoItem::QueryArray to perform the LoadArrayByComandoId query
+			try {
+				return ComandoItem::QueryArray(
+					QQ::Equal(QQN::ComandoItem()->ComandoId, $intComandoId),
+					$objOptionalClauses
+					);
+			} catch (QCallerException $objExc) {
+				$objExc->IncrementOffset();
+				throw $objExc;
+			}
+		}
+
+		/**
+		 * Count ComandoItems
+		 * by ComandoId Index(es)
+		 * @param integer $intComandoId
+		 * @return int
+		*/
+		public static function CountByComandoId($intComandoId, $objOptionalClauses = null) {
+			// Call ComandoItem::QueryCount to perform the CountByComandoId query
+			return ComandoItem::QueryCount(
+				QQ::Equal(QQN::ComandoItem()->ComandoId, $intComandoId)
 			, $objOptionalClauses
 			);
 		}
@@ -694,14 +648,14 @@
 		//////////////////////////////////////
 
 		/**
-		 * Save this Comando
+		 * Save this ComandoItem
 		 * @param bool $blnForceInsert
 		 * @param bool $blnForceUpdate
 		 * @return int
 		 */
 		public function Save($blnForceInsert = false, $blnForceUpdate = false) {
 			// Get the Database Object for this Class
-			$objDatabase = Comando::GetDatabase();
+			$objDatabase = ComandoItem::GetDatabase();
 
 			$mixToReturn = null;
 
@@ -709,17 +663,17 @@
 				if ((!$this->__blnRestored) || ($blnForceInsert)) {
 					// Perform an INSERT query
 					$objDatabase->NonQuery('
-						INSERT INTO `comando` (
-							`numero`,
-							`date`
+						INSERT INTO `comando_item` (
+							`comando_id`,
+							`referencia`
 						) VALUES (
-							' . $objDatabase->SqlVariable($this->strNumero) . ',
-							' . $objDatabase->SqlVariable($this->dttDate) . '
+							' . $objDatabase->SqlVariable($this->intComandoId) . ',
+							' . $objDatabase->SqlVariable($this->strReferencia) . '
 						)
 					');
 
 					// Update Identity column and return its value
-					$mixToReturn = $this->intId = $objDatabase->InsertId('comando', 'id');
+					$mixToReturn = $this->intId = $objDatabase->InsertId('comando_item', 'id');
 
 					// Journaling
 					if ($objDatabase->JournalingDatabase) $this->Journal('INSERT');
@@ -732,10 +686,10 @@
 					// Perform the UPDATE query
 					$objDatabase->NonQuery('
 						UPDATE
-							`comando`
+							`comando_item`
 						SET
-							`numero` = ' . $objDatabase->SqlVariable($this->strNumero) . ',
-							`date` = ' . $objDatabase->SqlVariable($this->dttDate) . '
+							`comando_id` = ' . $objDatabase->SqlVariable($this->intComandoId) . ',
+							`referencia` = ' . $objDatabase->SqlVariable($this->strReferencia) . '
 						WHERE
 							`id` = ' . $objDatabase->SqlVariable($this->intId) . '
 					');
@@ -758,21 +712,21 @@
 		}
 
 		/**
-		 * Delete this Comando
+		 * Delete this ComandoItem
 		 * @return void
 		 */
 		public function Delete() {
 			if ((is_null($this->intId)))
-				throw new QUndefinedPrimaryKeyException('Cannot delete this Comando with an unset primary key.');
+				throw new QUndefinedPrimaryKeyException('Cannot delete this ComandoItem with an unset primary key.');
 
 			// Get the Database Object for this Class
-			$objDatabase = Comando::GetDatabase();
+			$objDatabase = ComandoItem::GetDatabase();
 
 
 			// Perform the SQL Query
 			$objDatabase->NonQuery('
 				DELETE FROM
-					`comando`
+					`comando_item`
 				WHERE
 					`id` = ' . $objDatabase->SqlVariable($this->intId) . '');
 
@@ -781,47 +735,47 @@
 		}
 
 		/**
-		 * Delete all Comandos
+		 * Delete all ComandoItems
 		 * @return void
 		 */
 		public static function DeleteAll() {
 			// Get the Database Object for this Class
-			$objDatabase = Comando::GetDatabase();
+			$objDatabase = ComandoItem::GetDatabase();
 
 			// Perform the Query
 			$objDatabase->NonQuery('
 				DELETE FROM
-					`comando`');
+					`comando_item`');
 		}
 
 		/**
-		 * Truncate comando table
+		 * Truncate comando_item table
 		 * @return void
 		 */
 		public static function Truncate() {
 			// Get the Database Object for this Class
-			$objDatabase = Comando::GetDatabase();
+			$objDatabase = ComandoItem::GetDatabase();
 
 			// Perform the Query
 			$objDatabase->NonQuery('
-				TRUNCATE `comando`');
+				TRUNCATE `comando_item`');
 		}
 
 		/**
-		 * Reload this Comando from the database.
+		 * Reload this ComandoItem from the database.
 		 * @return void
 		 */
 		public function Reload() {
 			// Make sure we are actually Restored from the database
 			if (!$this->__blnRestored)
-				throw new QCallerException('Cannot call Reload() on a new, unsaved Comando object.');
+				throw new QCallerException('Cannot call Reload() on a new, unsaved ComandoItem object.');
 
 			// Reload the Object
-			$objReloaded = Comando::Load($this->intId);
+			$objReloaded = ComandoItem::Load($this->intId);
 
 			// Update $this's local variables to match
-			$this->strNumero = $objReloaded->strNumero;
-			$this->dttDate = $objReloaded->dttDate;
+			$this->ComandoId = $objReloaded->ComandoId;
+			$this->strReferencia = $objReloaded->strReferencia;
 		}
 
 		/**
@@ -830,20 +784,20 @@
 		 * @param string $strJournalCommand
 		 */
 		public function Journal($strJournalCommand) {
-			$objDatabase = Comando::GetDatabase()->JournalingDatabase;
+			$objDatabase = ComandoItem::GetDatabase()->JournalingDatabase;
 
 			$objDatabase->NonQuery('
-				INSERT INTO `comando` (
+				INSERT INTO `comando_item` (
 					`id`,
-					`numero`,
-					`date`,
+					`comando_id`,
+					`referencia`,
 					__sys_login_id,
 					__sys_action,
 					__sys_date
 				) VALUES (
 					' . $objDatabase->SqlVariable($this->intId) . ',
-					' . $objDatabase->SqlVariable($this->strNumero) . ',
-					' . $objDatabase->SqlVariable($this->dttDate) . ',
+					' . $objDatabase->SqlVariable($this->intComandoId) . ',
+					' . $objDatabase->SqlVariable($this->strReferencia) . ',
 					' . (($objDatabase->JournaledById) ? $objDatabase->JournaledById : 'NULL') . ',
 					' . $objDatabase->SqlVariable($strJournalCommand) . ',
 					NOW()
@@ -855,24 +809,24 @@
 		 * Gets the historical journal for an object from the log database.
 		 * Objects will have VirtualAttributes available to lookup login, date, and action information from the journal object.
 		 * @param integer intId
-		 * @return Comando[]
+		 * @return ComandoItem[]
 		 */
 		public static function GetJournalForId($intId) {
-			$objDatabase = Comando::GetDatabase()->JournalingDatabase;
+			$objDatabase = ComandoItem::GetDatabase()->JournalingDatabase;
 
-			$objResult = $objDatabase->Query('SELECT * FROM comando WHERE id = ' .
+			$objResult = $objDatabase->Query('SELECT * FROM comando_item WHERE id = ' .
 				$objDatabase->SqlVariable($intId) . ' ORDER BY __sys_date');
 
-			return Comando::InstantiateDbResult($objResult);
+			return ComandoItem::InstantiateDbResult($objResult);
 		}
 
 		/**
 		 * Gets the historical journal for this object from the log database.
 		 * Objects will have VirtualAttributes available to lookup login, date, and action information from the journal object.
-		 * @return Comando[]
+		 * @return ComandoItem[]
 		 */
 		public function GetJournal() {
-			return Comando::GetJournalForId($this->intId);
+			return ComandoItem::GetJournalForId($this->intId);
 		}
 
 
@@ -899,59 +853,47 @@
 					// @return integer
 					return $this->intId;
 
-				case 'Numero':
-					// Gets the value for strNumero (Unique)
-					// @return string
-					return $this->strNumero;
+				case 'ComandoId':
+					// Gets the value for intComandoId (Not Null)
+					// @return integer
+					return $this->intComandoId;
 
-				case 'Date':
-					// Gets the value for dttDate (Not Null)
-					// @return QDateTime
-					return $this->dttDate;
+				case 'Referencia':
+					// Gets the value for strReferencia (Not Null)
+					// @return string
+					return $this->strReferencia;
 
 
 				///////////////////
 				// Member Objects
 				///////////////////
+				case 'Comando':
+					// Gets the value for the Comando object referenced by intComandoId (Not Null)
+					// @return Comando
+					try {
+						if ((!$this->objComando) && (!is_null($this->intComandoId)))
+							$this->objComando = Comando::Load($this->intComandoId);
+						return $this->objComando;
+					} catch (QCallerException $objExc) {
+						$objExc->IncrementOffset();
+						throw $objExc;
+					}
+
 
 				////////////////////////////
 				// Virtual Object References (Many to Many and Reverse References)
 				// (If restored via a "Many-to" expansion)
 				////////////////////////////
 
-				case '_ComandoItem':
-					// Gets the value for the private _objComandoItem (Read-Only)
-					// if set due to an expansion on the comando_item.comando_id reverse relationship
-					// @return ComandoItem
-					return $this->_objComandoItem;
-
-				case '_ComandoItemArray':
-					// Gets the value for the private _objComandoItemArray (Read-Only)
-					// if set due to an ExpandAsArray on the comando_item.comando_id reverse relationship
-					// @return ComandoItem[]
-					return (array) $this->_objComandoItemArray;
-
-				case '_ComandoPeca':
-					// Gets the value for the private _objComandoPeca (Read-Only)
-					// if set due to an expansion on the comando_peca.comando_id reverse relationship
-					// @return ComandoPeca
-					return $this->_objComandoPeca;
-
-				case '_ComandoPecaArray':
-					// Gets the value for the private _objComandoPecaArray (Read-Only)
-					// if set due to an ExpandAsArray on the comando_peca.comando_id reverse relationship
-					// @return ComandoPeca[]
-					return (array) $this->_objComandoPecaArray;
-
 				case '_ComandoRisco':
 					// Gets the value for the private _objComandoRisco (Read-Only)
-					// if set due to an expansion on the comando_risco.comando_id reverse relationship
+					// if set due to an expansion on the comando_risco.comando_item_id reverse relationship
 					// @return ComandoRisco
 					return $this->_objComandoRisco;
 
 				case '_ComandoRiscoArray':
 					// Gets the value for the private _objComandoRiscoArray (Read-Only)
-					// if set due to an ExpandAsArray on the comando_risco.comando_id reverse relationship
+					// if set due to an ExpandAsArray on the comando_risco.comando_item_id reverse relationship
 					// @return ComandoRisco[]
 					return (array) $this->_objComandoRiscoArray;
 
@@ -982,23 +924,24 @@
 				///////////////////
 				// Member Variables
 				///////////////////
-				case 'Numero':
-					// Sets the value for strNumero (Unique)
-					// @param string $mixValue
-					// @return string
+				case 'ComandoId':
+					// Sets the value for intComandoId (Not Null)
+					// @param integer $mixValue
+					// @return integer
 					try {
-						return ($this->strNumero = QType::Cast($mixValue, QType::String));
+						$this->objComando = null;
+						return ($this->intComandoId = QType::Cast($mixValue, QType::Integer));
 					} catch (QCallerException $objExc) {
 						$objExc->IncrementOffset();
 						throw $objExc;
 					}
 
-				case 'Date':
-					// Sets the value for dttDate (Not Null)
-					// @param QDateTime $mixValue
-					// @return QDateTime
+				case 'Referencia':
+					// Sets the value for strReferencia (Not Null)
+					// @param string $mixValue
+					// @return string
 					try {
-						return ($this->dttDate = QType::Cast($mixValue, QType::DateTime));
+						return ($this->strReferencia = QType::Cast($mixValue, QType::String));
 					} catch (QCallerException $objExc) {
 						$objExc->IncrementOffset();
 						throw $objExc;
@@ -1008,6 +951,36 @@
 				///////////////////
 				// Member Objects
 				///////////////////
+				case 'Comando':
+					// Sets the value for the Comando object referenced by intComandoId (Not Null)
+					// @param Comando $mixValue
+					// @return Comando
+					if (is_null($mixValue)) {
+						$this->intComandoId = null;
+						$this->objComando = null;
+						return null;
+					} else {
+						// Make sure $mixValue actually is a Comando object
+						try {
+							$mixValue = QType::Cast($mixValue, 'Comando');
+						} catch (QInvalidCastException $objExc) {
+							$objExc->IncrementOffset();
+							throw $objExc;
+						} 
+
+						// Make sure $mixValue is a SAVED Comando object
+						if (is_null($mixValue->Id))
+							throw new QCallerException('Unable to set an unsaved Comando for this ComandoItem');
+
+						// Update Local Member Variables
+						$this->objComando = $mixValue;
+						$this->intComandoId = $mixValue->Id;
+
+						// Return $mixValue
+						return $mixValue;
+					}
+					break;
+
 				default:
 					try {
 						return parent::__set($strName, $mixValue);
@@ -1037,370 +1010,6 @@
 
 			
 		
-		// Related Objects' Methods for ComandoItem
-		//-------------------------------------------------------------------
-
-		/**
-		 * Gets all associated ComandoItems as an array of ComandoItem objects
-		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
-		 * @return ComandoItem[]
-		*/ 
-		public function GetComandoItemArray($objOptionalClauses = null) {
-			if ((is_null($this->intId)))
-				return array();
-
-			try {
-				return ComandoItem::LoadArrayByComandoId($this->intId, $objOptionalClauses);
-			} catch (QCallerException $objExc) {
-				$objExc->IncrementOffset();
-				throw $objExc;
-			}
-		}
-
-		/**
-		 * Counts all associated ComandoItems
-		 * @return int
-		*/ 
-		public function CountComandoItems() {
-			if ((is_null($this->intId)))
-				return 0;
-
-			return ComandoItem::CountByComandoId($this->intId);
-		}
-
-		/**
-		 * Associates a ComandoItem
-		 * @param ComandoItem $objComandoItem
-		 * @return void
-		*/ 
-		public function AssociateComandoItem(ComandoItem $objComandoItem) {
-			if ((is_null($this->intId)))
-				throw new QUndefinedPrimaryKeyException('Unable to call AssociateComandoItem on this unsaved Comando.');
-			if ((is_null($objComandoItem->Id)))
-				throw new QUndefinedPrimaryKeyException('Unable to call AssociateComandoItem on this Comando with an unsaved ComandoItem.');
-
-			// Get the Database Object for this Class
-			$objDatabase = Comando::GetDatabase();
-
-			// Perform the SQL Query
-			$objDatabase->NonQuery('
-				UPDATE
-					`comando_item`
-				SET
-					`comando_id` = ' . $objDatabase->SqlVariable($this->intId) . '
-				WHERE
-					`id` = ' . $objDatabase->SqlVariable($objComandoItem->Id) . '
-			');
-
-			// Journaling (if applicable)
-			if ($objDatabase->JournalingDatabase) {
-				$objComandoItem->ComandoId = $this->intId;
-				$objComandoItem->Journal('UPDATE');
-			}
-		}
-
-		/**
-		 * Unassociates a ComandoItem
-		 * @param ComandoItem $objComandoItem
-		 * @return void
-		*/ 
-		public function UnassociateComandoItem(ComandoItem $objComandoItem) {
-			if ((is_null($this->intId)))
-				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateComandoItem on this unsaved Comando.');
-			if ((is_null($objComandoItem->Id)))
-				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateComandoItem on this Comando with an unsaved ComandoItem.');
-
-			// Get the Database Object for this Class
-			$objDatabase = Comando::GetDatabase();
-
-			// Perform the SQL Query
-			$objDatabase->NonQuery('
-				UPDATE
-					`comando_item`
-				SET
-					`comando_id` = null
-				WHERE
-					`id` = ' . $objDatabase->SqlVariable($objComandoItem->Id) . ' AND
-					`comando_id` = ' . $objDatabase->SqlVariable($this->intId) . '
-			');
-
-			// Journaling
-			if ($objDatabase->JournalingDatabase) {
-				$objComandoItem->ComandoId = null;
-				$objComandoItem->Journal('UPDATE');
-			}
-		}
-
-		/**
-		 * Unassociates all ComandoItems
-		 * @return void
-		*/ 
-		public function UnassociateAllComandoItems() {
-			if ((is_null($this->intId)))
-				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateComandoItem on this unsaved Comando.');
-
-			// Get the Database Object for this Class
-			$objDatabase = Comando::GetDatabase();
-
-			// Journaling
-			if ($objDatabase->JournalingDatabase) {
-				foreach (ComandoItem::LoadArrayByComandoId($this->intId) as $objComandoItem) {
-					$objComandoItem->ComandoId = null;
-					$objComandoItem->Journal('UPDATE');
-				}
-			}
-
-			// Perform the SQL Query
-			$objDatabase->NonQuery('
-				UPDATE
-					`comando_item`
-				SET
-					`comando_id` = null
-				WHERE
-					`comando_id` = ' . $objDatabase->SqlVariable($this->intId) . '
-			');
-		}
-
-		/**
-		 * Deletes an associated ComandoItem
-		 * @param ComandoItem $objComandoItem
-		 * @return void
-		*/ 
-		public function DeleteAssociatedComandoItem(ComandoItem $objComandoItem) {
-			if ((is_null($this->intId)))
-				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateComandoItem on this unsaved Comando.');
-			if ((is_null($objComandoItem->Id)))
-				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateComandoItem on this Comando with an unsaved ComandoItem.');
-
-			// Get the Database Object for this Class
-			$objDatabase = Comando::GetDatabase();
-
-			// Perform the SQL Query
-			$objDatabase->NonQuery('
-				DELETE FROM
-					`comando_item`
-				WHERE
-					`id` = ' . $objDatabase->SqlVariable($objComandoItem->Id) . ' AND
-					`comando_id` = ' . $objDatabase->SqlVariable($this->intId) . '
-			');
-
-			// Journaling
-			if ($objDatabase->JournalingDatabase) {
-				$objComandoItem->Journal('DELETE');
-			}
-		}
-
-		/**
-		 * Deletes all associated ComandoItems
-		 * @return void
-		*/ 
-		public function DeleteAllComandoItems() {
-			if ((is_null($this->intId)))
-				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateComandoItem on this unsaved Comando.');
-
-			// Get the Database Object for this Class
-			$objDatabase = Comando::GetDatabase();
-
-			// Journaling
-			if ($objDatabase->JournalingDatabase) {
-				foreach (ComandoItem::LoadArrayByComandoId($this->intId) as $objComandoItem) {
-					$objComandoItem->Journal('DELETE');
-				}
-			}
-
-			// Perform the SQL Query
-			$objDatabase->NonQuery('
-				DELETE FROM
-					`comando_item`
-				WHERE
-					`comando_id` = ' . $objDatabase->SqlVariable($this->intId) . '
-			');
-		}
-
-			
-		
-		// Related Objects' Methods for ComandoPeca
-		//-------------------------------------------------------------------
-
-		/**
-		 * Gets all associated ComandoPecas as an array of ComandoPeca objects
-		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
-		 * @return ComandoPeca[]
-		*/ 
-		public function GetComandoPecaArray($objOptionalClauses = null) {
-			if ((is_null($this->intId)))
-				return array();
-
-			try {
-				return ComandoPeca::LoadArrayByComandoId($this->intId, $objOptionalClauses);
-			} catch (QCallerException $objExc) {
-				$objExc->IncrementOffset();
-				throw $objExc;
-			}
-		}
-
-		/**
-		 * Counts all associated ComandoPecas
-		 * @return int
-		*/ 
-		public function CountComandoPecas() {
-			if ((is_null($this->intId)))
-				return 0;
-
-			return ComandoPeca::CountByComandoId($this->intId);
-		}
-
-		/**
-		 * Associates a ComandoPeca
-		 * @param ComandoPeca $objComandoPeca
-		 * @return void
-		*/ 
-		public function AssociateComandoPeca(ComandoPeca $objComandoPeca) {
-			if ((is_null($this->intId)))
-				throw new QUndefinedPrimaryKeyException('Unable to call AssociateComandoPeca on this unsaved Comando.');
-			if ((is_null($objComandoPeca->Id)))
-				throw new QUndefinedPrimaryKeyException('Unable to call AssociateComandoPeca on this Comando with an unsaved ComandoPeca.');
-
-			// Get the Database Object for this Class
-			$objDatabase = Comando::GetDatabase();
-
-			// Perform the SQL Query
-			$objDatabase->NonQuery('
-				UPDATE
-					`comando_peca`
-				SET
-					`comando_id` = ' . $objDatabase->SqlVariable($this->intId) . '
-				WHERE
-					`id` = ' . $objDatabase->SqlVariable($objComandoPeca->Id) . '
-			');
-
-			// Journaling (if applicable)
-			if ($objDatabase->JournalingDatabase) {
-				$objComandoPeca->ComandoId = $this->intId;
-				$objComandoPeca->Journal('UPDATE');
-			}
-		}
-
-		/**
-		 * Unassociates a ComandoPeca
-		 * @param ComandoPeca $objComandoPeca
-		 * @return void
-		*/ 
-		public function UnassociateComandoPeca(ComandoPeca $objComandoPeca) {
-			if ((is_null($this->intId)))
-				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateComandoPeca on this unsaved Comando.');
-			if ((is_null($objComandoPeca->Id)))
-				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateComandoPeca on this Comando with an unsaved ComandoPeca.');
-
-			// Get the Database Object for this Class
-			$objDatabase = Comando::GetDatabase();
-
-			// Perform the SQL Query
-			$objDatabase->NonQuery('
-				UPDATE
-					`comando_peca`
-				SET
-					`comando_id` = null
-				WHERE
-					`id` = ' . $objDatabase->SqlVariable($objComandoPeca->Id) . ' AND
-					`comando_id` = ' . $objDatabase->SqlVariable($this->intId) . '
-			');
-
-			// Journaling
-			if ($objDatabase->JournalingDatabase) {
-				$objComandoPeca->ComandoId = null;
-				$objComandoPeca->Journal('UPDATE');
-			}
-		}
-
-		/**
-		 * Unassociates all ComandoPecas
-		 * @return void
-		*/ 
-		public function UnassociateAllComandoPecas() {
-			if ((is_null($this->intId)))
-				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateComandoPeca on this unsaved Comando.');
-
-			// Get the Database Object for this Class
-			$objDatabase = Comando::GetDatabase();
-
-			// Journaling
-			if ($objDatabase->JournalingDatabase) {
-				foreach (ComandoPeca::LoadArrayByComandoId($this->intId) as $objComandoPeca) {
-					$objComandoPeca->ComandoId = null;
-					$objComandoPeca->Journal('UPDATE');
-				}
-			}
-
-			// Perform the SQL Query
-			$objDatabase->NonQuery('
-				UPDATE
-					`comando_peca`
-				SET
-					`comando_id` = null
-				WHERE
-					`comando_id` = ' . $objDatabase->SqlVariable($this->intId) . '
-			');
-		}
-
-		/**
-		 * Deletes an associated ComandoPeca
-		 * @param ComandoPeca $objComandoPeca
-		 * @return void
-		*/ 
-		public function DeleteAssociatedComandoPeca(ComandoPeca $objComandoPeca) {
-			if ((is_null($this->intId)))
-				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateComandoPeca on this unsaved Comando.');
-			if ((is_null($objComandoPeca->Id)))
-				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateComandoPeca on this Comando with an unsaved ComandoPeca.');
-
-			// Get the Database Object for this Class
-			$objDatabase = Comando::GetDatabase();
-
-			// Perform the SQL Query
-			$objDatabase->NonQuery('
-				DELETE FROM
-					`comando_peca`
-				WHERE
-					`id` = ' . $objDatabase->SqlVariable($objComandoPeca->Id) . ' AND
-					`comando_id` = ' . $objDatabase->SqlVariable($this->intId) . '
-			');
-
-			// Journaling
-			if ($objDatabase->JournalingDatabase) {
-				$objComandoPeca->Journal('DELETE');
-			}
-		}
-
-		/**
-		 * Deletes all associated ComandoPecas
-		 * @return void
-		*/ 
-		public function DeleteAllComandoPecas() {
-			if ((is_null($this->intId)))
-				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateComandoPeca on this unsaved Comando.');
-
-			// Get the Database Object for this Class
-			$objDatabase = Comando::GetDatabase();
-
-			// Journaling
-			if ($objDatabase->JournalingDatabase) {
-				foreach (ComandoPeca::LoadArrayByComandoId($this->intId) as $objComandoPeca) {
-					$objComandoPeca->Journal('DELETE');
-				}
-			}
-
-			// Perform the SQL Query
-			$objDatabase->NonQuery('
-				DELETE FROM
-					`comando_peca`
-				WHERE
-					`comando_id` = ' . $objDatabase->SqlVariable($this->intId) . '
-			');
-		}
-
-			
-		
 		// Related Objects' Methods for ComandoRisco
 		//-------------------------------------------------------------------
 
@@ -1414,7 +1023,7 @@
 				return array();
 
 			try {
-				return ComandoRisco::LoadArrayByComandoId($this->intId, $objOptionalClauses);
+				return ComandoRisco::LoadArrayByComandoItemId($this->intId, $objOptionalClauses);
 			} catch (QCallerException $objExc) {
 				$objExc->IncrementOffset();
 				throw $objExc;
@@ -1429,7 +1038,7 @@
 			if ((is_null($this->intId)))
 				return 0;
 
-			return ComandoRisco::CountByComandoId($this->intId);
+			return ComandoRisco::CountByComandoItemId($this->intId);
 		}
 
 		/**
@@ -1439,26 +1048,26 @@
 		*/ 
 		public function AssociateComandoRisco(ComandoRisco $objComandoRisco) {
 			if ((is_null($this->intId)))
-				throw new QUndefinedPrimaryKeyException('Unable to call AssociateComandoRisco on this unsaved Comando.');
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociateComandoRisco on this unsaved ComandoItem.');
 			if ((is_null($objComandoRisco->Id)))
-				throw new QUndefinedPrimaryKeyException('Unable to call AssociateComandoRisco on this Comando with an unsaved ComandoRisco.');
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociateComandoRisco on this ComandoItem with an unsaved ComandoRisco.');
 
 			// Get the Database Object for this Class
-			$objDatabase = Comando::GetDatabase();
+			$objDatabase = ComandoItem::GetDatabase();
 
 			// Perform the SQL Query
 			$objDatabase->NonQuery('
 				UPDATE
 					`comando_risco`
 				SET
-					`comando_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+					`comando_item_id` = ' . $objDatabase->SqlVariable($this->intId) . '
 				WHERE
 					`id` = ' . $objDatabase->SqlVariable($objComandoRisco->Id) . '
 			');
 
 			// Journaling (if applicable)
 			if ($objDatabase->JournalingDatabase) {
-				$objComandoRisco->ComandoId = $this->intId;
+				$objComandoRisco->ComandoItemId = $this->intId;
 				$objComandoRisco->Journal('UPDATE');
 			}
 		}
@@ -1470,27 +1079,27 @@
 		*/ 
 		public function UnassociateComandoRisco(ComandoRisco $objComandoRisco) {
 			if ((is_null($this->intId)))
-				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateComandoRisco on this unsaved Comando.');
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateComandoRisco on this unsaved ComandoItem.');
 			if ((is_null($objComandoRisco->Id)))
-				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateComandoRisco on this Comando with an unsaved ComandoRisco.');
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateComandoRisco on this ComandoItem with an unsaved ComandoRisco.');
 
 			// Get the Database Object for this Class
-			$objDatabase = Comando::GetDatabase();
+			$objDatabase = ComandoItem::GetDatabase();
 
 			// Perform the SQL Query
 			$objDatabase->NonQuery('
 				UPDATE
 					`comando_risco`
 				SET
-					`comando_id` = null
+					`comando_item_id` = null
 				WHERE
 					`id` = ' . $objDatabase->SqlVariable($objComandoRisco->Id) . ' AND
-					`comando_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+					`comando_item_id` = ' . $objDatabase->SqlVariable($this->intId) . '
 			');
 
 			// Journaling
 			if ($objDatabase->JournalingDatabase) {
-				$objComandoRisco->ComandoId = null;
+				$objComandoRisco->ComandoItemId = null;
 				$objComandoRisco->Journal('UPDATE');
 			}
 		}
@@ -1501,15 +1110,15 @@
 		*/ 
 		public function UnassociateAllComandoRiscos() {
 			if ((is_null($this->intId)))
-				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateComandoRisco on this unsaved Comando.');
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateComandoRisco on this unsaved ComandoItem.');
 
 			// Get the Database Object for this Class
-			$objDatabase = Comando::GetDatabase();
+			$objDatabase = ComandoItem::GetDatabase();
 
 			// Journaling
 			if ($objDatabase->JournalingDatabase) {
-				foreach (ComandoRisco::LoadArrayByComandoId($this->intId) as $objComandoRisco) {
-					$objComandoRisco->ComandoId = null;
+				foreach (ComandoRisco::LoadArrayByComandoItemId($this->intId) as $objComandoRisco) {
+					$objComandoRisco->ComandoItemId = null;
 					$objComandoRisco->Journal('UPDATE');
 				}
 			}
@@ -1519,9 +1128,9 @@
 				UPDATE
 					`comando_risco`
 				SET
-					`comando_id` = null
+					`comando_item_id` = null
 				WHERE
-					`comando_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+					`comando_item_id` = ' . $objDatabase->SqlVariable($this->intId) . '
 			');
 		}
 
@@ -1532,12 +1141,12 @@
 		*/ 
 		public function DeleteAssociatedComandoRisco(ComandoRisco $objComandoRisco) {
 			if ((is_null($this->intId)))
-				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateComandoRisco on this unsaved Comando.');
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateComandoRisco on this unsaved ComandoItem.');
 			if ((is_null($objComandoRisco->Id)))
-				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateComandoRisco on this Comando with an unsaved ComandoRisco.');
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateComandoRisco on this ComandoItem with an unsaved ComandoRisco.');
 
 			// Get the Database Object for this Class
-			$objDatabase = Comando::GetDatabase();
+			$objDatabase = ComandoItem::GetDatabase();
 
 			// Perform the SQL Query
 			$objDatabase->NonQuery('
@@ -1545,7 +1154,7 @@
 					`comando_risco`
 				WHERE
 					`id` = ' . $objDatabase->SqlVariable($objComandoRisco->Id) . ' AND
-					`comando_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+					`comando_item_id` = ' . $objDatabase->SqlVariable($this->intId) . '
 			');
 
 			// Journaling
@@ -1560,14 +1169,14 @@
 		*/ 
 		public function DeleteAllComandoRiscos() {
 			if ((is_null($this->intId)))
-				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateComandoRisco on this unsaved Comando.');
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateComandoRisco on this unsaved ComandoItem.');
 
 			// Get the Database Object for this Class
-			$objDatabase = Comando::GetDatabase();
+			$objDatabase = ComandoItem::GetDatabase();
 
 			// Journaling
 			if ($objDatabase->JournalingDatabase) {
-				foreach (ComandoRisco::LoadArrayByComandoId($this->intId) as $objComandoRisco) {
+				foreach (ComandoRisco::LoadArrayByComandoItemId($this->intId) as $objComandoRisco) {
 					$objComandoRisco->Journal('DELETE');
 				}
 			}
@@ -1577,7 +1186,7 @@
 				DELETE FROM
 					`comando_risco`
 				WHERE
-					`comando_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+					`comando_item_id` = ' . $objDatabase->SqlVariable($this->intId) . '
 			');
 		}
 
@@ -1590,18 +1199,19 @@
 		////////////////////////////////////////
 
 		public static function GetSoapComplexTypeXml() {
-			$strToReturn = '<complexType name="Comando"><sequence>';
+			$strToReturn = '<complexType name="ComandoItem"><sequence>';
 			$strToReturn .= '<element name="Id" type="xsd:int"/>';
-			$strToReturn .= '<element name="Numero" type="xsd:string"/>';
-			$strToReturn .= '<element name="Date" type="xsd:dateTime"/>';
+			$strToReturn .= '<element name="Comando" type="xsd1:Comando"/>';
+			$strToReturn .= '<element name="Referencia" type="xsd:string"/>';
 			$strToReturn .= '<element name="__blnRestored" type="xsd:boolean"/>';
 			$strToReturn .= '</sequence></complexType>';
 			return $strToReturn;
 		}
 
 		public static function AlterSoapComplexTypeArray(&$strComplexTypeArray) {
-			if (!array_key_exists('Comando', $strComplexTypeArray)) {
-				$strComplexTypeArray['Comando'] = Comando::GetSoapComplexTypeXml();
+			if (!array_key_exists('ComandoItem', $strComplexTypeArray)) {
+				$strComplexTypeArray['ComandoItem'] = ComandoItem::GetSoapComplexTypeXml();
+				Comando::AlterSoapComplexTypeArray($strComplexTypeArray);
 			}
 		}
 
@@ -1609,19 +1219,20 @@
 			$objArrayToReturn = array();
 
 			foreach ($objSoapArray as $objSoapObject)
-				array_push($objArrayToReturn, Comando::GetObjectFromSoapObject($objSoapObject));
+				array_push($objArrayToReturn, ComandoItem::GetObjectFromSoapObject($objSoapObject));
 
 			return $objArrayToReturn;
 		}
 
 		public static function GetObjectFromSoapObject($objSoapObject) {
-			$objToReturn = new Comando();
+			$objToReturn = new ComandoItem();
 			if (property_exists($objSoapObject, 'Id'))
 				$objToReturn->intId = $objSoapObject->Id;
-			if (property_exists($objSoapObject, 'Numero'))
-				$objToReturn->strNumero = $objSoapObject->Numero;
-			if (property_exists($objSoapObject, 'Date'))
-				$objToReturn->dttDate = new QDateTime($objSoapObject->Date);
+			if ((property_exists($objSoapObject, 'Comando')) &&
+				($objSoapObject->Comando))
+				$objToReturn->Comando = Comando::GetObjectFromSoapObject($objSoapObject->Comando);
+			if (property_exists($objSoapObject, 'Referencia'))
+				$objToReturn->strReferencia = $objSoapObject->Referencia;
 			if (property_exists($objSoapObject, '__blnRestored'))
 				$objToReturn->__blnRestored = $objSoapObject->__blnRestored;
 			return $objToReturn;
@@ -1634,14 +1245,16 @@
 			$objArrayToReturn = array();
 
 			foreach ($objArray as $objObject)
-				array_push($objArrayToReturn, Comando::GetSoapObjectFromObject($objObject, true));
+				array_push($objArrayToReturn, ComandoItem::GetSoapObjectFromObject($objObject, true));
 
 			return unserialize(serialize($objArrayToReturn));
 		}
 
 		public static function GetSoapObjectFromObject($objObject, $blnBindRelatedObjects) {
-			if ($objObject->dttDate)
-				$objObject->dttDate = $objObject->dttDate->__toString(QDateTime::FormatSoap);
+			if ($objObject->objComando)
+				$objObject->objComando = Comando::GetSoapObjectFromObject($objObject->objComando, false);
+			else if (!$blnBindRelatedObjects)
+				$objObject->intComandoId = null;
 			return $objObject;
 		}
 
@@ -1658,30 +1271,27 @@
 
 	/**
 	 * @property-read QQNode $Id
-	 * @property-read QQNode $Numero
-	 * @property-read QQNode $Date
-	 * @property-read QQReverseReferenceNodeComandoItem $ComandoItem
-	 * @property-read QQReverseReferenceNodeComandoPeca $ComandoPeca
+	 * @property-read QQNode $ComandoId
+	 * @property-read QQNodeComando $Comando
+	 * @property-read QQNode $Referencia
 	 * @property-read QQReverseReferenceNodeComandoRisco $ComandoRisco
 	 */
-	class QQNodeComando extends QQNode {
-		protected $strTableName = 'comando';
+	class QQNodeComandoItem extends QQNode {
+		protected $strTableName = 'comando_item';
 		protected $strPrimaryKey = 'id';
-		protected $strClassName = 'Comando';
+		protected $strClassName = 'ComandoItem';
 		public function __get($strName) {
 			switch ($strName) {
 				case 'Id':
 					return new QQNode('id', 'Id', 'integer', $this);
-				case 'Numero':
-					return new QQNode('numero', 'Numero', 'string', $this);
-				case 'Date':
-					return new QQNode('date', 'Date', 'QDateTime', $this);
-				case 'ComandoItem':
-					return new QQReverseReferenceNodeComandoItem($this, 'comandoitem', 'reverse_reference', 'comando_id');
-				case 'ComandoPeca':
-					return new QQReverseReferenceNodeComandoPeca($this, 'comandopeca', 'reverse_reference', 'comando_id');
+				case 'ComandoId':
+					return new QQNode('comando_id', 'ComandoId', 'integer', $this);
+				case 'Comando':
+					return new QQNodeComando('comando_id', 'Comando', 'integer', $this);
+				case 'Referencia':
+					return new QQNode('referencia', 'Referencia', 'string', $this);
 				case 'ComandoRisco':
-					return new QQReverseReferenceNodeComandoRisco($this, 'comandorisco', 'reverse_reference', 'comando_id');
+					return new QQReverseReferenceNodeComandoRisco($this, 'comandorisco', 'reverse_reference', 'comando_item_id');
 
 				case '_PrimaryKeyNode':
 					return new QQNode('id', 'Id', 'integer', $this);
@@ -1698,31 +1308,28 @@
 	
 	/**
 	 * @property-read QQNode $Id
-	 * @property-read QQNode $Numero
-	 * @property-read QQNode $Date
-	 * @property-read QQReverseReferenceNodeComandoItem $ComandoItem
-	 * @property-read QQReverseReferenceNodeComandoPeca $ComandoPeca
+	 * @property-read QQNode $ComandoId
+	 * @property-read QQNodeComando $Comando
+	 * @property-read QQNode $Referencia
 	 * @property-read QQReverseReferenceNodeComandoRisco $ComandoRisco
 	 * @property-read QQNode $_PrimaryKeyNode
 	 */
-	class QQReverseReferenceNodeComando extends QQReverseReferenceNode {
-		protected $strTableName = 'comando';
+	class QQReverseReferenceNodeComandoItem extends QQReverseReferenceNode {
+		protected $strTableName = 'comando_item';
 		protected $strPrimaryKey = 'id';
-		protected $strClassName = 'Comando';
+		protected $strClassName = 'ComandoItem';
 		public function __get($strName) {
 			switch ($strName) {
 				case 'Id':
 					return new QQNode('id', 'Id', 'integer', $this);
-				case 'Numero':
-					return new QQNode('numero', 'Numero', 'string', $this);
-				case 'Date':
-					return new QQNode('date', 'Date', 'QDateTime', $this);
-				case 'ComandoItem':
-					return new QQReverseReferenceNodeComandoItem($this, 'comandoitem', 'reverse_reference', 'comando_id');
-				case 'ComandoPeca':
-					return new QQReverseReferenceNodeComandoPeca($this, 'comandopeca', 'reverse_reference', 'comando_id');
+				case 'ComandoId':
+					return new QQNode('comando_id', 'ComandoId', 'integer', $this);
+				case 'Comando':
+					return new QQNodeComando('comando_id', 'Comando', 'integer', $this);
+				case 'Referencia':
+					return new QQNode('referencia', 'Referencia', 'string', $this);
 				case 'ComandoRisco':
-					return new QQReverseReferenceNodeComandoRisco($this, 'comandorisco', 'reverse_reference', 'comando_id');
+					return new QQReverseReferenceNodeComandoRisco($this, 'comandorisco', 'reverse_reference', 'comando_item_id');
 
 				case '_PrimaryKeyNode':
 					return new QQNode('id', 'Id', 'integer', $this);

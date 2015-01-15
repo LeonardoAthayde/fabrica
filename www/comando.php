@@ -21,9 +21,8 @@
 		
 		protected function DefaultWaitIcon_Create(){
 			$this->objDefaultWaitIcon = new QWaitIcon($this);
-			$this->objDefaultWaitIcon->Text = '
-				
-				<div class="modal" style="display:block; overflow: auto;">
+			$this->objDefaultWaitIcon->Text = '				
+<div class="modal" style="display:block; overflow: auto;">
 	<div class="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header">
