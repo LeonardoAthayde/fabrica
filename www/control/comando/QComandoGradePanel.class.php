@@ -80,7 +80,11 @@
 		
 		public function btnDeleteRisco_Click($strFormId, $strControlId, $strParameter){
 			$objComandoRisco = ComandoRisco::Load($strParameter);
+			$objComantoItem = $objComandoRisco->ComandoItem;
 			$objComandoRisco->Delete();
+			
+			if($objComantoItem->CountComandoRiscos() == 0) 
+				$objComantoItem->Delete ();
 			
 			$objComando = $this->Form->GetComando();
 			foreach ($objComando->GetComandoPecaArray() as $objComandoPeca){
